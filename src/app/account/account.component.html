@@ -1,0 +1,26 @@
+<div class="container">
+	<header>
+		<div class="account-name">{{ account.name }}</div>
+		<div class="account-path">
+			<div *ngFor="let item of path"
+				class="item">
+				<a mdButton
+					(click)="select( item )">
+					<span class="text"> {{ item.name }} </span>
+				</a>
+				<md-icon class="icon"> keyboard_arrow_right </md-icon>
+			</div>
+		</div>
+	</header>
+	<main class="account h-scrollable">
+		<div *ngIf="account.description" class="description v-scrollable"> {{ account.description }} </div>
+		<div *ngIf="account.holderName" class="holderName">
+			<span class="label"> Account Holder Name: </span>
+			<span class="text"> {{ account.holderName }} </span>
+		</div>
+		<div *ngIf="account.number" class="number">
+			<span class="label"> Account Number: </span>
+			<span class="text"> {{ account.number }} </span>
+		</div>
+	</main>
+</div>

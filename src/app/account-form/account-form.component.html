@@ -1,0 +1,38 @@
+<div class="container">
+	<form [formGroup]="formGroup" novalidate
+		class="account-form"
+		(ngSubmit)="submit()">
+
+		<main>
+			<section class="name">
+				<!-- <md-form-field><input
+					mdInput
+					placeholder="Name"
+					formControlName="name" />
+				</md-form-field> -->
+				<!-- <md-form-field class="example-full-width">
+					<input mdInput placeholder="Favorite food" value="Sushi">
+				</md-form-field> -->
+			</section>
+		</main>
+
+		<footer>
+			<div class="left">
+				<button md-button type="button"
+					class="reset-button no-animation"
+					(click)="reset()"> RESET 
+				</button>
+			</div>
+			<div class="right">
+				<button md-button type="button" 
+					class="cancel-button no-animation" 
+					(click)="cancel()"> CANCEL 
+				</button>
+				<button md-raised-button color="primary" type="submit"
+					class="save-button"> SAVE 
+				</button>
+			</div>
+		</footer>
+
+	</form>
+</div>

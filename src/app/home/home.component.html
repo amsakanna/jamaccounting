@@ -1,0 +1,26 @@
+<div class="container">
+	<!-- <header>
+		<div class="floating-box">
+			<jam-menu [menu]="menu"
+				(select)="selectMenuItem( $event )">
+			</jam-menu>
+		</div>
+	</header> -->
+	<aside>
+		<nav class="menu">
+			<div class="item">
+				<a md-raised-button color="primary" (click)="goto('accounts')"> <md-icon> account_balance_wallet </md-icon> <span class="text"> Accounts </span> </a>
+			</div>
+			<div class="item">
+				<a md-raised-button color="primary" (click)="goto('vouchers')"> <md-icon> receipt </md-icon> <span class="text"> Vouchers </span> </a>
+			</div>
+			<div class="item">
+				<a md-raised-button color="primary" (click)="goto('inventory')"> <md-icon> list </md-icon> <span class="text"> Inventory </span> </a>
+			</div>
+		</nav>
+	</aside>
+	<main>
+		<router-outlet>			
+		</router-outlet>
+	</main>
+</div>

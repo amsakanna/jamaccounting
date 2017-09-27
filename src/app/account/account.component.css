@@ -1,0 +1,50 @@
+.container header {
+    padding: 0px 50px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.account-name {
+    font-size: 2em;
+}
+
+.account-path {
+    display: flex;
+    align-items: center;
+}
+
+.account-path .item {
+    display: flex;
+    align-items: center; 
+    color: royalblue;
+    font-size: 0.8em;
+}
+
+.account-path .item a {
+    cursor: pointer;
+}
+
+.account-path .item .icon {
+    color: royalblue;
+}
+
+.account-path .item:last-child .icon {
+    display: none;
+}
+
+.account {
+    padding: 20px 50px;
+    padding-top: 0px;
+    height: calc( 100% - 170px );
+}
+
+.account .description {
+    padding-bottom: 20px;
+    text-align: justify;    
+}
+
+.account .label {
+    font-weight: bold;
+}

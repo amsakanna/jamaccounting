@@ -1,0 +1,20 @@
+<jam-accordion-item [noContent]="! ( childNodes && childNodes.length )"
+	[expanded]="isActive"
+	(toggle)="_handleAccordionToggle( $event )">
+	<div header-template
+		class="jam-tree-text"
+		[style.fontWeight]="selected ? 'bold' : 'normal'"
+		[style.color]="selected ? 'cornflowerblue' : 'black'">
+		<div> {{ text }} </div>
+	</div>
+	<div content-template
+		class="jam-tree-nodes">
+		<jam-tree *ngFor="let node of childNodes"
+			[tree]="tree"
+			[node]="node"
+			[displayTextProperty]="displayTextProperty"
+			[selectedNode]="selectedNode"
+			(selectNode)="_handleChildNodeSelect( $event )">
+		</jam-tree>
+	</div>
+</jam-accordion-item>

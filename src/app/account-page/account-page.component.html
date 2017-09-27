@@ -1,0 +1,26 @@
+<div class="container">
+	<main class="floating-box">
+		<section class="account-tree-container">
+			<header> Accounts </header>
+			<nav class="account-tree scrollable">
+				<jam-tree *ngFor="let account of accountList"
+					displayTextProperty="name"
+					[tree]="accountService.tree"
+					[node]="account"
+					[selectedNode]="accountService.tree.selectedItem"
+					(selectNode)="select( $event )">
+				</jam-tree>
+			</nav>
+			<footer>
+				<button md-raised-button
+					color="primary"
+					(click)="newItem()">
+					New Account
+				</button>
+			</footer>
+		</section>
+		<section class="account">
+			<router-outlet></router-outlet>
+		</section>
+	</main>
+</div>

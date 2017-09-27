@@ -1,0 +1,60 @@
+<div class="container">
+	<main class="floating-box">
+
+		<section class="explorer-section">
+
+			<nav class="scrollable">
+				<jam-explorer [tree]="inventoryService.tree"
+					selectedItemBackgroundColor="lightblue"
+					selectedItemForegroundColor="darkgreen"
+					hoveredItemBackgroundColor="rgb(227, 230, 235)"
+					hoveredItemForegroundColor="darkslategray"
+					(select)="select( $event )">
+					<div header-template
+						class="title">
+						Inventory
+					</div>
+					<ng-template let-item="item">
+						<div class="list-item disable-text-selection">
+							<section class="name-section">
+								<div class="name"> {{ item.name }} </div>
+								<div class="id"> {{ item.id }} </div>
+							</section>
+							<section class="units-section">
+								<div class="units"> {{ item.units }} </div>
+							</section>
+						</div>
+					</ng-template>
+				</jam-explorer>
+			</nav>
+			
+			<footer>
+				<button md-raised-button color="primary"
+					(click)="newInventoryItem()">
+					New Item
+				</button>
+			</footer>
+
+		</section>
+
+		<section class="item-section">
+			<header>
+				<div class="name"> {{ selectedItem.name }} </div>
+				<div class="path">
+					<div *ngFor="let item of path"
+						class="item">
+						<a mdButton						
+							(click)="select( item )">
+							<span class="text"> {{ item.name }} </span>
+						</a>
+						<md-icon class="icon"> keyboard_arrow_right </md-icon>
+					</div>
+				</div>
+			</header>
+			<main>
+				<router-outlet></router-outlet>
+			</main>
+		</section>
+
+	</main>
+</div>

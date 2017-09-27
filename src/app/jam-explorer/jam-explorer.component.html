@@ -1,0 +1,36 @@
+<div class="jam-explorer">
+	<header>
+		<section class="jam-explorer-back-button">
+			<button md-button disableRipple
+				class="compact no-animation"
+				(click)="_goBack()">
+				<md-icon> keyboard_arrow_left </md-icon>
+			</button>
+		</section>
+		<section class="jam-explorer-header-template">
+			<ng-content select="[header-template]">
+			</ng-content>
+		</section>
+	</header>
+	<main>
+		<jam-list
+			[list]="list"
+			[selectedItem]="tree.selectedItem"
+			[title]="title"
+			[showNewButton]="showNewButton"
+			[newItemText]="newItemText"
+			[selectedItemBackgroundColor]="selectedItemBackgroundColor"
+			[selectedItemForegroundColor]="selectedItemForegroundColor"
+			[hoveredItemBackgroundColor]="hoveredItemBackgroundColor"
+			[hoveredItemForegroundColor]="hoveredItemForegroundColor"
+			(select)="_select( $event )"
+			(open)="_open( $event )">
+			<ng-template let-item="item">
+				<ng-template
+					[ngTemplateOutlet]="listItemTemplate"
+					[ngOutletContext]="{ item: item }">
+				</ng-template>
+			</ng-template>		
+		</jam-list>
+	</main>
+</div>

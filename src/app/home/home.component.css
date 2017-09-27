@@ -1,0 +1,39 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.container main {
+    flex-grow: 1;
+    height: 100%;
+}
+
+.container aside {
+    width: 200px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container aside .menu .item {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.container aside .menu .item:first-child {
+    padding-top: 0px;
+}
+
+.container aside .menu .item /deep/ .mat-icon {
+    color: white;
+}
+
+.container aside .menu .item .text {
+    padding-left: 10px;
+}

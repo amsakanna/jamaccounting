@@ -1,0 +1,17 @@
+.jam-explorer {
+    width: 100%;
+    height: 100%;
+}
+
+.jam-explorer header {
+    display: flex;
+    align-items: baseline;
+}
+
+section.jam-explorer-header-template {
+    flex-grow: 1;
+}
+
+.jam-explorer main {
+    flex-grow: 1;
+}

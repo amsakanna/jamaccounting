@@ -1,0 +1,16 @@
+<div class="jam-menu">
+	<ul>
+		<li *ngFor="let menuItem of menu.children">
+			<div> {{ menuItem.text }} </div>
+			<ul>
+				<li *ngFor="let subMenuItem of menuItem.children">
+					<a md-button disableRipple
+						class="compact no-focus no-animation"
+						(click)="_select( subMenuItem ); $event.stopImmediatePropagation();">
+						{{ subMenuItem.text }}
+					</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div>
