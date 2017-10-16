@@ -5,36 +5,36 @@
 
 		<main>
 			<section class="name">
-				<md-form-field><input
-					mdInput
+				<mat-form-field><input
+					matInput
 					placeholder="Name"
 					formControlName="name" />
-				</md-form-field>
+				</mat-form-field>
 			</section>
 
-			<md-select placeholder="Category"
+			<mat-select placeholder="Category"
 				formControlName="parent"
 				[(ngModel)]="this.inventoryItem.parentKey">
-				<md-option *ngFor="let inventoryItem of inventoryTree.list"
+				<mat-option *ngFor="let inventoryItem of inventoryTree.list"
 					[value]="inventoryItem.$key">
 					{{ inventoryItem.name }}
-				</md-option>
-			</md-select>
+				</mat-option>
+			</mat-select>
 		</main>
 
 		<footer>
 			<div class="left">
-				<button md-button type="button"
+				<button mat-button type="button"
 					class="reset-button no-animation"
 					(click)="reset()"> RESET 
 				</button>
 			</div>
 			<div class="right">
-				<button md-button type="button" 
+				<button mat-button type="button" 
 					class="cancel-button no-animation" 
 					(click)="cancel()"> CANCEL 
 				</button>
-				<button md-raised-button color="primary" type="submit"
+				<button mat-raised-button color="primary" type="submit"
 					class="save-button"> SAVE 
 				</button>
 			</div>

@@ -1,4 +1,6 @@
-export class Address
+import { IData } from "./i-data.model";
+
+export class Address implements IData
 {
 
     $key: string;
@@ -32,6 +34,25 @@ export class Address
         this.city = object.city ? object.city : '';
         this.state = object.state ? object.state : 'Tamil Nadu';
         this.country = object.country ? object.country : 'India';
+    }
+
+    public toObject()
+    {
+        return {
+            $key: this.$key,
+            type: this.type,
+            name: this.name,
+            phone: this.phone,
+            establishment: this.establishment,
+            establishmentCode: this.establishmentCode,
+            establishmentName: this.establishmentName,
+            branchName: this.branchName,
+            pinCode: this.pinCode,
+            streetAddress: this.streetAddress,
+            city: this.city,
+            state: this.state,
+            country: this.country
+        };
     }
 
 }

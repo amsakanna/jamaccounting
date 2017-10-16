@@ -1,42 +1,20 @@
-<div class="jam-list" (click)="_deselect()">
-	<header>
-		<div *ngIf="title"
-			class="jam-list-title">
-			{{ title }}
-		</div>
-		<div *ngIf="showSearch" class="jam-list-search-container">
-			<md-icon class="jam-list-search-icon" md-prefix> search </md-icon>
-			<input class="jam-list-search-box" placeholder="Search" (input)="_search($event.target.value)">
-		</div>
-	</header>
-	<main class="v-scrollable">
-		<div *ngFor="let item of list"
-			class="jam-list-item plain"
-			(click)="_select(item); $event.stopImmediatePropagation();"
-			(dblclick)="_open(item); $event.stopImmediatePropagation();"
-			(mouseenter)="_hoveredItem = item"
-			(mouseleave)="_hoveredItem = null"
-			[@listItemAnimation]="listItemState"
-			[style.backgroundColor]="item == selectedItem ? selectedItemBackgroundColor : item == _hoveredItem ? hoveredItemBackgroundColor : 'transparent'"
-			[style.color]="item == selectedItem ? selectedItemForegroundColor : item == _hoveredItem ? hoveredItemForegroundColor : 'black'">
-			<ng-template
-				[ngTemplateOutlet]="listItemTemplate"
-				[ngOutletContext]="{ 
-					item: item, 
-					index: i, 
-					hoveredItem: _hoveredItem, 
-					selectedItem: selectedItem
-				}">
-			</ng-template>
-		</div>
-	</main>
-	<footer>
-		<button md-raised-button
-			*ngIf="showNewButton"
-			class="jam-list-new-button"
-			color="primary"
-			(click)="_newItem()">
-			{{ newItemText }}
-		</button>
-	</footer>
+<div class="jam-list jam-list-scrollable">
+	<div *ngFor="let item of list"
+		class="jam-list-item plain"
+		(click)="_select(item)"
+		(dblclick)="_open(item)"
+		(mouseenter)="_hoveredItem = item"
+		(mouseleave)="_hoveredItem = null"
+		[@listItemAnimation]="listItemState"
+		[style.backgroundColor]="_backgroundColor( item )"
+		>
+		<ng-template
+			[ngTemplateOutlet]="listItemTemplate"
+			[ngOutletContext]="{ 
+				item: item, 
+				hoveredItem: _hoveredItem, 
+				selectedItem: selectedItem
+			}">
+		</ng-template>
+	</div>
 </div>

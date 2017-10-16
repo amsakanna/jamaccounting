@@ -2,38 +2,29 @@
     width: 100%;
     height: 100%;
     display: flex;
+    justify-content: center;
+    align-items: center;    
 }
 
-.container main {
-    flex-grow: 1;
-    height: 100%;
-}
-
-.container aside {
-    width: 200px;
-    height: 100%;
+.container > main {
+    position: relative;
+    margin-top: -100px;
+    width: 100%;
+    height: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: royalblue;
 }
 
-.container aside .menu .item {
-    padding-top: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-
-.container aside .menu .item:first-child {
-    padding-top: 0px;
-}
-
-.container aside .menu .item /deep/ .mat-icon {
+.tag-line {
+    font-family: 'Nosifer';
+    font-size: 2em;
     color: white;
 }
 
-.container aside .menu .item .text {
-    padding-left: 10px;
+.tag-img {
+    position: absolute;
+    top: -100px;
+    right: 5%;
 }

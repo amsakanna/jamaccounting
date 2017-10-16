@@ -95,7 +95,18 @@ export class FlatTree<T>
 	public select( item: T | string ) : T
 	{
         item = this.getItem( item );
-		return this.selectedItem = this.isValid( item ) ? item : this.defaultItem;
+        this.selectedItem = this.isValid( item ) ? this.getItem( item ) : this.defaultItem;        
+        return this.selectedItem;
+    }
+
+    public get selectedFamily(): T
+    {
+        return this.getParent( this.selectedItem );
+    }
+
+    public get rootReached(): boolean
+    {
+        return ( this.selectedFamily == this.root );
     }
 
     public isValid( item: T | string ) : boolean

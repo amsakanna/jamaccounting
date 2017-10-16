@@ -1,14 +1,10 @@
 <div class="container">
 	<main class="floating-box">
-
-		<section class="explorer-section">
-
-			<nav class="scrollable">
-				<jam-explorer [tree]="inventoryService.tree"
-					selectedItemBackgroundColor="lightblue"
-					selectedItemForegroundColor="darkgreen"
-					hoveredItemBackgroundColor="rgb(227, 230, 235)"
-					hoveredItemForegroundColor="darkslategray"
+		<jam-explorer
+			[itemTitle]="selectedItem.name"
+			newItemText="New Item">
+			<div jam-explorer-list-template>
+				<jam-tree-list [tree]="inventoryService.tree"
 					(select)="select( $event )">
 					<div header-template
 						class="title">
@@ -25,11 +21,47 @@
 							</section>
 						</div>
 					</ng-template>
-				</jam-explorer>
+				</jam-tree-list>
+			</div>
+			<div jam-explorer-item-template>
+				<router-outlet></router-outlet>
+			</div>
+		</jam-explorer>
+	</main>
+</div>
+
+
+
+
+
+<!-- <div class="container">
+	<main class="floating-box">
+
+		<section class="explorer-section">
+
+			<nav class="scrollable">
+				<jam-tree-list [tree]="inventoryService.tree"
+					(select)="select( $event )">
+					<div header-template
+						class="title">
+						Inventory
+					</div>
+					<ng-template let-item="item">
+						<div class="list-item disable-text-selection">
+							<section class="name-section">
+								<div class="name"> {{ item.name }} </div>
+								<div class="id"> {{ item.id }} </div>
+							</section>
+							<section class="units-section">
+								<div class="units"> {{ item.units }} </div>
+							</section>
+						</div>
+					</ng-template>
+				</jam-tree-list>
 			</nav>
 			
 			<footer>
-				<button md-raised-button color="primary"
+				<button mat-raised-button color="primary"
 					(click)="newInventoryItem()">
 					New Item
 				</button>
@@ -39,17 +71,25 @@
 
 		<section class="item-section">
 			<header>
-				<div class="name"> {{ selectedItem.name }} </div>
-				<div class="path">
-					<div *ngFor="let item of path"
-						class="item">
-						<a mdButton						
-							(click)="select( item )">
-							<span class="text"> {{ item.name }} </span>
-						</a>
-						<md-icon class="icon"> keyboard_arrow_right </md-icon>
-					</div>
-				</div>
+				<section class="title">
+					<div class="name"> {{ selectedItem.name }} </div>
+					<div class="path">
+						<div *ngFor="let item of path"
+							class="item">
+							<a mdButton
+								(click)="select( item )">
+								<span class="text"> {{ item.name }} </span>
+							</a>
+							<mat-icon class="icon"> keyboard_arrow_right </mat-icon>
+						</div>
+					</div>				
+				</section>
+				<section class="action">
+					<a mdButton
+						(click)="edit()">
+						<mat-icon> edit </mat-icon>
+					</a>
+				</section>
 			</header>
 			<main>
 				<router-outlet></router-outlet>
@@ -57,4 +97,4 @@
 		</section>
 
 	</main>
-</div>
+</div> -->

@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
-import { Account } from '../models/account.model';
-import { AccountService } from '../services/account.service';
-import { Observable } from "rxjs";
+import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/filter";
+import { Router } from "@angular/router";
+import { AccountService } from '../services/account.service';
+import { CompanyService } from '../services/all-data.service';
+import { Account } from '../models/account.model';
+import { Company } from '../models/company.model';
 
 @Component({
-  selector: 'app-account-page',
-  templateUrl: './account-page.component.html',
-  styleUrls: ['./account-page.component.css']
+	selector: 'app-account-page',
+	templateUrl: './account-page.component.html',
+	styleUrls: ['./account-page.component.css']
 })
 export class AccountPageComponent implements OnInit
 {
@@ -17,7 +19,8 @@ export class AccountPageComponent implements OnInit
 
 	ngOnInit() {}
 	constructor(private router: Router,
-				private accountService: AccountService)
+				private accountService: AccountService,
+				private companyService: CompanyService)
 	{
 		this.accountList = this.accountService.tree.getChildren( this.accountService.tree.root );
 	}

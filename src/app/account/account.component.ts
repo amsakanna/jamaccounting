@@ -10,7 +10,7 @@ import { Account } from "../models/account.model";
 })
 export class AccountComponent implements OnInit
 {
-private a;
+
 	private account: Account;
 	private path: Array<Account>;
 	private pathText: string;

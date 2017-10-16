@@ -1,0 +1,20 @@
+.menu .item {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.menu .item:first-child {
+    padding-top: 0px;
+}
+
+.menu .item /deep/ .mat-icon {
+    color: white;
+}
+
+.menu .item .text {
+    padding-left: 10px;
+}

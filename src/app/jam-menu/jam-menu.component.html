@@ -4,7 +4,7 @@
 			<div> {{ menuItem.text }} </div>
 			<ul>
 				<li *ngFor="let subMenuItem of menuItem.children">
-					<a md-button disableRipple
+					<a mat-button disableRipple
 						class="compact no-focus no-animation"
 						(click)="_select( subMenuItem ); $event.stopImmediatePropagation();">
 						{{ subMenuItem.text }}

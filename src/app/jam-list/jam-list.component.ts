@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Input, Output, ContentChild, TemplateRef } from '@angular/core';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { Router } from "@angular/router";
 
 @Component({
@@ -30,18 +30,11 @@ export class JamListComponent implements OnInit
 	
 	@Input() list: Array<any>;
 	@Input() selectedItem: any;
-	@Input() title: string;
-	@Input() showSearch: boolean;
-	@Input() showNewButton: boolean;
-	@Input() newItemText: string;
 	@Input() selectedItemBackgroundColor: string;
 	@Input() selectedItemForegroundColor: string;
 	@Input() hoveredItemBackgroundColor: string;
 	@Input() hoveredItemForegroundColor: string;
 	
-	@Output() search: EventEmitter<string>;
-	@Output() newItem: EventEmitter<any>;
-	@Output() delete: EventEmitter<any>;
 	@Output() selectedItemChange: EventEmitter<any>;
 	@Output() select: EventEmitter<any>;
 	@Output() open: EventEmitter<any>;
@@ -50,9 +43,6 @@ export class JamListComponent implements OnInit
 	
 	constructor( private router: Router )
 	{
-		this.search = new EventEmitter<string>();
-		this.newItem = new EventEmitter<any>();
-		this.delete = new EventEmitter<any>();
 		this.selectedItemChange = new EventEmitter<any>();
 		this.select = new EventEmitter<any>();
 		this.open = new EventEmitter<any>();		
@@ -60,39 +50,65 @@ export class JamListComponent implements OnInit
 	
 	ngOnInit()
 	{
-		this.selectedItemBackgroundColor = this.selectedItemBackgroundColor ? this.selectedItemBackgroundColor : 'royalblue';
+		this.selectedItemBackgroundColor = this.selectedItemBackgroundColor ? this.selectedItemBackgroundColor : 'rgb(227, 230, 235)';
 		this.selectedItemForegroundColor = this.selectedItemForegroundColor ? this.selectedItemForegroundColor : 'white';
 		this.hoveredItemBackgroundColor = this.hoveredItemBackgroundColor ? this.hoveredItemBackgroundColor : 'rgb(227, 230, 235)';
 		this.hoveredItemForegroundColor = this.hoveredItemForegroundColor ? this.hoveredItemForegroundColor : 'black';
-		// this.selectedItem = this.list[0];
 	}
 	
-	_search( text: string )
-	{
-		this.search.emit( text );
-	}
-
-	_newItem() 
-	{
-		this.newItem.emit();
-	}
-
-	_select( item: any )
+	private _select( item: any )
 	{
 		this.selectedItem = item;
 		this.select.emit( item );
 		this.selectedItemChange.emit( item );
 	}
 
-	_deselect()
+	private _deselect()
 	{
 		this.selectedItem = null;
 		this.selectedItemChange.emit( null );
 	}
 
-	_open( item: any )
+	private _open( item: any )
 	{
 		this.open.emit( item );
 	}
+
+	// interface related
+
+	private _backgroundColor( item: any ) : string
+	{
+		var backgroundColor: string;
+
+		switch ( item ) {
+			case this.selectedItem:
+				backgroundColor = this.selectedItemBackgroundColor;
+				break;
+			case this._hoveredItem:
+				backgroundColor = this.hoveredItemBackgroundColor;		
+			default:
+				backgroundColor = 'transparent';
+				break;
+		}
+		return backgroundColor;
+	}
+
+	private _foregroundColor( item: any ) : string
+	{
+		var foregroundColor: string;
+		
+		switch ( item ) {
+			case this.selectedItem:
+				foregroundColor = this.selectedItemForegroundColor;
+				break;
+			case this._hoveredItem:
+				foregroundColor = this.hoveredItemForegroundColor;		
+			default:
+				foregroundColor = 'black';
+				break;
+		}
+		return foregroundColor;
+	}
+
 
 }

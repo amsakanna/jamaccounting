@@ -48,8 +48,10 @@ export const enum ErrorCode {
 	UPDATE_FAILED = 104
 }
 
-export const enum Event {
-	None,
-	Login,
-	Logout
+export const enum Roles
+{
+	unknown,
+	owner,
+	admin,
+	user
 }
