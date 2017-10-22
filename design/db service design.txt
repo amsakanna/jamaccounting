@@ -1,0 +1,16 @@
+tableName
+metadata
+
+- writes
+    insert
+    delete
+    update
+    update else insert
+
+- reads
+    lookup
+    list
+    object
+    isValidKey
+    prepareQuery
+

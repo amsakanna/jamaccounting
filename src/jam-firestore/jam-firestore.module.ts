@@ -1,7 +1,9 @@
 import { NgModule, ModuleWithProviders, InjectionToken } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { JamFirestoreDatabase, IJamFireStoreConfig, configToken } from './jam-firestore';
+import { configToken } from './jam-firestore.config';
+import { IJamFirestoreConfig } from './models/i-jam-firestore-config.model';
+import { JamFirestoreDatabase } from "./services/jam-firestore-database.service";
 
 @NgModule({
     imports: [CommonModule],
@@ -11,10 +13,8 @@ import { JamFirestoreDatabase, IJamFireStoreConfig, configToken } from './jam-fi
 })
 export class JamFirestoreModule
 {
-    static forRoot( config: IJamFireStoreConfig ): ModuleWithProviders
+    static forRoot( config: IJamFirestoreConfig ): ModuleWithProviders
     {
-        var c = new InjectionToken<IJamFireStoreConfig>('config')
-        console.log( config, configToken, c );
         return {
             ngModule: JamFirestoreModule,
             providers: [

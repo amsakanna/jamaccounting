@@ -3,7 +3,6 @@ import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/filter";
 import { Router } from "@angular/router";
 import { AccountService } from '../services/account.service';
-import { CompanyService } from '../services/all-data.service';
 import { Account } from '../models/account.model';
 import { Company } from '../models/company.model';
 
@@ -19,8 +18,7 @@ export class AccountPageComponent implements OnInit
 
 	ngOnInit() {}
 	constructor(private router: Router,
-				private accountService: AccountService,
-				private companyService: CompanyService)
+				private accountService: AccountService)
 	{
 		this.accountList = this.accountService.tree.getChildren( this.accountService.tree.root );
 	}

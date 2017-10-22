@@ -1,0 +1,19 @@
+-- owner -- soundari
+    -- company
+        -- admin
+            -- user
+            -- user            
+    -- company
+        -- admin
+            -- user
+            -- user
+-- owner -- vanavil
+    -- authorize ip
+    -- company        
+        -- admin
+            -- user
+            -- user
+    -- company
+        -- admin
+            -- user
+            -- user

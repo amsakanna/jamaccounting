@@ -1,0 +1,35 @@
+- home
+    - pricing
+    - contact
+    - about
+    - register
+    - sign-in
+        - user ( owner )
+            - profile
+            - companies
+                - add-company
+                    - register employee sign in
+                    - set admin
+                    - authorize device
+                - company
+                    - settings
+                    - dashboard
+        - company-sign-in ( employee )
+            - dashboard ( admin )
+                - users
+                    - user
+                    - new user
+                - masters
+                    - accounts
+                    - inventory
+                    - voucher types
+                - history
+                - reports
+            - dashboard ( others )
+                - vouchers
+                    - new
+
+
+
+    
+

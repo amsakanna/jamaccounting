@@ -1,0 +1,27 @@
+Owner:
+    - An owner of an Organization is the member that has purchased the subscription.
+    - Each Organization can only have one owner.
+    - An owner has all privileges which include
+        - buying subscriptions
+        - upgrading subscriptions
+        - downgrading subscriptions
+        - cancelling subscriptions
+        - modifying product access privileges
+        - adding members to an Organization
+        - removing members from an Organization
+        - changing member roles
+
+Admin:
+    - An admin is a member of an Organization.
+    - An Organization can have more than one admin.
+    - An admin has privileges which include
+        - modifying product access privileges for other members
+        - adding members to an Organization
+        - removing members from an Organization
+        - changing member roles.
+
+User:
+    - A user is a member of an Organization.
+    - An Organization can have more than one user.
+    - A user has privileges which include
+        - using the products for which access privileges have been granted

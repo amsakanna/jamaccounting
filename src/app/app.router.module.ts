@@ -19,12 +19,12 @@ import { InventoryPageComponent } from "./inventory-page/inventory-page.componen
 import { InventoryComponent } from "./inventory/inventory.component";
 import { InventoryFormComponent } from "./inventory-form/inventory-form.component";
 
-import { AuthGuard, DatabaseMetaGuard } from "./services/guard.service";
+import { AuthGuard, DatabaseGuard } from "./services/guard.service";
 import { SettingsPageComponent } from "./settings-page/settings-page.component";
 import { CompaniesComponent } from "./companies/companies.component";
 
 const appRoutes: Routes = [
-    { path: '', canActivate: [DatabaseMetaGuard], children: [
+    { path: '', canActivate: [DatabaseGuard], children: [
 
         { path: '', component: HomeComponent },
         { path: 'about', component: AboutPageComponent },

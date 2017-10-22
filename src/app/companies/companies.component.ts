@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CompanyService } from "../services/all-data.service";
 import { Company } from '../models/company.model';
 
 @Component({
@@ -13,11 +12,8 @@ export class CompaniesComponent implements OnInit
 	private companyList: Array<Company>;
 	private selectedCompany: Company;
 	
-	constructor(private companyService: CompanyService)
+	constructor()
 	{
-		// this.companyService
-		// .getList1()
-		// .subscribe( list => this.companyList = list );
 	}
 
 	ngOnInit() {

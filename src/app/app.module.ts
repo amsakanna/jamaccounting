@@ -1,29 +1,38 @@
+/*    Framework Modules    */
+
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule, MatButtonModule, MatInputModule, MatSelectModule } from '@angular/material';
+
+/*    3rd Party Modules    */
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
-import { AppRouterModule } from './app.router.module';
 
+/*    My Library Modules    */
 import { JamAuthModule } from "../jam-auth/jam-auth";
 import { JamEventManagerModule } from '../jam-event-manager/jam-event-manager';
-import { JamFirestoreModule, IJamFireStoreConfig } from "../jam-firestore/jam-firestore";
+import { JamFirestoreModule } from "../jam-firestore/jam-firestore";
 
+/*    Environment variables    */
 import { database } from "../environments/environment";
 
-import { DatabaseService } from './services/database.service';
-import { DataService } from './services/data.service';
-import { AuthGuard, DatabaseMetaGuard } from './services/guard.service';
+/*    Router Module    */
+import { AppRouterModule } from './app.router.module';
+
+/*    App Main Services    */
+import { AuthGuard, DatabaseGuard } from './services/guard.service';
 import { Navigator } from './services/navigator.service';
-import { DatabaseMetaService } from './services/meta.service';
-import { CompanyService } from './services/all-data.service';
+import { InterfaceMetaService } from './services/meta.service';
+
+/*    App Services    */
 import { AccountService } from './services/account.service';
 import { InventoryService } from './services/inventory.service';
 
+/*    App Components    */
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { AccountComponent } from './account/account.component';
@@ -56,12 +65,6 @@ import { MyPlanComponent } from './my-plan/my-plan.component';
 import { JamXboxMenuComponent } from './jam-xbox-menu/jam-xbox-menu.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { CompaniesComponent } from './companies/companies.component';
-
-import { Tables } from './models/tables.model';
-
-const jamFireStoreConfig: IJamFireStoreConfig = {
-	databaseMetadataPath: ''
-};
 
 @NgModule({
 	declarations: [
@@ -113,19 +116,16 @@ const jamFireStoreConfig: IJamFireStoreConfig = {
 		AppRouterModule,
 		JamAuthModule.forRoot(),
 		JamEventManagerModule.forRoot(),
-		JamFirestoreModule.forRoot( jamFireStoreConfig )
+		JamFirestoreModule.forRoot( database.jamFireStoreConfig )
 	],
 	providers: [
 		AngularFireDatabase,
-		DatabaseService,
-		DataService,
 		AuthGuard,
-			DatabaseMetaGuard,
+			DatabaseGuard,
 		Navigator,
-		DatabaseMetaService,
+		InterfaceMetaService,
 		AccountService,
-			InventoryService,
-			CompanyService
+			InventoryService
 	],
 	bootstrap: [AppComponent]
 })

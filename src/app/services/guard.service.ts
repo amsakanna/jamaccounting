@@ -5,8 +5,9 @@ import 'rxjs/add/operator/do';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { EventManager } from '../../jam-event-manager/jam-event-manager';
 import { AuthService } from '../../jam-auth/jam-auth';
-import { DatabaseMetaService } from './meta.service';
+import { InterfaceMetaService } from './meta.service';
 import { MyEvents } from '../models/event.model';
+import { DatabaseService } from "./database.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate
@@ -29,7 +30,6 @@ export class AuthGuard implements CanActivate
 			console.log( 'auth guard let me in ?', authenticated );
 			if( ! authenticated ) {
 				this.eventManager.emitPageRequestEvent( MyEvents.SignInPageRequested );
-				// this.router.navigateByUrl( '/sign-in', { queryParams: { returnUrl: routerStateSnapshot.url } });
 			}
 		});
 	}
@@ -37,18 +37,18 @@ export class AuthGuard implements CanActivate
 }
 
 @Injectable()
-export class DatabaseMetaGuard implements CanActivate
+export class DatabaseGuard implements CanActivate
 {
 	
-	constructor(private databaseMetaService: DatabaseMetaService) {}
+	constructor(private databaseService: DatabaseService) {}
 		
 	canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot,
 				routerStateSnapshot: RouterStateSnapshot): Observable<boolean>
 	{
-		// Check if database metadata is loaded
-		return this.databaseMetaService.loadStatus.asObservable().take( 1 )		
+		// Check if database is loaded
+		return this.databaseService.loadStatus.asObservable().take( 1 )		
 		.do( loaded => {
-			console.log( 'database metadata loaded ?', loaded );
+			console.log( 'database loaded ?', loaded );
 		});
 
 	}

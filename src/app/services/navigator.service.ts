@@ -28,14 +28,14 @@ export class Navigator
 			this.previousUrl = this.currentUrl;
 			this.currentUrl = event.urlAfterRedirects;
 			this.buildMenu();
-		})
+		});
 
 		this.buildMap();
 
 		this.eventManager.navigationEvents
 		.subscribe( event => {
 			this.handle( event as NavigationEvent );
-		})
+		});
 
 	}
 

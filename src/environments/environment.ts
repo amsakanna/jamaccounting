@@ -8,6 +8,7 @@ export const environment = {
 };
 
 export const database = {
+
 	firebaseAppConfig: {
 		apiKey: "AIzaSyBek8EcAPhGyBZWawFNpwowVxFmT7GyWgc",
 		authDomain: "jamdeck.firebaseapp.com",
@@ -15,5 +16,9 @@ export const database = {
 		projectId: "firebase-jamdeck",
 		storageBucket: "firebase-jamdeck.appspot.com",
 		messagingSenderId: "41851418000"
+	},
+	jamFireStoreConfig: {
+		databaseMetadataPath: 'Metadata/database/Table'
 	}
+	
 }
