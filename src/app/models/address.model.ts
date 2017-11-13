@@ -1,12 +1,16 @@
-import { IData } from "./i-data.model";
+import { IData } from "../../jam-firestore/models/i-data.model";
 
 export class Address implements IData
 {
 
-    $key: string;
+    key: string;
     type: string;
     name: string;
     phone: string;
+    landline: string;
+    fax: string;
+    email: string;
+    website: string;
     establishment: string;
     establishmentCode: string;
     establishmentName: string;
@@ -20,10 +24,13 @@ export class Address implements IData
     constructor( object?: any )
     {
         object = object ? object : {};
-        
-        this.$key = object.$key ? object.$key : '';
+
+        this.key = object.key ? object.key : '';
         this.name = object.name ? object.name : '';
         this.phone = object.phone ? object.phone : '';
+        this.landline = object.landline || '';
+        this.email = object.email ? object.email : '';
+        this.website = object.website ? object.website : '';
         this.establishment = object.establishment ? object.establishment : '';
         this.establishmentCode = object.establishmentCode ? object.establishmentCode : '';
         this.establishmentName = object.establishmentName ? object.establishmentName : '';
@@ -32,17 +39,20 @@ export class Address implements IData
         this.type = object.type ? object.type : '';
         this.streetAddress = object.streetAddress ? object.streetAddress : '';
         this.city = object.city ? object.city : '';
-        this.state = object.state ? object.state : 'Tamil Nadu';
-        this.country = object.country ? object.country : 'India';
+        this.state = object.state ? object.state : '';
+        this.country = object.country ? object.country : '';
     }
 
     public toObject()
     {
         return {
-            $key: this.$key,
+            key: this.key,
             type: this.type,
             name: this.name,
             phone: this.phone,
+            landline: this.landline,
+            email: this.email,
+            website: this.website,
             establishment: this.establishment,
             establishmentCode: this.establishmentCode,
             establishmentName: this.establishmentName,

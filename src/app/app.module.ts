@@ -4,7 +4,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatIconModule, MatButtonModule, MatInputModule, MatSelectModule } from '@angular/material';
+import {
+	MatIconModule,
+	MatButtonModule,
+	MatInputModule,
+	MatSelectModule,
+	MatOptionModule,
+	MatStepperModule,
+	MatDatepickerModule,
+	MatNativeDateModule,
+	MatTooltipModule
+} from '@angular/material';
 
 /*    3rd Party Modules    */
 import { AngularFireModule } from 'angularfire2';
@@ -24,11 +34,13 @@ import { database } from "../environments/environment";
 import { AppRouterModule } from './app.router.module';
 
 /*    App Main Services    */
-import { AuthGuard, DatabaseGuard } from './services/guard.service';
+import { AuthGuard, DatabaseGuard, UserGuard } from './services/guard.service';
+import { DatabaseService } from './services/database.service';
 import { Navigator } from './services/navigator.service';
 import { InterfaceMetaService } from './services/meta.service';
 
 /*    App Services    */
+import { UserService } from './services/user.service';
 import { AccountService } from './services/account.service';
 import { InventoryService } from './services/inventory.service';
 
@@ -65,6 +77,7 @@ import { MyPlanComponent } from './my-plan/my-plan.component';
 import { JamXboxMenuComponent } from './jam-xbox-menu/jam-xbox-menu.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { CompaniesComponent } from './companies/companies.component';
+import { JamHorizontalListComponent } from './jam-horizontal-list/jam-horizontal-list.component';
 
 @NgModule({
 	declarations: [
@@ -98,7 +111,8 @@ import { CompaniesComponent } from './companies/companies.component';
 		MyPlanComponent,
 		JamXboxMenuComponent,
 		SettingsPageComponent,
-		CompaniesComponent
+		CompaniesComponent,
+		JamHorizontalListComponent
 	],
 	imports: [
 		BrowserModule,
@@ -107,6 +121,11 @@ import { CompaniesComponent } from './companies/companies.component';
 			MatButtonModule,
 			MatInputModule,
 			MatSelectModule,
+			MatOptionModule,
+			MatStepperModule,
+			MatDatepickerModule,
+			MatNativeDateModule,
+			MatTooltipModule,
 		FormsModule,
 			ReactiveFormsModule,
 		AngularFireModule.initializeApp( database.firebaseAppConfig ),
@@ -122,10 +141,13 @@ import { CompaniesComponent } from './companies/companies.component';
 		AngularFireDatabase,
 		AuthGuard,
 			DatabaseGuard,
+			UserGuard,
+		DatabaseService,
 		Navigator,
 		InterfaceMetaService,
 		AccountService,
-			InventoryService
+			InventoryService,
+			UserService
 	],
 	bootstrap: [AppComponent]
 })

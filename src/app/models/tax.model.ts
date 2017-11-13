@@ -10,7 +10,7 @@ export class Tax
     public effectiveDate: Date;
     public rate: number;
     public amount: number;
-    
+
     constructor( object?: any )
     {
         object = object ? object : {};

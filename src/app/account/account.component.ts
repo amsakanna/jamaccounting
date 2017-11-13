@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { AccountService } from "../services/account.service";
 import { Account } from "../models/account.model";
+import { EventManager, EventStatus } from '../../jam-event-manager/jam-event-manager';
+import { Pages } from '../enums/pages.enum';
 
 @Component({
 	selector: 'app-account',
@@ -11,32 +13,30 @@ import { Account } from "../models/account.model";
 export class AccountComponent implements OnInit
 {
 
-	private account: Account;
 	private path: Array<Account>;
-	private pathText: string;
 
-	ngOnInit() {}
 	constructor(private activatedRoute: ActivatedRoute,
-				private router: Router,
+				private eventManager: EventManager,
 				private accountService: AccountService)
 	{
-		var routeKey = this.activatedRoute.snapshot.params['key'] || '';
-		if( routeKey != this.accountService.tree.selectedItem.$key )
-		{
-			this.accountService.select( routeKey );
-			this.router.navigateByUrl( '/accounts/' + this.accountService.tree.selectedItem.$key );
-		}
-	}
-	
-	ngDoCheck()
-	{
-		this.account = this.accountService.tree.selectedItem;
-		this.path = this.accountService.tree.getPath( this.account ).reverse();
+		const accountKey: string = this.activatedRoute.snapshot.params['account'];
+		console.log( 'accountKey:', accountKey );
+		const account = new Account( { key: accountKey } );
+		this.accountService.select( account );
 	}
 
-	select( account: Account )
+	ngOnInit()
 	{
-		this.accountService.select( account );	
+	}
+
+	private select( account: Account )
+	{
+		this.accountService.select( account );
+	}
+
+	private edit( account: Account )
+	{
+		this.eventManager.emitPageRequestEvent( Pages.EditAccount, EventStatus.Requested );
 	}
 
 }

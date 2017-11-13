@@ -19,7 +19,7 @@ import { InventoryPageComponent } from "./inventory-page/inventory-page.componen
 import { InventoryComponent } from "./inventory/inventory.component";
 import { InventoryFormComponent } from "./inventory-form/inventory-form.component";
 
-import { AuthGuard, DatabaseGuard } from "./services/guard.service";
+import { AuthGuard, DatabaseGuard, UserGuard } from "./services/guard.service";
 import { SettingsPageComponent } from "./settings-page/settings-page.component";
 import { CompaniesComponent } from "./companies/companies.component";
 
@@ -31,24 +31,26 @@ const appRoutes: Routes = [
         { path: 'sign-in', component: SignInComponent },
         { path: 'register', component: RegisterComponent },
         { path: 'pricing', component: PricingPageComponent },
-        { path: 'user', component: UserPageComponent, canActivate: [AuthGuard], children: [
+        { path: 'user', component: UserPageComponent, canActivate: [AuthGuard, UserGuard], children: [
             { path: '', component: ProfilePageComponent },
-            { path: 'companies', component: CompaniesComponent, children: [
-                { path: ':key', component: CompanyComponent },
-                { path: ':key/settings', component: SettingsPageComponent }
-            ]},
+            { path: 'companies/@new', component: CompanyFormComponent },
+            { path: 'companies', component: CompaniesComponent},
             { path: 'my-plan', component: MyPlanComponent },
         ]},
+        { path: 'company/:company', component: CompanyComponent, canActivate: [AuthGuard, UserGuard], children: [
+            { path: 'settings', component: SettingsPageComponent },
+            { path: 'accounts', component: AccountPageComponent, children: [
+                { path: '@new', component: AccountFormComponent },
+                { path: ':account', component: AccountComponent },
+                { path: ':account/edit', component: AccountFormComponent }
+            ]},
+            { path: 'inventory', component: InventoryPageComponent, children: [
+                { path: ':key', component: InventoryComponent },
+                { path: ':key/edit', component: InventoryFormComponent }
+            ]}
+        ]},
 
-        { path: 'accounts', component: AccountPageComponent, canActivate: [AuthGuard], children: [
-            { path: ':key', component: AccountComponent },
-            { path: ':key/edit', component: AccountFormComponent }
-        ] },
-        { path: 'inventory', component: InventoryPageComponent, children: [
-            { path: ':key', component: InventoryComponent },
-            { path: ':key/edit', component: InventoryFormComponent }
-        ] }
-        
+
     ] }
 ];
 

@@ -1,5 +1,3 @@
-import { ReplaySubject } from "rxjs/ReplaySubject";
-
 export const enum MyEvents {
     None = '',
     HomeRequested = 'HomeRequested',
@@ -8,12 +6,13 @@ export const enum MyEvents {
     SignInPageRequested = 'SignInPageRequested',
     UserRequested = 'UserRequested',
     CompaniesRequested = 'CompaniesRequested',
+    NewCompanyRequested = 'NewCompanyRequested',
     ProfileRequested = 'ProfileRequested',
     MyPlanRequested = 'MyPlanRequested',
     SettingsRequested = 'SettingsRequested',
     AccountsRequested = 'AccountsRequested',
     InventoryRequested = 'InventoryRequested',
-    VouchersRequested = 'VouchersRequested'
+    VouchersRequested = 'VouchersRequested',
 }
 
 export enum MyEventTypes

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { DatabaseService } from '../services/database.service';
 import { Company } from '../models/company.model';
+import { EventManager, EventStatus } from '../../jam-event-manager/jam-event-manager';
+import { MyEvents } from '../models/event.model';
+import { Pages } from '../enums/pages.enum';
 
 @Component({
 	selector: 'app-companies',
@@ -9,24 +13,31 @@ import { Company } from '../models/company.model';
 export class CompaniesComponent implements OnInit
 {
 
-	private companyList: Array<Company>;
-	private selectedCompany: Company;
-	
-	constructor()
+	private list: Array<Company>;
+	private selectedItem: Company;
+
+	constructor(private db: DatabaseService,
+				private eventManager: EventManager)
 	{
+
 	}
 
-	ngOnInit() {
+	ngOnInit()
+	{
+		this.db.tables.Company.list.subscribe( list => {
+			console.log( list );
+			this.list = list;
+		 } );
 	}
 
-	select( company: Company )
+	private select( company: Company )
 	{
-		this.selectedCompany = company;
+		this.eventManager.emitPageRequestEvent( Pages.Company, EventStatus.Requested, [{ key: 'company', value: company.key }] );
 	}
 
-	scrollme( event: MouseWheelEvent )
+	private newItem()
 	{
-		document.getElementById( 'company-list' ).scrollLeft += event.deltaY;
+		this.eventManager.emitPageRequestEvent( Pages.NewCompany, EventStatus.Requested );
 	}
 
 }

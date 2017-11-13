@@ -3,7 +3,8 @@
 		<jam-explorer
 			[itemTitle]="selectedItem.name"
 			newItemText="New Item">
-			<div jam-explorer-list-template>
+			<div jam-explorer-list-template
+				class="jam-explorer-list-template">
 				<jam-tree-list [tree]="inventoryService.tree"
 					(select)="select( $event )">
 					<div header-template

@@ -3,7 +3,8 @@
 	<header>
 		<section class="company">
 			<a mdButton (click)="goto( 'home' )">
-				<mat-icon class="home-icon">
+				<mat-icon color="primary"
+					class="home-icon">
 					home
 				</mat-icon>
 			</a>
@@ -18,7 +19,8 @@
 			<div class="user-buttton">
 				<a mdButton
 					(click)="goto( 'user' )">
-					<mat-icon *ngIf="auth?.authenticated"
+					<mat-icon color="primary"
+						*ngIf="auth?.authenticated"
 						class="user-icon">
 						account_circle
 					</mat-icon>

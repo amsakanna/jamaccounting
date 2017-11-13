@@ -20,7 +20,11 @@
 }
 
 .jam-explorer-list > main {
-    flex-grow: 1;
+    height: calc( 100% - 100px );
+}
+
+.jam-explorer-list-template {
+    height: 100%;
 }
 
 .jam-explorer-list > footer {

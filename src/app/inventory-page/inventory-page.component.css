@@ -17,6 +17,10 @@
     height: 100%;
 }
 
+.jam-explorer-list-template {
+    height: 100%;
+}
+
 .title {
     height: 100px;
     display: flex;

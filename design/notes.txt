@@ -2,14 +2,14 @@
     -- company
         -- admin
             -- user
-            -- user            
+            -- user
     -- company
         -- admin
             -- user
             -- user
 -- owner -- vanavil
     -- authorize ip
-    -- company        
+    -- company
         -- admin
             -- user
             -- user

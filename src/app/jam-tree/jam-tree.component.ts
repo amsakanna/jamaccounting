@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FlatTree } from "../models/flat-tree.model";
 
 @Component({
@@ -23,6 +23,11 @@ export class JamTreeComponent implements OnInit
 		this.text = this.node[this.displayTextProperty];
 		this.childNodes = this.tree.getChildren( this.node );
 		this.isActive = this.tree.isAncestor( this.selectedNode, this.node );
+	}
+
+	ngOnChanges( changes: SimpleChanges )
+	{
+		this.isActive = this.isActive || this.tree.isAncestor( this.selectedNode, this.node );
 	}
 
 	constructor()

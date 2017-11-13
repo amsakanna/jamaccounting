@@ -1,16 +1,23 @@
 <div class="container">
 	<main>
-		<nav>
-			<ul id="company-list"
-				class="company-list horizontal h-scrollable"
-				(mousewheel)="scrollme( $event )">
-				<li *ngFor="let company of companyList">
-					<div class="company floating-box"
-						(click)="select( company )">
-						{{ company.name }}
-					</div>
-				</li>
-			</ul>
-		</nav>
+		<jam-list
+			class="jam-list"
+			[list]="list"
+			[selectedItem]="selectedItem"
+			direction="horizontal"
+			itemGap="100"
+			showAddButton="true"
+			(newItem)="newItem()"
+			(select)="select( $event )">
+			<div new-button-template
+				class="new-button list-item floating-box">
+				<mat-icon class="new-button-icon"> add_circle </mat-icon>
+			</div>
+			<ng-template let-item="item">
+				<div class="list-item floating-box">
+					<div class="name"> {{ item.name }} </div>
+				</div>
+			</ng-template>	
+		</jam-list>
 	</main>
 </div>

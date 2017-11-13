@@ -3,7 +3,7 @@
     height: 100%;
 }
 
-.jam-tree-list header {
+.jam-tree-list > header {
     display: flex;
     align-items: baseline;
 }
@@ -28,6 +28,6 @@ section.jam-tree-list-header-template {
     justify-content: center;    
 }
 
-.jam-tree-list main {
-    flex-grow: 1;
+.jam-tree-list > main {
+    height: calc( 100% - 100px );
 }

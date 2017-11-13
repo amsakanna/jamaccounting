@@ -32,12 +32,12 @@ declare global {
 
 Array.prototype.contains = function ( item ) 
 {
-	return this.indexOf(item) >= 0;
+	return this.indexOf( item ) >= 0;
 };
 
 String.prototype.contains = function ( searchString, ignoreCase? ) 
 {	
-	if(ignoreCase) {
+	if( ignoreCase ) {
 		return this.toLowerCase().indexOf( searchString.toLowerCase() ) >= 0;
 	}
 	else

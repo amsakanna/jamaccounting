@@ -3,10 +3,13 @@ import { Subject } from 'rxjs/Subject';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { IJamXboxMenuItem } from './jam-xbox-menu/jam-xbox-menu.component';
 import { AuthService } from '../jam-auth/services/auth.service';
-import { Auth } from '../jam-auth/models/auth.model';
 import { Navigator } from './services/navigator.service';
+import { Auth } from '../jam-auth/models/auth.model';
 import { Event, Events, EventTypes, EventManager } from '../jam-event-manager/jam-event-manager';
 import { MyEvents } from './models/event.model';
+import { DatabaseOperations } from '../jam-firestore/jam-firestore';
+import { EventStatus } from '../jam-event-manager/jam-event-manager';
+import { Pages } from './enums/pages.enum';
 
 @Component({
 	selector: 'app-root',
@@ -16,51 +19,57 @@ import { MyEvents } from './models/event.model';
 export class AppComponent
 {
 	private auth: Auth;
-	
+
 	constructor(private db: AngularFirestore,
 				private eventManager: EventManager,
-				private authService: AuthService,
-				private navigator: Navigator)
+				private navigator: Navigator,
+				private authService: AuthService)
 	{
 		this.eventManager.addTriggerEvents( this.triggerEvents );
 		this.authService.auth.subscribe( auth => this.auth = auth );
 	}
-	
+
 	ngOnInit() {}
 
 	private goto( page: string )
 	{
 		switch ( page ) {
 			case 'home':
-				this.eventManager.emitPageRequestEvent( MyEvents.HomeRequested );
+				this.eventManager.emitPageRequestEvent( Pages.Home, EventStatus.Requested );
 				break;
 			case 'user':
-				this.eventManager.emitPageRequestEvent( MyEvents.UserRequested );
+				this.eventManager.emitPageRequestEvent( Pages.User, EventStatus.Requested );
 				break;
 			default:
 				break;
-		}		
+		}
 	}
 
 	private select( menuItem: IJamXboxMenuItem )
 	{
-		if( menuItem.$key == Events.SignOutRequested ) {
-			this.eventManager.emitAuthEvent( Events.SignOutRequested );
+		if( menuItem.$key == Events.SignOut ) {
+			this.eventManager.emitAuthEvent( Events.SignOut, EventStatus.Requested );
 		} else {
-			const token = this.eventManager.emitPageRequestEvent( menuItem.$key );
+			const token = this.eventManager.emitPageRequestEvent( menuItem.$key, EventStatus.Requested );
 		}
-	}	
+	}
 
 	private get triggerEvents() : Array<Array<Subject<Event>>>
 	{
-		var triggerEvents = new Array<Array<Subject<Event>>>();
-		triggerEvents[EventTypes.AuthEvent + '-' + Events.Registered] = [ this.eventManager.navigationEvents ];
-		triggerEvents[EventTypes.AuthEvent + '-' + Events.SignedIn] = [ this.eventManager.navigationEvents ];
-		triggerEvents[EventTypes.AuthEvent + '-' + Events.SignOutRequested] = [ this.eventManager.authEvents ];
-		triggerEvents[EventTypes.AuthEvent + '-' + Events.SignedOut] = [ this.eventManager.navigationEvents ];
-		triggerEvents[EventTypes.PageRequestEvent] = [ this.eventManager.navigationEvents ];
-		return triggerEvents;
+		var t = new Array<Array<Subject<Event>>>();
+
+		t[Event.createId( EventTypes.AuthEvent, Events.Register, EventStatus.Requested )] = [ this.eventManager.authEvents ];
+		t[Event.createId( EventTypes.AuthEvent, Events.SignOut, EventStatus.Requested )] = [ this.eventManager.authEvents ];
+
+		t[Event.createId( EventTypes.AuthEvent, Events.Register, EventStatus.Succeeded )] = [ this.eventManager.databaseEvents, this.eventManager.navigationEvents ];
+		t[Event.createId( EventTypes.AuthEvent, Events.SignIn, EventStatus.Succeeded )] = [ this.eventManager.databaseEvents, this.eventManager.navigationEvents ];
+		t[Event.createId( EventTypes.AuthEvent, Events.SignOut, EventStatus.Succeeded )] = [ this.eventManager.navigationEvents ];
+
+		t[EventTypes.PageRequestEvent] = [ this.eventManager.navigationEvents ];
+		t[Event.createId( EventTypes.DatabaseEvent, DatabaseOperations.Insert, EventStatus.Succeeded )] = [ this.eventManager.navigationEvents ];
+
+		return t;
 	}
-	
+
 }
 

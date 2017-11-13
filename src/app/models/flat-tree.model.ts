@@ -9,12 +9,17 @@ export class FlatTree<T>
 
     constructor( list: Array<T>, rootKey: string, keyName?: string, parentKeyName?: string )
     {
-        this.list = list ? list : new Array<T>();
-        this.keyName = keyName ? keyName : '$key';
-        this.parentKeyName = parentKeyName ? parentKeyName : 'parentKey' ;
+        this.list = list || new Array<T>();
+        this.keyName = keyName || 'key';
+        this.parentKeyName = parentKeyName || 'parentKey' ;
         this.defaultItem = null;
         this.selectedItem = null;
         this.root = this.list.find( listItem => listItem[this.keyName] == rootKey );
+    }
+
+    public push( ... items: Array<T> ) : number
+    {
+        return this.list.push( ... items );
     }
 
     public getItem( item: T | string ) : T

@@ -1,5 +1,7 @@
+import { Subject } from 'rxjs/Subject';
 import { Injectable } from '@angular/core';
 import { Router } from "@angular/router";
+import { DatabaseService } from './database.service';
 import { Account } from "../models/account.model";
 import { FlatTree } from "../models/flat-tree.model";
 
@@ -7,67 +9,59 @@ import { FlatTree } from "../models/flat-tree.model";
 export class AccountService
 {
 
+	public list: Array<Account>;
+	private _selectedItem: Account;
 	public tree: FlatTree<Account>;
+	public selectedItem$: Subject<Account>
 
-	constructor(private router: Router)
+	constructor ( private router: Router,
+		private db: DatabaseService )
 	{
-		var accounts = this.getAccountList();
-		this.tree = new FlatTree<Account>( accounts, 'AC00' );
-		this.tree.defaultItem = this.tree.getItem( 'AC00A' );
-		this.select( this.tree.defaultItem );
+		console.log( 'account-service' );
+		this.selectedItem$ = new Subject<Account>();
+		this.db.tables.Account.listAndHold
+			.subscribe( list => this.buildTree( list ) );
 	}
 
-	public select( account: Account | string )
+	public get selectedItem (): Account
 	{
-		this.tree.select( account );		
+		return this._selectedItem;
 	}
 
-	private getAccountList() : Array<Account>
+	public set selectedItem ( value: Account )
 	{
-		return [
-			
-			new Account( { $key: 'AC00', name: 'Primary' } ),
+		this._selectedItem = value;
+		this.selectedItem$.next( this._selectedItem );
+	}
 
-			new Account( { $key: 'AC00A', name: 'Assets', parentKey: 'AC00' } ),
-			new Account( { $key: 'AC00A1', name: 'Fixed Assets', parentKey: 'AC00A' } ),
-			new Account( { $key: 'AC00A2', name: 'Investments', parentKey: 'AC00A' } ),
-			new Account( { $key: 'AC00A3', name: 'Current Assets', parentKey: 'AC00A' } ),
-			new Account( { $key: 'AC00A31', name: 'Bank Account', parentKey: 'AC00A3' } ),
-			new Account( { $key: 'AC00A32', name: 'Cash In Hand', parentKey: 'AC00A3' } ),
-			new Account( { $key: 'AC00A33', name: 'Deposits', parentKey: 'AC00A3' } ),
-			new Account( { $key: 'AC00A34', name: 'Loans And Advances', parentKey: 'AC00A3' } ),
-			new Account( { $key: 'AC00A35', name: 'Stock In Hand', parentKey: 'AC00A3' } ),
-			new Account( { $key: 'AC00A36', name: 'Sundry Debtors', parentKey: 'AC00A3' } ),
-			new Account( { $key: 'AC00A4', name: 'Miscellaneous Expenses', parentKey: 'AC00A' } ),
+	public buildTree ( list: Array<Account> )
+	{
+		console.log( ( this.tree ? 're-' : '' ) + 'building account tree' );
+		console.log( list );
+		/**
+		 * Build tree
+		 */
+		const rootAccount = list.find( item => item.parentKey == null );
+		this.tree = new FlatTree<Account>( list, rootAccount.key );
 
-			new Account( { $key: 'AC00L', name: 'Liabilities', parentKey: 'AC00' } ),
-			new Account( { $key: 'AC00L4', name: 'Loans', parentKey: 'AC00L' } ),
-			new Account( { $key: 'AC00L42', name: 'Secured Loans', parentKey: 'AC00L4', description: `
-			A secured loan, is a loan in which the borrower pledges some asset (e.g. a car or property) as collateral for the loan, 
-			which then becomes a secured debt owed to the creditor who gives the loan.
-			`, number: '65232656232', holderName: 'Amsakanna' } ),
-			new Account( { $key: 'AC00L43', name: 'Unsecured Loans', parentKey: 'AC00L4' } ),
-			new Account( { $key: 'AC00L5', name: 'Branches / Divisions', parentKey: 'AC00L' } ),
-			new Account( { $key: 'AC00L6', name: 'Capital Account', parentKey: 'AC00L' } ),
-			new Account( { $key: 'AC00L61', name: 'Reserves And Surplus', parentKey: 'AC00L6' } ),
-			new Account( { $key: 'AC00L7', name: 'Current Liabilities', parentKey: 'AC00L' } ),
-			new Account( { $key: 'AC00L41', name: 'Bank OD Account', parentKey: 'AC00L7' } ),
-			new Account( { $key: 'AC00L71', name: 'Duties And Taxes', parentKey: 'AC00L7' } ),
-			new Account( { $key: 'AC00L72', name: 'Provisions', parentKey: 'AC00L7' } ),
-			new Account( { $key: 'AC00L73', name: 'Sundry Creditors', parentKey: 'AC00L7' } ),
-			new Account( { $key: 'AC00L8', name: 'Suspense Accounts', parentKey: 'AC00L' } ),
+		/**
+		 * Set default item and select it
+		 */
+		this.tree.defaultItem = list.find( item => item.id == '101' );
+		console.log( this.selectedItem );
+		this.tree.select( this.selectedItem || this.tree.defaultItem );
+		this.selectedItem = this.tree.selectedItem;
 
-			new Account( { $key: 'AC00E', name: 'Expenses', parentKey: 'AC00' } ),
-			new Account( { $key: 'AC00E9', name: 'Direct Expenses', parentKey: 'AC00E' } ),
-			new Account( { $key: 'AC00EA', name: 'Indirect Expenses', parentKey: 'AC00E' } ),
-			new Account( { $key: 'AC00EB', name: 'Purchase Accounts', parentKey: 'AC00E' } ),
+		/**
+		 * Build initial list
+		 */
+		this.list = this.tree.getChildren( this.tree.root );
+		console.log( 'account-service', 'tree-built' );
+	}
 
-			new Account( { $key: 'AC00I', name: 'Incomes', parentKey: 'AC00' } ),
-			new Account( { $key: 'AC00IC', name: 'Direct Incomes', parentKey: 'AC00I' } ),
-			new Account( { $key: 'AC00ID', name: 'Indirect Incomes', parentKey: 'AC00I' } ),
-			new Account( { $key: 'AC00IE', name: 'Sales Accounts', parentKey: 'AC00I' } )
-
-		];
+	public select ( account: Account )
+	{
+		this.selectedItem = ( this.tree && this.tree.select( account ) ) || account;
 	}
 
 }

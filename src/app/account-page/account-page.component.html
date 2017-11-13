@@ -1,9 +1,9 @@
 <div class="container">
-	<main class="floating-box">
+	<div class="component floating-box">
 		<section class="account-tree-container">
 			<header> Accounts </header>
 			<nav class="account-tree scrollable">
-				<jam-tree *ngFor="let account of accountList"
+				<jam-tree *ngFor="let account of accountService.list"
 					displayTextProperty="name"
 					[tree]="accountService.tree"
 					[node]="account"
@@ -22,5 +22,5 @@
 		<section class="account">
 			<router-outlet></router-outlet>
 		</section>
-	</main>
+	</div>
 </div>

@@ -1,3 +1,130 @@
-<p>
-  company-form works!
-</p>
+<div class="container">
+
+	<div class="component floating-box">
+
+		<header>
+			<h1 class="normal form-title"> {{ formTitle }} </h1>
+			<section class="summary">
+				<div *ngIf="company.gstin" class="item"> <span class="key"> GSTIN: </span> <span class="value"> {{ company.gstin }} </span> </div>
+				<div *ngIf="company.pan" class="item"> <span class="key"> PAN: </span> <span class="value"> {{ company.pan }} </span> </div>
+				<div *ngIf="company.cin" class="item"> <span class="key"> CIN: </span> <span class="value"> {{ company.cin }} </span> </div>
+			</section>
+		</header>
+
+		<main>
+			<mat-horizontal-stepper linear="true" #stepper
+				class="company-stepper">
+				<mat-step [stepControl]="formGroups[0]">
+					<form [formGroup]="formGroups[0]"
+						class="company-form">
+						<ng-template matStepLabel> Name </ng-template>
+						<main class="v-scrollable">
+							<p>
+								Your company name plays a monumental role
+								in a brand's growth and perception,
+								meaning it can completely make or break a company.
+							</p>
+							<mat-form-field class="large company-name-box">
+								<input matInput placeholder="Company Name" formControlName="name">
+							</mat-form-field>
+						</main>
+					</form>
+				</mat-step>
+				<mat-step [stepControl]="formGroups[1]">
+					<form [formGroup]="formGroups[1]"
+						class="company-form address-form">
+						<main class="v-scrollable">
+							<ng-template matStepLabel> Address </ng-template>
+							<mat-form-field>
+								<input matInput placeholder="Street Address (optional)" formControlName="streetAddress"/>
+							</mat-form-field>
+							<div><mat-form-field>
+								<input matInput placeholder="City (optional)" formControlName="city"/>
+							</mat-form-field>
+							<mat-form-field>
+								<input matInput placeholder="PIN Code (optional)" formControlName="pinCode"/>
+							</mat-form-field></div>
+							<mat-form-field>
+								<input matInput placeholder="State (optional)" formControlName="state"/>
+							</mat-form-field>
+						</main>
+					</form>
+				</mat-step>
+				<mat-step [stepControl]="formGroups[2]">
+					<form [formGroup]="formGroups[2]"
+						class="company-form contact-form">
+						<main class="v-scrollable">
+							<ng-template matStepLabel> Contact </ng-template>
+							<mat-form-field>
+								<input matInput placeholder="Mobile (optional)" formControlName="phone"/>
+							</mat-form-field>
+							<mat-form-field>
+								<input matInput placeholder="Land Line (optional)" formControlName="landline"/>
+							</mat-form-field>
+							<mat-form-field>
+								<input matInput placeholder="Company Email (optional)" formControlName="email"/>
+							</mat-form-field>
+							<mat-form-field>
+								<input matInput placeholder="Website (optional)" formControlName="website"/>
+							</mat-form-field>
+							<mat-form-field>
+								<input matInput placeholder="Fax (optional)" formControlName="fax"/>
+							</mat-form-field>
+						</main>
+					</form>
+				</mat-step>
+				<mat-step [stepControl]="formGroups[3]">
+					<form [formGroup]="formGroups[3]"
+						class="company-form tax-form">
+						<main class="v-scrollable">
+							<ng-template matStepLabel> Tax </ng-template>
+							<mat-form-field>
+								<input matInput placeholder="Company Id" formControlName="id">
+								<mat-error *ngIf="id.errors"> Allowed: lowercase, numbers, underscore. </mat-error>
+							</mat-form-field>
+							<mat-form-field>
+								<input matInput placeholder="GSTIN (optional)" formControlName="gstin">
+							</mat-form-field>
+							<mat-form-field>
+								<input matInput placeholder="PAN (optional)" formControlName="pan">
+							</mat-form-field>
+							<mat-form-field>
+								<input matInput placeholder="CIN (optional)" formControlName="cin">
+							</mat-form-field>
+						</main>
+					</form>
+				</mat-step>
+				<mat-step [stepControl]="formGroups[4]">
+					<form [formGroup]="formGroups[4]"
+						class="company-form finish-form"
+						(ngSubmit)="submit()">
+						<main class="v-scrollable">
+							<ng-template matStepLabel> Finish </ng-template>
+							<h1 class="normal almost-done-text"> Almost done ! </h1>
+							<p>
+								Your company <span class="company-name"> {{ company.name }} </span> is ready to be created.
+								When you're all set, please click on Create Company.
+							</p>
+						</main>
+					</form>
+				</mat-step>
+			</mat-horizontal-stepper>
+		</main>
+
+		<footer>
+			<button mat-button
+				class="stepperBackButton"
+				(click)="stepper.previous()">
+				<mat-icon class="large"> keyboard_arrow_left </mat-icon>
+				<span class="stepperBackButtonText"> back </span>
+			</button>
+			<button mat-raised-button
+				class="stepperNextButton"
+				[color]="stepperNextButtonColor"
+				(click)="nextStepper()">
+				{{ stepperNextButtonText }}
+			</button>
+		</footer>
+		
+	</div>
+</div>

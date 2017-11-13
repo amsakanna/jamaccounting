@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
-import { EventManager, Events } from '../../jam-event-manager/jam-event-manager';
+import { EventManager, Events, EventStatus } from '../../jam-event-manager/jam-event-manager';
 import { AuthService } from '../services/auth.service';
 import { AuthFormValidators } from '../directives/auth-form.validator';
 import { User } from "../models/user.model";
@@ -18,14 +18,14 @@ export class RegisterComponent implements OnInit
 	@Input() role: Roles;
 	private formGroup: FormGroup;
 	@Output() register: EventEmitter<User>;
-	
+
 	constructor(private formBuilder: FormBuilder,
 				private eventManager: EventManager,
 				private authService: AuthService)
 	{
 		this.register = new EventEmitter<User>();
 	}
-	
+
 	ngOnInit()
 	{
 		this.formGroup = this.formBuilder.group({
@@ -52,11 +52,11 @@ export class RegisterComponent implements OnInit
 	private _register()
 	{
 		const user = new User( { email: this.email.value, password: this.password.value, role: this.role } );
-		this.eventManager.emitAuthEvent( Events.RegisterRequested );
+		this.eventManager.emitAuthEvent( Events.Register, EventStatus.Requested );
 		this.authService.register( user );
 		this.register.emit( user );
 	}
-	
+
 	private _submit()
 	{
 		if( this.formGroup.status == 'VALID' ) {

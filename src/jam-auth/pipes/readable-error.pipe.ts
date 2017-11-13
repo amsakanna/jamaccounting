@@ -21,15 +21,15 @@ export class ReadableErrorPipe implements PipeTransform
 	}
 
 	transform( errors: any, field: string ): any
-	{		
+	{
 		if( ! this.errorMessages[field] ) return '';
 
 		// Get first matching error
 		var errorType = Object.keys(this.errorMessages[field]).find( errorMessageKey => {
 			return !! Object.keys( errors ).find( errorKey => errorMessageKey == errorKey );
-		});		
+		});
 		var errorMessage: string = this.errorMessages[field][errorType];
-		
+
 		if( ! errorMessage ) return 'Oops! Something went wrong'
 
 		// Replace variables here

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { EventManager, Events } from '../../jam-event-manager/jam-event-manager';
+import { EventManager, Events, EventStatus } from '../../jam-event-manager/jam-event-manager';
 import { AuthService } from "../services/auth.service";
 import { User } from "../models/user.model";
 
@@ -51,7 +51,7 @@ export class SignInComponent implements OnInit
 	private _signIn()
 	{
 		const user = new User( { email: this.email.value, password: this.password.value } );
-		this.eventManager.emitAuthEvent( Events.SignInRequested );
+		this.eventManager.emitAuthEvent( Events.SignIn, EventStatus.Requested );
 		this.authService.signIn( user );
 		this.signIn.emit( user );
 	}

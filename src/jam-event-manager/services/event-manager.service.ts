@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject } from "rxjs/Subject";
-import { Event, AuthEvent, PageRequestEvent, NavigationEvent } from '../models/event.model';
+import { Event, AuthEvent, PageRequestEvent, NavigationEvent, DatabaseEvent } from '../models/event.model';
+import { EventStatus } from '../enums/event-status.enum';
+import { KeyValue } from '../../app/models/key-value.model';
 
 @Injectable()
 export class EventManager
@@ -12,6 +14,7 @@ export class EventManager
     public authEvents: Subject<Event>;
     public pageRequestEvents: Subject<Event>;
     public navigationEvents: Subject<Event>;
+    public databaseEvents: Subject<Event>;
     public logEvents: Subject<Event>;
 
 	constructor()
@@ -21,6 +24,7 @@ export class EventManager
         this.authEvents = new Subject<Event>();
         this.pageRequestEvents = new Subject<Event>();
         this.navigationEvents = new Subject<Event>();
+        this.databaseEvents = new Subject<Event>();
         this.logEvents = new Subject<Event>();
     }
 
@@ -32,7 +36,7 @@ export class EventManager
             // Ensure existing events for the key
             this.triggerEvents[key] = this.triggerEvents[key] || [];
 
-            // Add new events for the key            
+            // Add new events for the key
             this.triggerEvents[key] = [ ...this.triggerEvents[key], ...triggerEvents[key] ];
 
             // Remove duplicate events
@@ -40,14 +44,17 @@ export class EventManager
             this.triggerEvents[key] = [ ...Array.from( uniqueEvents ) ];
 
         });
-
-        console.log( 'triggerEvents', this.triggerEvents );
     }
-    
+
 	public emit( event: Event )
 	{
         // Add trigger events to existing array
-        event.triggerEvents = [ ...event.triggerEvents, ...this.triggerEvents[event.type] || [], ...this.triggerEvents[event.id] || [] ];
+        event.triggerEvents = [
+            ...event.triggerEvents,
+            ...this.triggerEvents[event.type] || [],
+            ...this.triggerEvents[event.type + '-' + event.name] || [],
+            ...this.triggerEvents[event.id] || []
+        ];
 
         // Remove duplicate events
         var uniqueEvents = new Set<Subject<Event>>( event.triggerEvents );
@@ -56,27 +63,37 @@ export class EventManager
         // Loop through the list and trigger each event
         event.triggerEvents.forEach( triggerEvent =>
         {
-            console.log( 'emitting', event.id );
+            console.log( 'triggering', event.id );
             triggerEvent.next( event );
         });
         // this.allEvents.next( event );
     }
-    
-    public emitAuthEvent( name: string, errorCode?: string, returnUrl?: string )
+
+    public emitAuthEvent( name: string, status: EventStatus, user?: any, errorCode?: string, returnUrl?: string )
     {
-        const event = new AuthEvent( name, errorCode, returnUrl );
+        const event = new AuthEvent( name, status, user, errorCode, returnUrl );
+        console.log( 'emitting', event.id );
         this.emit( event );
     }
-    
-    public emitPageRequestEvent( name: string )
+
+    public emitPageRequestEvent( name: string, status: EventStatus, urlParams?: Array<KeyValue> )
     {
-        const event = new PageRequestEvent( name );        
+        const event = new PageRequestEvent( name, status, urlParams );
+        console.log( 'emitting', event.id );
         this.emit( event );
     }
-    
-    public emitNavigationEvent( name: string, errorCode?: string )
+
+    public emitNavigationEvent( name: string, status: EventStatus, urlParams?: Array<KeyValue>, errorCode?: string )
     {
-        const event = new NavigationEvent( name, errorCode );
+        const event = new NavigationEvent( name, status, urlParams, errorCode );
+        console.log( 'emitting', event.id );
+        this.emit( event );
+    }
+
+    public emitDatabaseEvent( name: string, status: EventStatus, tableName: string, data: any, errorCode?: string )
+    {
+        const event = new DatabaseEvent( name, status, tableName, data, errorCode );
+        console.log( 'emitting', event.id );
         this.emit( event );
     }
 

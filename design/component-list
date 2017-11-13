@@ -1,0 +1,32 @@
+dashboard
+settings
+    profile
+    preferences
+    templates
+    subscription
+    taxes
+    automation
+    reminders
+masters
+    contacts
+    accounts
+    voucher-types
+    users
+    roles
+actions
+    purchase
+        purchase-order
+        bill
+        expense
+        payment-made
+    sales
+        estimate
+        sales-order
+        invoice
+        delivery-challan
+        payment-received        
+reports
+    opening-balances
+    profit-and-loss
+    cash-flow
+    balance-sheet

@@ -5,7 +5,11 @@
 		class="jam-tree-text"
 		[style.fontWeight]="selected ? 'bold' : 'normal'"
 		[style.color]="selected ? 'cornflowerblue' : 'black'">
-		<div> {{ text }} </div>
+		<div>
+			<span style="white-space: nowrap">
+				{{ text }}
+			</span>
+		</div>
 	</div>
 	<div content-template
 		class="jam-tree-nodes">

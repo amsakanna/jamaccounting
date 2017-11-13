@@ -18,7 +18,7 @@ export const database = {
 		messagingSenderId: "41851418000"
 	},
 	jamFireStoreConfig: {
-		databaseMetadataPath: 'Metadata/database/Table'
+		databaseMetadataPath: 'Metadata/Database'
 	}
 	
 }

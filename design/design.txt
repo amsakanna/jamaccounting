@@ -1,35 +1,58 @@
-- home
-    - pricing
-    - contact
-    - about
-    - register
-    - sign-in
-        - user ( owner )
-            - profile
-            - companies
-                - add-company
-                    - register employee sign in
-                    - set admin
-                    - authorize device
-                - company
-                    - settings
-                    - dashboard
-        - company-sign-in ( employee )
-            - dashboard ( admin )
-                - users
-                    - user
-                    - new user
-                - masters
-                    - accounts
-                    - inventory
-                    - voucher types
-                - history
-                - reports
-            - dashboard ( others )
-                - vouchers
-                    - new
-
-
-
-    
-
+*       - home
+            - pricing
+            - contact
+            - about
+✓          - register
+✓          - sign-in
+*              - user ( owner )
+*                  - profile
+✓                  - companies
+✓                      - list
+✓                      - new
+✓                      - view
+                            - sign-in
+                                - email
+                                - password ( password or temporary password )
+                            - profile ( owner/super/admin )
+                            - settings
+                                - authorize device
+                                - customization
+                                - subscription
+*                               - restricted ( owner/super )
+                            - user
+                                - profile
+                                - change password
+                            - roles
+                                - list
+                                - new
+                                - view
+                                - edit
+                            - users ( owner/super/admin )
+                                - list
+                                - new
+                                - view
+                                - edit
+                            - dashboard ( view based on roles )
+                            - masters ( owner/super/admin/accountant )
+*                               - accounts
+*                                   - list
+                                    - new
+                                    - view
+                                    - edit
+                                - voucher types
+                                    - list
+                                    - new
+                                    - view
+                                    - edit
+*                               - inventory
+*                                   - list
+                                    - new
+                                    - view
+                                    - edit
+                            - transactions
+                                - list ( access based on roles )
+                                - new
+                                - view
+                                - edit
+                            - reports ( access based on roles )
+                            - history ( owner/super )

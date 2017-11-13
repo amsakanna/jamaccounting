@@ -1,3 +1,51 @@
-<p>
-  company works!
-</p>
+<div class="container">
+
+    <div class="component">
+
+        <main>
+            <router-outlet></router-outlet>
+        </main>
+
+        <footer>
+            <nav>
+                <button mat-button disableRipple
+                    class="no-focus item"
+                    matTooltip="Dashboard" matTooltipPosition="above"
+                    (click)="goto( '' )">
+                    <mat-icon> donut_small </mat-icon>
+                </button>
+                <button mat-button disableRipple
+                    class="no-focus item"
+                    matTooltip="Quick Add" matTooltipPosition="above"
+                    (click)="goto( '' )">
+                    <mat-icon> add_circle </mat-icon>
+                </button>
+                <button mat-button disableRipple
+                    class="no-focus item"
+                    matTooltip="Account" matTooltipPosition="above"
+                    (click)="goto( Pages.Accounts )">
+                    <mat-icon> account_balance </mat-icon>
+                </button>
+                <button mat-button disableRipple
+                    class="no-focus item"
+                    matTooltip="Messages" matTooltipPosition="above"
+                    (click)="goto( '' )">
+                    <mat-icon> announcement </mat-icon>
+                </button>
+                <button mat-button disableRipple
+                    class="no-focus item"
+                    matTooltip="Settings" matTooltipPosition="above"
+                    (click)="goto( '' )">
+                    <mat-icon> settings </mat-icon>
+                </button>
+                <button mat-raised-button color="warn"
+                    class="item"
+                    (click)="shutDown()">
+                    Shut Down
+                </button>
+            </nav>
+        </footer>
+
+    </div>
+
+</div>

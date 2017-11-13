@@ -7,7 +7,7 @@
 
 .container > header {
     padding: 0px 50px;
-    height: 80px;
+    height: 70px;
     width: calc(100% - 100px);
     display: flex;
     justify-content: space-between;
@@ -16,7 +16,7 @@
 
 .container > main {
     width: 100%;
-    height: calc( 100% - 80px);
+    height: calc( 100% - 70px);
 }
 
 section.company {
@@ -28,4 +28,8 @@ section.company {
     width: 30px;
     height: 30px;
     font-size: 30px;
+}
+
+.menu {
+    padding-bottom: 10px;
 }
