@@ -1,7 +1,7 @@
 import { Subject } from "rxjs/Subject";
 import { EventTypes } from "../enums/event-types.enum";
 import { Events } from "../enums/events.enum";
-import { KeyValue } from "../../app/models/key-value.model";
+import { KeyValue } from '../../jam-model-library/jam-model-library';
 import { EventStatus } from "../enums/event-status.enum";
 
 export interface IEvent
@@ -20,7 +20,7 @@ export class Event implements IEvent
     public triggerEvents: Array<Subject<Event>>;
     public static IFS = '-';
 
-    constructor( name: string, type: string, status: EventStatus )
+    constructor ( name: string, type: string, status: EventStatus )
     {
         this.name = name || '';
         this.type = type || EventTypes.None.toString();
@@ -28,14 +28,14 @@ export class Event implements IEvent
         this.triggerEvents = [];
     }
 
-    public static createId( type?: string, name?: string, status?: string)
+    public static createId ( type?: string, name?: string, status?: string )
     {
-        return type || '' + Event.IFS
-            + name || '' + Event.IFS
+        return ( type || '' ) + Event.IFS
+            + ( name || '' ) + Event.IFS
             + status;
     }
-    
-    public get id(): string
+
+    public get id (): string
     {
         return this.type + Event.IFS
             + this.name + Event.IFS
@@ -49,7 +49,7 @@ export class AuthEvent extends Event
     public errorCode: string;
     public returnUrl: string;
 
-    constructor( name: string, status: EventStatus, user?: any, errorCode?: string, returnUrl?: string )
+    constructor ( name: string, status: EventStatus, user?: any, errorCode?: string, returnUrl?: string )
     {
         super( name, EventTypes.AuthEvent.toString(), status );
         this.user = user;
@@ -63,7 +63,7 @@ export class NavigationEvent extends Event
     public urlParams: Array<KeyValue>;
     public errorCode: string;
 
-    constructor( name: string, status: EventStatus, urlParams?: Array<KeyValue>, errorCode?: string )
+    constructor ( name: string, status: EventStatus, urlParams?: Array<KeyValue>, errorCode?: string )
     {
         super( name, EventTypes.NavigationEvent.toString(), status );
         this.urlParams = urlParams;
@@ -75,7 +75,7 @@ export class PageRequestEvent extends Event
 {
     public urlParams: Array<KeyValue>;
 
-    constructor( name: string, status: EventStatus, urlParams?: Array<KeyValue> )
+    constructor ( name: string, status: EventStatus, urlParams?: Array<KeyValue> )
     {
         super( name, EventTypes.PageRequestEvent.toString(), status );
         this.urlParams = urlParams;
@@ -88,7 +88,7 @@ export class DatabaseEvent extends Event
     public data: any;
     public errorCode: string;
 
-    constructor( name: string, status: EventStatus, tableName: string, data: any, errorCode?: string )
+    constructor ( name: string, status: EventStatus, tableName: string, data: any, errorCode?: string )
     {
         super( name, EventTypes.DatabaseEvent.toString(), status );
         this.tableName = tableName;

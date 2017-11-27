@@ -1,0 +1,70 @@
+.jam-explorer {
+    width: 100%;
+    height: 100%;    
+    display: flex;
+}
+
+.jam-explorer-list {
+    width: 400px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;    
+}
+
+.jam-explorer-list > header {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+}
+
+.jam-explorer-list > main {
+    height: calc( 100% - 100px );
+}
+
+.jam-explorer-list-template {
+    height: 100%;
+}
+
+.jam-explorer-list > footer {
+    padding: 0px 50px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.jam-explorer-item {
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.jam-explorer-item > header {
+    height: 100px;
+    display: flex;
+    align-items: center;
+}
+
+.jam-explorer-item > header .jam-explorer-item-title-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.jam-explorer-item > header .jam-explorer-item-action-buttons {
+    padding: 0px 50px;
+}
+
+.jam-explorer-item > header .jam-explorer-item-title {
+    font-size: 1.2em;
+}
+
+.jam-explorer-item > main {
+    width: 100%;
+    flex-grow: 1;
+}

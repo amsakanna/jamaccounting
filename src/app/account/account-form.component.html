@@ -1,0 +1,46 @@
+<div class="container">
+	<form [formGroup]="formGroup" novalidate
+		class="account-form"
+		(ngSubmit)="submit()">
+
+		<main>
+			<mat-form-field class="name">
+				<input matInput placeholder="Account Name" formControlName="name"/>
+			</mat-form-field>
+			<!-- <mat-form-field class="id">
+				<input matInput placeholder="Account Id" formControlName="id"/>
+			</mat-form-field> -->
+			<mat-form-field>
+				<mat-select [(value)]="account.parentKey">
+					<mat-option *ngFor="let parent of accountList"
+						[value]="parent.key">
+						{{ parent.name }}
+					</mat-option>
+				</mat-select>
+			  </mat-form-field>
+
+			<!-- <mat-form-field class="number">
+				<input matInput placeholder="Account Number" formControlName="number"/>
+			</mat-form-field> -->
+		</main>
+
+		<footer>
+			<div class="left">
+				<button mat-button type="button"
+					class="reset-button no-animation"
+					(click)="reset()"> RESET
+				</button>
+			</div>
+			<div class="right">
+				<button mat-button type="button"
+					class="cancel-button no-animation"
+					(click)="cancel()"> CANCEL
+				</button>
+				<button mat-raised-button color="primary" type="submit"
+					class="save-button"> SAVE
+				</button>
+			</div>
+		</footer>
+
+	</form>
+</div>

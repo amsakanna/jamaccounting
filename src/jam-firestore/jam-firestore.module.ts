@@ -5,15 +5,17 @@ import { configToken } from './jam-firestore.config';
 import { IJamFirestoreConfig } from './models/i-jam-firestore-config.model';
 import { JamFirestoreDatabase } from "./services/jam-firestore-database.service";
 
-@NgModule({
-    imports: [CommonModule],
-    declarations: [],
-    providers: [JamFirestoreDatabase],
-    exports: []
-})
+@NgModule( {
+    imports: [
+        CommonModule
+    ],
+    providers: [
+        JamFirestoreDatabase
+    ]
+} )
 export class JamFirestoreModule
 {
-    static forRoot( config: IJamFirestoreConfig ): ModuleWithProviders
+    static forRoot ( config: IJamFirestoreConfig ): ModuleWithProviders
     {
         return {
             ngModule: JamFirestoreModule,
@@ -21,6 +23,6 @@ export class JamFirestoreModule
                 JamFirestoreDatabase,
                 { provide: configToken, useValue: config }
             ]
-        }
+        };
     }
 }

@@ -1,23 +1,15 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { EventManager } from './services/event-manager.service';
 
-@NgModule({
-    imports: [CommonModule],
-    declarations: [],
-    providers: [EventManager],
-    exports: []
-})
+@NgModule( {} )
 export class JamEventManagerModule
 {
-    static forRoot(): ModuleWithProviders
+    static forRoot (): ModuleWithProviders
     {
         return {
             ngModule: JamEventManagerModule,
-            providers: [
-                EventManager
-            ]
+            providers: [ EventManager ]
         }
     }
 }

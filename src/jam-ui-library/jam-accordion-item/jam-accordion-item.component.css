@@ -1,0 +1,9 @@
+.jam-accordion-item-header {
+    display: flex;
+}
+
+.jam-accordion-item-icon {
+    font-size: 15px;
+    width: 15px;
+    height: 20px;
+}

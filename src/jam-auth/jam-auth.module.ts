@@ -1,45 +1,32 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule, MatButtonModule, MatInputModule, MatSelectModule } from '@angular/material';
+import { ReadableErrorPipe } from './readable-error.pipe';
+import { AuthGuard } from './auth-guard.service';
+import { SignInComponent } from './sign-in.component';
+import { RegisterComponent } from './register.component';
 
-import { JamEventManagerModule } from '../jam-event-manager/jam-event-manager';
-
-import { ReadableErrorPipe } from './pipes/readable-error.pipe';
-import { AuthService } from './services/auth.service';
-import { SignInComponent } from './sign-in/sign-in.component';
-import { RegisterComponent } from './register/register.component';
-
-@NgModule({
+@NgModule( {
     imports: [
         CommonModule,
+        ReactiveFormsModule,
         MatIconModule,
-            MatButtonModule,
-            MatInputModule,
-            MatSelectModule,
-        FormsModule,
-            ReactiveFormsModule,
-        JamEventManagerModule.forRoot()
+        MatButtonModule,
+        MatInputModule,
+        MatSelectModule
     ],
-    declarations: [
-        ReadableErrorPipe,
-        SignInComponent,
-        RegisterComponent
-    ],
-    providers: [AuthService],
-    exports: [
-        SignInComponent,
-        RegisterComponent
-    ]
-})
+    declarations: [ ReadableErrorPipe, SignInComponent, RegisterComponent ],
+    providers: [ AuthGuard ],
+    exports: [ SignInComponent, RegisterComponent ]
+} )
 export class JamAuthModule
 {
-    static forRoot(): ModuleWithProviders
+    static forRoot (): ModuleWithProviders
     {
         return {
             ngModule: JamAuthModule,
-            providers: [AuthService]
-        }
+            providers: [ AuthGuard ]
+        };
     }
 }

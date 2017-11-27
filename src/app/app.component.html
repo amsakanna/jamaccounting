@@ -1,8 +1,8 @@
 <div class="container">
-	
+
 	<header>
 		<section class="company">
-			<a mdButton (click)="goto( 'home' )">
+			<a mdButton (click)="goto( pages.Home )">
 				<mat-icon color="primary"
 					class="home-icon">
 					home
@@ -10,21 +10,21 @@
 			</a>
 		</section>
 		<nav class="menu">
-			<jam-xbox-menu
+			<!-- <jam-xbox-menu
 				[menu]="navigator.menu"
 				(select)="select( $event )">
-			</jam-xbox-menu>
+			</jam-xbox-menu> -->
 		</nav>
 		<section class="user">
 			<div class="user-buttton">
 				<a mdButton
-					(click)="goto( 'user' )">
+					(click)="goto( pages.User )">
 					<mat-icon color="primary"
-						*ngIf="auth?.authenticated"
+						*ngIf="authenticated"
 						class="user-icon">
 						account_circle
 					</mat-icon>
-					<span *ngIf="!(auth?.authenticated)"
+					<span *ngIf="!authenticated"
 						class="user-text">
 						SIGN IN
 					</span>

@@ -1,57 +1,43 @@
 import { Component, OnInit } from '@angular/core';
-import { Pages } from '../enums/pages.enum';
-import { EventManager, EventStatus } from '../../jam-event-manager/jam-event-manager';
-import { DatabaseService } from '../services/database.service';
+import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
-import { Company } from '../models/company.model';
-import { UserService } from '../services/user.service';
-import { UserAccount } from '../models/user-account.model';
+import { Store } from '@ngrx/store';
+import { CompanyModuleState } from './company.state';
+import { CompanyAction } from './company.actions';
+import { NavigatorAction } from '../../jam-navigator/jam-navigator';
+import { Pages } from '../shared/pages.enum';
+import { Company } from './company.model';
 
-@Component({
+@Component( {
 	selector: 'app-company',
 	templateUrl: './company.component.html',
-	styleUrls: ['./company.component.css']
-})
+	styleUrls: [ './company.component.css' ]
+} )
 export class CompanyComponent implements OnInit
 {
-
 	private company: Company;
-	private Pages = Pages;
 
-	constructor(private eventManager: EventManager,
-				private activatedRoute: ActivatedRoute,
-				private db: DatabaseService,
-				private	userService: UserService
-			)
+	constructor ( private store: Store<CompanyModuleState>,
+		private activatedRoute: ActivatedRoute )
 	{
-		console.log( 'company-component' );
-		var companyKey = this.activatedRoute.snapshot.params['company'] || '';
-		console.log( companyKey );
-		this.db.EnterCollection( this.db.tables.Company.name, companyKey );
-		companyKey && this.db.tables.Company.lookup( companyKey ).then( company => this.company = company );
+		this.store.select( state => state.companyState )
+			.subscribe( companyState => this.company = companyState.selectedItem );
 	}
 
-	ngOnInit()
+	ngOnInit ()
 	{
+		var companyKey = this.activatedRoute.snapshot.params[ 'company' ] || '';
+		this.store.dispatch( new CompanyAction.Select( companyKey ) );
 	}
 
-	private goto( page: Pages )
+	private goto ( page: Pages )
 	{
-		if( page in Pages ) {
-			this.eventManager.emitPageRequestEvent( page, EventStatus.Requested );
-		}
+		this.store.dispatch( new NavigatorAction.Navigate( page ) );
 	}
 
-	private async shutDown()
+	private async shutDown ()
 	{
-		const companyDeleted = await this.db.tables.Company.delete( this.company.key );
-		if( companyDeleted ) {
-			var existingUserAccount = this.userService.userAccount;
-			existingUserAccount.companies = existingUserAccount.companies.filter( company => company != this.company.key );
-			const newUserAccount = new UserAccount( { key: existingUserAccount.key, companies: existingUserAccount.companies } );
-			await this.db.tables.UserAccount.updateFields( newUserAccount );
-			this.eventManager.emitPageRequestEvent( Pages.Companies, EventStatus.Requested );
-		}
+		this.store.dispatch( new CompanyAction.Remove( this.company.key ) );
 	}
 
 }

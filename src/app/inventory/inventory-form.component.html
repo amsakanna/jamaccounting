@@ -1,0 +1,44 @@
+<div class="container">
+	<form [formGroup]="formGroup" novalidate
+		class="inventory-form"
+		(ngSubmit)="submit()">
+
+		<main>
+			<section class="name">
+				<mat-form-field><input
+					matInput
+					placeholder="Name"
+					formControlName="name" />
+				</mat-form-field>
+			</section>
+
+			<mat-select placeholder="Category"
+				formControlName="parent"
+				[(ngModel)]="this.inventoryItem.parentKey">
+				<mat-option *ngFor="let inventoryItem of inventoryTree.list"
+					[value]="inventoryItem.$key">
+					{{ inventoryItem.name }}
+				</mat-option>
+			</mat-select>
+		</main>
+
+		<footer>
+			<div class="left">
+				<button mat-button type="button"
+					class="reset-button no-animation"
+					(click)="reset()"> RESET 
+				</button>
+			</div>
+			<div class="right">
+				<button mat-button type="button" 
+					class="cancel-button no-animation" 
+					(click)="cancel()"> CANCEL 
+				</button>
+				<button mat-raised-button color="primary" type="submit"
+					class="save-button"> SAVE 
+				</button>
+			</div>
+		</footer>
+
+	</form>
+</div>

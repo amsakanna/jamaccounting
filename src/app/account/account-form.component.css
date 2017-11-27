@@ -1,0 +1,32 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.account-form {
+    width: 100%;
+    height: 100%;
+}
+
+.account-form > main {
+    padding: 50px 100px;
+    height: calc(100% - 200px);
+}
+
+.account-form > footer {
+    height: 100px;
+    padding: 0px 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reset-button, .cancel-button {
+    color: royalblue;
+}
+
+.account-form > footer > .left {
+    flex-grow: 1;
+}
