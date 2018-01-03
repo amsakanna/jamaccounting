@@ -1,11 +1,11 @@
-import { Pages } from './../shared/pages.enum';
 import { Injectable } from "@angular/core";
 import { Observable } from 'rxjs/Observable';
 import { Action } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
 import { DatabaseService } from "../shared/database.service";
-import { AuthAction, AuthActionTypes } from "../../jam-auth/jam-auth";
-import { NavigatorAction } from "../../jam-navigator/jam-navigator";
+import { AuthAction, AuthActionTypes } from "../../jam/auth";
+import { NavigatorAction } from "../../jam/navigator";
+import { Pages } from '../model';
 
 @Injectable()
 export class CoreEffects

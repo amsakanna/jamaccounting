@@ -1,0 +1,37 @@
+<div id="jam-list"
+	class="jam-list jam-list-scrollable"
+	[style.paddingTop]="direction == 'horizontal' ? '50px' : '0px'"
+	[style.paddingBottom]="direction == 'horizontal' ? '50px' : '0px'"
+	[ngClass]="direction">
+	<div *ngIf="showAddButton"
+		class="jam-list-item"
+		[style.marginLeft]="marginLeft"
+		(click)="_create()"
+		[style.transform]="_transform( 'new' )"
+		(mouseenter)="_hoveredItem = 'new'"
+		(mouseleave)="_hoveredItem = null"
+		[@listItemAnimation]="listItemState">
+		<ng-content select="[new-button-template]">
+		</ng-content>
+	</div>
+	<div *ngFor="let item of list"
+		class="jam-list-item"
+		[style.backgroundColor]="_backgroundColor( item )"
+		[style.transform]="_transform( item )"
+		[style.marginLeft]="marginLeft"
+		[style.marginTop]="marginTop"
+		(click)="_select(item)"
+		(dblclick)="_open(item)"
+		(mouseenter)="_hoveredItem = item"
+		(mouseleave)="_hoveredItem = null"
+		[@listItemAnimation]="listItemState">
+		<ng-template
+			[ngTemplateOutlet]="listItemTemplate"
+			[ngTemplateOutletContext]="{
+				item: item,
+				hoveredItem: _hoveredItem,
+				selectedItem: selectedItem
+			}">
+		</ng-template>
+	</div>
+</div>

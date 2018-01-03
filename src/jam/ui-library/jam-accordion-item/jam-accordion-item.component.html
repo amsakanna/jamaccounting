@@ -1,0 +1,13 @@
+<div class="jam-accordion-item">
+	<header class="jam-accordion-item-header"
+		(click)="_toggle()">
+		<mat-icon class="jam-accordion-item-icon"> {{ icon }} </mat-icon>
+		<ng-content select="[header-template]">
+		</ng-content>
+	</header>
+	<main class="jam-accordion-item-content"
+		*ngIf="expanded">
+		<ng-content select="[content-template]">
+		</ng-content>
+	</main>
+</div>

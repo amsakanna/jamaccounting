@@ -1,9 +1,9 @@
-import { FlatTree } from '../../jam-model-library/flat-tree.model';
-import { Account } from './account.model';
-import { AppState } from '../app.store';
-import { JamEntityState } from '../../jam-ngrx/jam-ngrx';
+import { JamEntityState } from '../../jam/ngrx';
+import { CompanyModuleState } from '../company';
+import { Account } from '../model';
+import { FlatTree } from '../../jam/model-library';
 
-export interface AccountModuleState extends AppState
+export interface AccountModuleState extends CompanyModuleState
 {
 	accountState: AccountState
 }

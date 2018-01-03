@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AccountModuleState, AccountState, AccountAction } from './account.store';
-import { Account } from './account.model';
-import { Router } from '@angular/router';
-import { FlatTree } from '../../jam-model-library/jam-model-library';
+import { NavigatorAction } from '../../jam/navigator';
+import { Account, Pages } from '../model';
+import { FlatTree, KeyValue } from '../../jam/model-library';
 
 @Component( {
 	selector: 'app-account',
@@ -17,28 +17,30 @@ export class AccountComponent implements OnInit
 	private tree: FlatTree<Account>;
 	private selectedItem: Account;
 
-	constructor ( private store: Store<AccountModuleState>, private router: Router )
-	{
-	}
+	constructor ( private store: Store<AccountModuleState> ) { }
 
 	ngOnInit ()
 	{
 		this.store.select( state => state.accountState.loading )
 			.subscribe( loading => this.loading = loading );
+
 		this.store.select( state => state.accountState.tree )
 			.subscribe( tree => this.tree = tree );
+
 		this.store.select( state => state.accountState.selectedItem )
 			.subscribe( selectedItem => this.selectedItem = selectedItem );
-		this.store.dispatch( new AccountAction.Initialize() );
+
+		this.store.select( state => state.companyState.selectedItem )
+			.filter( company => !!company )
+			.subscribe( company => this.store.dispatch( new AccountAction.Initialize() ) );
 	}
 
 	private select ( account: Account )
 	{
-		console.log( account );
 		this.store.dispatch( new AccountAction.Select( account.key ) );
 	}
 
-	private newItem ()
+	private create ()
 	{
 		this.store.dispatch( new AccountAction.Create() );
 	}

@@ -1,6 +1,7 @@
 /*  Framework Modules  */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import
 {
@@ -16,20 +17,24 @@ import
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
-/*  App Components  */
-import { userReducers } from './user.reducers';
-import { UserEffects } from './user.effects';
+/*  My Library Modules  */
+import { JamListModule } from '../../jam/ui-library';
+
+/*  Components  */
+import { userRoutes } from './user.routes';
+import { UserGuard } from './user.guard';
+import { userReducers, UserEffects } from './user.store';
 import { UserComponent } from './user.component';
-import { UserRoutingModule } from './user-routing.module';
-import { UserGuard } from './user-guard.service';
 import { ProfileComponent } from './profile.component';
 import { SubscriptionComponent } from './subscription.component';
+import { CompaniesComponent } from './companies.component';
 
 @NgModule( {
 	declarations: [
 		UserComponent,
 		ProfileComponent,
-		SubscriptionComponent
+		SubscriptionComponent,
+		CompaniesComponent
 	],
 	imports: [
 		CommonModule,
@@ -42,7 +47,8 @@ import { SubscriptionComponent } from './subscription.component';
 		MatTooltipModule,
 		StoreModule.forFeature( 'userState', userReducers ),
 		EffectsModule.forFeature( [ UserEffects ] ),
-		UserRoutingModule
+		JamListModule,
+		RouterModule.forChild( userRoutes )
 	],
 	providers: [ UserGuard ]
 } )

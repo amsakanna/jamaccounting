@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Store } from '@ngrx/store';
 import { AccountModuleState, AccountState, AccountAction } from './account.store';
-import { Account } from './account.model';
+import { Account } from '../model';
 
 @Component( {
 	selector: 'app-account-form',
@@ -13,68 +13,87 @@ import { Account } from './account.model';
 export class AccountFormComponent implements OnInit
 {
 
-	private accountKeyParam: string;
-	private accountState: AccountState;
-	private account: Account;
-	private accountList: Account[];
-	private formGroup: FormGroup;
+	private form: FormGroup;
+	private creating: boolean;
+	private item: Account;
+	private list: Account[];
 
-	constructor ( private formBuilder: FormBuilder,
-		private activatedRoute: ActivatedRoute,
-		private store: Store<AccountModuleState> )
+	constructor ( private store: Store<AccountModuleState>,
+		private formBuilder: FormBuilder,
+		private activatedRoute: ActivatedRoute )
 	{
-		this.account = new Account();
+		this.item = new Account();
 	}
 
 	ngOnInit ()
 	{
-		console.log( this.activatedRoute.snapshot.params );
-		this.accountKeyParam = this.activatedRoute.snapshot.params[ 'account' ] || null;
+		this.store.select( state => state.accountState )
+			.subscribe( accountState =>
+			{
+				if ( accountState.loading ) return;
 
-		this.store.select( state => state.accountState ).subscribe( accountState =>
-		{
-			this.accountState = accountState;
-			if ( this.accountState.loading ) return;
+				this.list = accountState.list;
+				this.creating = accountState.creating;
 
-			this.accountList = accountState.list;
-			if ( this.accountState.creating ) {
-				this.account.parentKey = ( this.accountState.selectedItem || this.account ).key;
-			} else if ( this.accountState.editing ) {
-				this.account = this.accountState.selectedItem || this.account;
-			}
-		} );
-		this.store.dispatch( new AccountAction.Select( this.accountKeyParam ) );
-		console.log( 'account-param', this.accountKeyParam );
-		this.accountKeyParam ? this.store.dispatch( new AccountAction.Edit() ) : this.store.dispatch( new AccountAction.Create() );
-		this.formGroup = this.buildForm();
+				if ( accountState.creating ) {
+					this.item.parentKey = ( accountState.selectedItem || this.item ).key;
+				} else if ( accountState.editing ) {
+					this.item = accountState.selectedItem || this.item;
+				}
+
+			} );
+
+		/**
+		 * Handle first load
+		 */
+		const accountKey: string = this.activatedRoute.snapshot.params[ 'account' ] || null;
+		this.store.select( state => state.accountState.selectedItem ).take( 1 )
+			.filter( selectedItem => !selectedItem || ( accountKey && selectedItem.key != accountKey ) )
+			.subscribe( selectedItem => this.store.dispatch( new AccountAction.Select( accountKey ) ) );
+
+		this.store.select( state => state.accountState.creating ).take( 1 )
+			.withLatestFrom( this.store.select( state => state.accountState.editing ) )
+			.filter( ( [ creating, editing ] ) => !creating && !editing )
+			.subscribe( ( [ creating, editing ] ) => accountKey
+				? this.store.dispatch( new AccountAction.Edit( new Account( { key: accountKey } ) ) )
+				: this.store.dispatch( new AccountAction.Create() ) );
+
+		this.form = this.buildForm();
+
 	}
 
-	private buildForm ()
+	private buildForm (): FormGroup
 	{
 		return this.formBuilder.group( {
-			name: [ this.account.name, Validators.required ]
+			name: [ this.item.name, Validators.required ]
 		} );
 	}
 
-	private buildModel ()
+	private buildModel (): Account
 	{
-		this.account.name = this.formGroup.controls[ 'name' ].value;
+		this.item.name = this.form.controls[ 'name' ].value;
+		return this.item;
 	}
 
-	private async submit ()
+	private submit (): void
 	{
-		this.buildModel();
-		if ( this.accountState.creating ) {
-			this.store.dispatch( new AccountAction.Add( this.account ) );
+		const account = this.buildModel();
+		if ( this.creating ) {
+			this.store.dispatch( new AccountAction.Add( account ) );
 		} else {
-			this.store.dispatch( new AccountAction.Modify( this.account ) );
+			this.store.dispatch( new AccountAction.Modify( account ) );
 		}
 	}
 
-	private cancel ()
+	private cancel (): void
 	{
 		this.store.dispatch( new AccountAction.CancelCreate() );
 		this.store.dispatch( new AccountAction.CancelEdit() );
+	}
+
+	private reset (): void
+	{
+
 	}
 
 }

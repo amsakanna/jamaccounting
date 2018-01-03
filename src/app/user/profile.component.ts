@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { UserModuleState } from './user.state';
-import { User } from '../../jam-auth/jam-auth';
+import { User } from '../../jam/auth';
 
 @Component( {
 	selector: 'app-profile',

@@ -1,13 +1,20 @@
 /*  Framework Modules  */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import
 {
 	MatIconModule,
 	MatButtonModule,
 	MatInputModule,
-	MatTooltipModule
+	MatSelectModule,
+	MatOptionModule,
+	MatStepperModule,
+	MatDatepickerModule,
+	MatNativeDateModule,
+	MatTooltipModule,
+	MatFormFieldModule
 } from '@angular/material';
 
 /*  3rd Party Modules  */
@@ -15,15 +22,14 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 /*  My Library Modules  */
-import { JamModelLibraryModule } from './../../jam-model-library/jam-model-library';
-import { JamBounceSpinnerModule } from './../../jam-ui-library/jam-ui-library';
+import { JamBounceSpinnerModule } from '../../jam/ui-library';
 
-/*  App Modules  */
-import { CompanyRoutingModule } from './company-routing.module';
-import { CompanyFormComponent } from './company-form.component';
+/*  App Components  */
+import { companyRoutes } from './company.routes';
+import { CompanyGuard } from './company.guard';
+import { companyReducers, CompanyEffects } from './company.store';
 import { CompanyComponent } from './company.component';
-import { companyReducers } from './company.reducers';
-import { CompanyEffects } from './company.effects';
+import { CompanyFormComponent } from './company-form.component';
 
 @NgModule( {
 	declarations: [
@@ -36,12 +42,18 @@ import { CompanyEffects } from './company.effects';
 		MatIconModule,
 		MatButtonModule,
 		MatInputModule,
+		MatSelectModule,
+		MatOptionModule,
+		MatStepperModule,
+		MatDatepickerModule,
+		MatNativeDateModule,
 		MatTooltipModule,
+		MatFormFieldModule,
+		JamBounceSpinnerModule,
 		StoreModule.forFeature( 'companyState', companyReducers ),
 		EffectsModule.forFeature( [ CompanyEffects ] ),
-		JamModelLibraryModule,
-		JamBounceSpinnerModule,
-		CompanyRoutingModule
-	]
+		RouterModule.forChild( companyRoutes )
+	],
+	providers: [ CompanyGuard ]
 } )
 export class CompanyModule { }

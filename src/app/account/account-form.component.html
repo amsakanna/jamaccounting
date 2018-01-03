@@ -1,5 +1,5 @@
 <div class="container">
-	<form [formGroup]="formGroup" novalidate
+	<form [formGroup]="form" novalidate
 		class="account-form"
 		(ngSubmit)="submit()">
 
@@ -11,8 +11,8 @@
 				<input matInput placeholder="Account Id" formControlName="id"/>
 			</mat-form-field> -->
 			<mat-form-field>
-				<mat-select [(value)]="account.parentKey">
-					<mat-option *ngFor="let parent of accountList"
+				<mat-select [(value)]="item.parentKey">
+					<mat-option *ngFor="let parent of list"
 						[value]="parent.key">
 						{{ parent.name }}
 					</mat-option>

@@ -1,7 +1,7 @@
-import { JamEntityState } from "../../jam-ngrx/jam-ngrx";
-import { Company } from "./company.model";
 import { AppState } from "../app.store";
-import { UserModuleState } from "../user/user";
+import { UserModuleState } from "../user";
+import { JamEntityState } from "../../jam/ngrx";
+import { Company } from "../model";
 
 export interface CompanyModuleState extends AppState, UserModuleState
 {

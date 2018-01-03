@@ -1,0 +1,50 @@
+<div class="container">
+	<jam-bounce-spinner *ngIf="$.loading"></jam-bounce-spinner>
+	<div class="component floating-box" [class.blur]="$.loading">
+		<header class="title-box"> Categories </header>
+		<section class="list">
+			<main>
+				<p-tree
+					[value]="$.tree"
+					selectionMode="single"
+					[(selection)]="$.selectedNode"
+					(onNodeSelect)="$.select( $event?.node?.data )"
+					[style]="{ border:'1px solid black;' }"
+					draggableNodes="true"
+					droppableNodes="true">
+					<ng-template let-node  pTemplate="default">
+						<span class="list-item-container">
+							<span class="list-item"
+							> {{ node.label }} </span>
+						</span>
+					</ng-template>
+				</p-tree>
+			</main>
+			<footer class="flex-center">
+				<button mat-raised-button color="primary"
+					class="add-button small"
+					(click)="$.create()">
+					<span> New Category </span>
+				</button>
+			</footer>
+		</section>
+		<section class="detail">
+			<header *ngIf="$.selectedItem">
+				<h3> {{ $.selectedItem.name }} </h3>
+				<div class="action">
+					<button mat-button color="primary"
+						(click)="$.edit()">
+						<mat-icon> edit </mat-icon>
+					</button>
+					<button mat-button color="warn"
+						(click)="$.remove( $.selectedItem.key )">
+						<mat-icon> delete </mat-icon>
+					</button>
+				</div>
+			</header>
+			<main *ngIf="$.selectedItem">
+				<router-outlet></router-outlet>
+			</main>
+		</section>
+	</div>
+</div>

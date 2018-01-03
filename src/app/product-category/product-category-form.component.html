@@ -1,0 +1,118 @@
+<div class="container">
+	<jam-bounce-spinner *ngIf="$.adding || $.modifying"></jam-bounce-spinner>
+	<form novalidate
+		class="form"
+		[formGroup]="$.form"
+		[class.blur]="$.adding || $.modifying"
+		(ngSubmit)="$.submit()">
+
+		<h2 mat-dialog-title> {{ $.creating ? 'New Item' : 'Edit Item' }} </h2>
+
+		<mat-dialog-content>
+			<div>
+				<mat-form-field class="name">
+					<input matInput placeholder="Name" formControlName="name"/>
+				</mat-form-field>
+				<mat-form-field class="parent-category">
+					<mat-select placeholder="Parent Category" [(value)]="$.formItem.parentKey">
+						<mat-option *ngFor="let parent of $.list" [value]="parent.key">
+							{{ parent.name }}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+
+			<mat-accordion>
+
+				<header style="margin-bottom: 20px"> Features </header>
+
+				<mat-expansion-panel *ngFor="let feature of $.formItem.features; index as i"
+					[expanded]="!feature.name">
+
+
+					<mat-expansion-panel-header>
+						<mat-panel-title>
+							{{ feature.name }}
+						</mat-panel-title>
+					</mat-expansion-panel-header>
+
+					<form novalidate [formGroup]="$.featureForms[i]">
+						<div>
+
+							<mat-form-field>
+								<input matInput placeholder="Feature name" formControlName="name">
+							</mat-form-field>
+
+							<mat-form-field>
+								<input matInput placeholder="Unit of measure" formControlName="unitOfMeasure">
+							</mat-form-field>
+
+							<mat-selection-list>
+								<mat-list-option *ngFor="let featureOption of feature.options">
+									{{ featureOption }}
+								</mat-list-option>
+							</mat-selection-list>
+
+							<mat-form-field>
+								<input matInput placeholder="Feature Option" formControlName="newFeatureOption">
+							</mat-form-field>
+
+							<button mat-button
+								type="button"
+								class="small"
+								(click)="$.addFeatureOption( i )"> Add
+							</button>
+
+						</div>
+
+						<mat-action-row>
+							<button mat-button color="warn"
+								type="button"
+								class="small"
+								(click)="$.removeFeature( i )"> Remove
+							</button>
+							<button mat-raised-button color="primary"
+								type="button"
+								style="margin-left: 10px"
+								class="small"
+								[disabled]="!$.featureForms[i].valid"
+								(click)="$.addFeature( i )"> Save
+							</button>
+						</mat-action-row>
+
+					</form>
+
+				</mat-expansion-panel>
+
+				<button mat-raised-button color="primary" type="button"
+					class="small"
+					style="margin-top: 20px"
+					(click)="$.createFeature()"> Add New Feature
+				</button>
+
+			</mat-accordion>
+
+
+		</mat-dialog-content>
+
+		<mat-dialog-actions>
+			<div class="left">
+				<button mat-button type="button"
+					class="reset-button no-animation"
+					(click)="$.reset()"> RESET
+				</button>
+			</div>
+			<div class="right">
+				<button mat-button type="button"
+					class="cancel-button no-animation"
+					(click)="$.cancel()"> CANCEL
+				</button>
+				<button mat-raised-button color="primary" type="submit"
+					class="save-button"
+					[disabled]="!$.form.valid"> SAVE
+				</button>
+			</div>
+		</mat-dialog-actions>
+
+	</form>
+</div>

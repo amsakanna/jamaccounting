@@ -1,41 +1,142 @@
-import { Injectable } from '@angular/core';
-import { Router } from "@angular/router";
-import { FlatTree } from '../../jam-model-library/jam-model-library';
-import { InventoryItem } from "./inventory-item.model";
+import { Injectable } from "@angular/core";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { buildModelFromForm } from "../../jam/functions";
+import { Store } from "@ngrx/store";
+import { InventoryModuleState, InventoryAction } from "./inventory.store";
+import { Inventory, Product, ProductCategory, Tax } from "../model";
 
 @Injectable()
 export class InventoryService
 {
+	public list: Inventory[];
+	public selectedItem: Inventory;
+	public selectedItemProduct: Product;
+	public selectedItemCategory: ProductCategory;
+	public taxList: Tax[];
+	public loading: boolean;
+	public creating: boolean;
+	public adding: boolean;
+	public modifying: boolean;
+	public form: FormGroup;
+	public formItem: Inventory;
+	public emptyItem: Inventory;
 
-	public tree: FlatTree<InventoryItem>;
-
-	constructor ( private router: Router )
+	constructor (
+		public store: Store<InventoryModuleState>,
+		public formBuilder: FormBuilder
+	)
 	{
-		var inventoryItems = this.getInventoryItemList();
-		this.tree = new FlatTree<InventoryItem>( inventoryItems, 'IN00' );
-		this.tree.defaultItem = this.tree.getItem( 'IN00C' );
-		this.tree.select( this.tree.defaultItem );
+
+		this.emptyItem = {
+			key: null,
+			productKey: null,
+			supplyType: null,
+			units: null,
+			buyingPrice: null,
+			sellingPrice: null,
+			taxKeys: []
+		};
+
+		this.formItem = JSON.parse( JSON.stringify( this.emptyItem ) );
+
+		this.form = this.formBuilder.group( {
+			units: [ 0, Validators.required ],
+			buyingPrice: [ '' ],
+			sellingPrice: [ '' ]
+		} );
+
+		this.store.select( state => state.companyState.selectedItem )
+			.filter( company => !!company )
+			.subscribe( company => this.store.dispatch( new InventoryAction.Initialize() ) );
+
+		this.store.select( state => state.inventoryState.list )
+			.subscribe( list => this.list = list );
+
+		this.store.select( state => state.inventoryState.selectedItem )
+			.subscribe( selectedItem => this.selectedItem = selectedItem );
+
+		this.store.select( state => state.inventoryState.selectedItemProduct )
+			.subscribe( selectedItemProduct => this.selectedItemProduct = selectedItemProduct );
+
+		this.store.select( state => state.inventoryState.selectedItemCategory )
+			.subscribe( selectedItemCategory => this.selectedItemCategory = selectedItemCategory );
+
+		this.store.select( state => state.inventoryState.taxList )
+			.subscribe( taxList => this.taxList = taxList );
+
+		this.store.select( state => state.inventoryState.loading )
+			.subscribe( loading => this.loading = loading );
+
+		this.store.select( state => state.inventoryState.creating )
+			.map( creating => this.creating = creating )
+			.filter( creating => creating )
+			.subscribe( creating =>
+			{
+				this.formItem = JSON.parse( JSON.stringify( this.emptyItem ) );
+				this.form.reset();
+			} );
+
+		this.store.select( state => state.inventoryState.adding )
+			.subscribe( adding => this.adding = adding );
+
+		this.store.select( state => state.inventoryState.editing )
+			.filter( editing => editing )
+			.subscribe( editing =>
+			{
+				this.formItem = JSON.parse( JSON.stringify( this.selectedItem ) );
+				this.form.setValue( {
+					units: this.formItem.units,
+					buyingPrice: this.formItem.buyingPrice,
+					sellingPrice: this.formItem.sellingPrice
+				} );
+			} );
+
+		this.store.select( state => state.inventoryState.modifying )
+			.subscribe( modifying => this.modifying = modifying );
+
 	}
 
-	private getInventoryItemList (): Array<InventoryItem>
+	public checkAndSelect ( key: string )
 	{
-		return [
-			new InventoryItem( { $key: 'IN00', id: 'IN00', name: 'Primary' } ),
-
-			new InventoryItem( { $key: 'IN00C', id: 'IN00C', name: 'Clothes', units: 540, parentKey: 'IN00', unitOfMeasure: 'No' } ),
-			new InventoryItem( { $key: 'IN00C1', id: 'IN00C1', name: 'Sarees', units: 40, buyingPrice: 400, parentKey: 'IN00C' } ),
-			new InventoryItem( { $key: 'IN00C2', id: 'IN00C2', name: 'Gowns', units: 500, buyingPrice: 1200, sellingPrice: 500, parentKey: 'IN00C' } )
-		];
-	}
-
-	public upsert ( item: InventoryItem )
-	{
-		var existingItem = this.tree.getItem( existingItem );
-		if ( existingItem ) {
-			const index = this.tree.list.indexOf( existingItem );
-			this.tree.list.splice( index, 1 );
+		if ( !this.selectedItem || this.selectedItem.key != key ) {
+			this.store.dispatch( new InventoryAction.Select( key ) )
 		}
-		this.tree.list.push( item );
+	}
+
+	public select ( item: Inventory )
+	{
+		this.store.dispatch( new InventoryAction.Select( item.key ) );
+	}
+
+	public create (): void
+	{
+		this.store.dispatch( new InventoryAction.Create() );
+	}
+
+	public edit (): void
+	{
+		this.store.dispatch( new InventoryAction.Edit() );
+	}
+
+	public remove ( key: string ): void
+	{
+		this.store.dispatch( new InventoryAction.Remove( key ) );
+	}
+
+	public submit (): void
+	{
+		const item = buildModelFromForm( this.formItem, this.form );
+
+		this.creating
+			? this.store.dispatch( new InventoryAction.Add( item ) )
+			: this.store.dispatch( new InventoryAction.Modify( item ) );
+	}
+
+	public cancel (): void
+	{
+		this.creating
+			? this.store.dispatch( new InventoryAction.CancelCreate() )
+			: this.store.dispatch( new InventoryAction.CancelEdit() );
 	}
 
 }

@@ -2,7 +2,7 @@
 
 	<header>
 		<section class="company">
-			<a mdButton (click)="goto( pages.Home )">
+			<a mat-button (click)="goto( pages.Home )">
 				<mat-icon color="primary"
 					class="home-icon">
 					home
@@ -17,7 +17,7 @@
 		</nav>
 		<section class="user">
 			<div class="user-buttton">
-				<a mdButton
+				<a mat-button
 					(click)="goto( pages.User )">
 					<mat-icon color="primary"
 						*ngIf="authenticated"

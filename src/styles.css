@@ -1,5 +1,6 @@
 @import '~https://fonts.googleapis.com/icon?family=Material+Icons';
 @import '~@angular/material/prebuilt-themes/royalblue-deeppurple.css';
+@import "~primeng/resources/themes/omega/theme.css";
 
 html {
     width: 100%;
@@ -10,11 +11,12 @@ body {
     margin: 0px;
     width: 100%;
     height: 100%;
-    background-color: rgb(238, 241, 247);
-    /* background-color: rgb(223, 226, 232); */
-    /* background-image: url( 'https://firebasestorage.googleapis.com/v0/b/firebase-jamdeck.appspot.com/o/brushed-alu.png?alt=media&token=148bc048-30ac-47bb-85e2-75bf4358e384' );     */
     overflow: scroll;
     font-family: Roboto;
+    background-color: rgb(238, 241, 247);
+    background-color: rgb(182, 186, 198);
+    /* background-color: rgb(223, 226, 232); */
+    /* background-image: url( 'https://firebasestorage.googleapis.com/v0/b/firebase-jamdeck.appspot.com/o/brushed-alu.png?alt=media&token=148bc048-30ac-47bb-85e2-75bf4358e384' );     */
 }
 
 body > .background {
@@ -68,7 +70,6 @@ ul {
     margin: 0px;
     padding: 0px;
     list-style-type:none;
-    cursor: default;
 }
 
 li {
@@ -92,6 +93,8 @@ h1.normal, h2.normal, h3.normal, h4.normal, h5.normal, h6.normal {
     overflow-y: auto;
     -ms-overflow-style: none;
     overflow: -moz-scrollbars-none;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .v-scrollable {
@@ -99,6 +102,8 @@ h1.normal, h2.normal, h3.normal, h4.normal, h5.normal, h6.normal {
     overflow-y: auto;
     -ms-overflow-style: none;
     overflow: -moz-scrollbars-none;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .h-scrollable {
@@ -106,6 +111,8 @@ h1.normal, h2.normal, h3.normal, h4.normal, h5.normal, h6.normal {
     overflow-y: hidden;
     -ms-overflow-style: none;
     overflow: -moz-scrollbars-none;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .disable-text-selection {
@@ -219,4 +226,66 @@ mat-horizontal-stepper /deep/ .mat-horizontal-content-container {
 mat-horizontal-stepper /deep/ .mat-horizontal-stepper-content[aria-expanded="true"] {
     width: 100%;
     height: 100%;
+}
+
+mat-list-item.active {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+mat-list-item .mat-list-item-content {
+    padding: 0px 32px;
+}
+
+/*
+    PrimeNg Makeover
+*/
+
+p-tree .ui-widget-content {
+    border: 0px;
+    background: transparent !important;
+}
+
+/*
+    Common Styles
+*/
+
+.container {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+    align-items: center;
+}
+
+.blur {
+    filter: blur( 10px );
+}
+
+.title-box {
+    background-color: slategrey;
+    color: white;
+    border-radius: 3px;
+    box-shadow: 6px 6px 80px 0px rgba(0, 0, 0, 0.1) !important;
+}
+
+div.title {
+    font-weight: bold;
+}
+
+button.small {
+    font-size: 11px;
+    line-height: 28px;
+    padding: 0px 10px;
+}
+
+mat-icon.small {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

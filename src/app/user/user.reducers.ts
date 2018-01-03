@@ -1,6 +1,6 @@
 import { UserState } from './user.state';
 import { UserActionTypes, UserAction } from './user.actions';
-import { User } from '../../jam-auth/jam-auth';
+import { User } from '../../jam/auth';
 
 const initialState: UserState = {
 	loading: false,

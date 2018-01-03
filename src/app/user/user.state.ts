@@ -1,6 +1,6 @@
 import { AppState } from "../app.store";
-import { UserAccount } from './user-account.model';
-import { User } from "../../jam-auth/jam-auth";
+import { UserAccount } from '../model';
+import { User } from "../../jam/auth";
 
 export interface UserModuleState extends AppState
 {

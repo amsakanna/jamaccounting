@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { DatabaseService } from '../shared/database.service';
 import { UserModuleState } from './user.state';
-import { User } from '../../jam-auth/jam-auth';
-import { UserAccount } from './user-account.model';
+import { User } from '../../jam/auth';
+import { UserAccount } from '../model';
 
 @Injectable()
 export class UserService

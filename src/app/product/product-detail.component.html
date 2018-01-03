@@ -1,0 +1,15 @@
+<div class="container">
+	<div class="component">
+		<main class="item">
+			<div class="item-sku">SKU: {{ $.selectedItem.sku }}</div>
+			<h4> Features </h4>
+			<div *ngFor="let feature of $.selectedItem.features"
+				class="feature">
+				<div>
+					<span> {{ feature.name }}: </span>
+					<span *ngIf="feature.value"> {{ feature.value }} </span>
+				</div>
+			</div>
+		</main>
+	</div>
+</div>

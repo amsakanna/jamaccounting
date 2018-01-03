@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
-import { Account } from './account.model';
-import { FlatTree } from '../../jam-model-library/jam-model-library';
+import { Account } from '../model';
+import { FlatTree } from '../../jam/model-library';
 
 export const enum AccountActionTypes
 {

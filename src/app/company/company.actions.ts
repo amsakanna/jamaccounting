@@ -1,6 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Company } from './company.model';
-import { UserAccount } from '../user/user-account.model';
+import { Company, UserAccount } from '../model';
 
 export const enum CompanyActionTypes
 {
@@ -22,8 +21,8 @@ export const enum CompanyActionTypes
 }
 export namespace CompanyAction
 {
-	export class Initialize implements Action { public readonly type = CompanyActionTypes.initialize; constructor ( public userAccount: UserAccount ) { } }
-	export class Initialized implements Action { public readonly type = CompanyActionTypes.initialized; constructor ( public list: Company[] ) { } }
+	export class Initialize implements Action { public readonly type = CompanyActionTypes.initialize; constructor () { } }
+	export class Initialized implements Action { public readonly type = CompanyActionTypes.initialized; constructor () { } }
 	export class Select implements Action { public readonly type = CompanyActionTypes.select; constructor ( public key: string = null ) { } }
 	export class Selected implements Action { public readonly type = CompanyActionTypes.selected; constructor ( public item: Company ) { } }
 	export class SelectFailed implements Action { public readonly type = CompanyActionTypes.selectFailed; constructor () { } }

@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
-import { User } from '../../jam-auth/jam-auth';
-import { UserAccount } from './user-account.model';
+import { User } from '../../jam/auth';
+import { UserAccount } from '../model';
 
 export const enum UserActionTypes
 {

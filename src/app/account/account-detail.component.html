@@ -1,14 +1,13 @@
-<div *ngIf="account"
-	class="container">
+<div class="container">
 	<div class="component">
 
 		<header>
 			<section class="title">
-				<div class="account-name">{{ account.name }}</div>
-				<div class="account-path">
-					<div *ngFor="let pathItem of path"
-						class="item">
-						<a mdButton
+				<div class="item-name">{{ item?.name }}</div>
+				<div class="item-path">
+					<div *ngFor="let pathItem of ( path$ | async )"
+						class="path-item">
+						<a mat-button
 							(click)="select( pathItem )">
 							<span class="text"> {{ pathItem.name }} </span>
 						</a>
@@ -19,22 +18,14 @@
 			<section class="action">
 				<button mat-button color="primary"
 					class="compact no-focus"
-					(click)="edit( account )">
+					(click)="edit()">
 					<mat-icon> edit </mat-icon>
 				</button>
 			</section>
 		</header>
 
-		<main class="account h-scrollable">
-			<!-- <div *ngIf="account.description" class="description v-scrollable"> {{ account.description }} </div> -->
-			<!-- <div *ngIf="account.holderName" class="holderName">
-				<span class="label"> Account Holder Name: </span>
-				<span class="text"> {{ account.holderName }} </span>
-			</div>
-			<div *ngIf="account.number" class="number">
-				<span class="label"> Account Number: </span>
-				<span class="text"> {{ account.number }} </span>
-			</div> -->
+		<main class="item">
+
 		</main>
 
 	</div>

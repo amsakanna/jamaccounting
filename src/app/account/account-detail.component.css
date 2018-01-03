@@ -29,45 +29,45 @@ section.action {
     align-items: center;
 }
 
-.account-name {
+.item-name {
     font-size: 1.5em;
 }
 
-.account-path {
+.item-path {
     display: flex;
     align-items: center;
 }
 
-.account-path .item {
+.item-path .path-item {
     display: flex;
-    align-items: center; 
+    align-items: center;
     color: royalblue;
     font-size: 0.8em;
 }
 
-.account-path .item a {
+.item-path .path-item a {
     cursor: pointer;
 }
 
-.account-path .item .icon {
+.item-path .path-item .icon {
     color: royalblue;
 }
 
-.account-path .item:last-child .icon {
+.item-path .path-item:last-child .icon {
     display: none;
 }
 
-.account {
+.item {
     padding: 20px 50px;
     padding-top: 0px;
     height: calc( 100% - 170px );
 }
 
-.account .description {
+.item .description {
     padding-bottom: 20px;
-    text-align: justify;    
+    text-align: justify;
 }
 
-.account .label {
+.item .label {
     font-weight: bold;
 }

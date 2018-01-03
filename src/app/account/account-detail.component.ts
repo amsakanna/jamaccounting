@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from "@angular/router";
 import { Store } from '@ngrx/store';
 import { AccountModuleState, AccountState, AccountAction } from './account.store';
-import { Account } from "./account.model";
+import { Account } from "../model";
 
 @Component( {
 	selector: 'app-account-detail',
@@ -12,23 +13,31 @@ import { Account } from "./account.model";
 export class AccountDetailComponent implements OnInit
 {
 
-	private accountKeyParam: string;
-	private account: Account;
-	private path: Array<Account>;
+	private item: Account;
+	private path$: Observable<Account[]>;
 
-	constructor ( private activatedRoute: ActivatedRoute,
-		private store: Store<AccountModuleState> )
-	{
-	}
+	constructor ( private store: Store<AccountModuleState>,
+		private activatedRoute: ActivatedRoute ) { }
 
 	ngOnInit ()
 	{
-		this.accountKeyParam = this.activatedRoute.snapshot.params[ 'account' ] || null;
+
 		this.store.select( state => state.accountState.selectedItem )
-			.subscribe( selectedItem => this.account = selectedItem );
-		this.store.select( state => state.accountState.tree )
-			.subscribe( tree => this.path = tree && this.account ? tree.getAncestors( this.account ).reverse() : [] );
-		this.store.dispatch( new AccountAction.Select( this.accountKeyParam ) );
+			.subscribe( selectedItem => this.item = selectedItem );
+
+		this.path$ = this.store.select( state => state.accountState.selectedItem )
+			.withLatestFrom( this.store.select( state => state.accountState.tree ) )
+			.filter( ( [ selectedItem, tree ] ) => !!tree )
+			.map( ( [ selectedItem, tree ] ) => tree.getAncestors( selectedItem ).reverse() );
+
+		/**
+		 * Handle first load
+		 */
+		const key: string = this.activatedRoute.snapshot.params[ 'account' ] || '';
+		this.store.select( state => state.accountState.selectedItem ).take( 1 )
+			.filter( selectedItem => !selectedItem || selectedItem.key != key )
+			.subscribe( selectedItem => this.store.dispatch( new AccountAction.Select( key ) ) );
+
 	}
 
 	private select ( account: Account )
@@ -36,7 +45,7 @@ export class AccountDetailComponent implements OnInit
 		this.store.dispatch( new AccountAction.Select( account.key ) );
 	}
 
-	private edit ( account: Account )
+	private edit ()
 	{
 		this.store.dispatch( new AccountAction.Edit() );
 	}

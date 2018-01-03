@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import
 {
 	MatIconModule,
@@ -17,16 +18,14 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 /*  My Library Modules  */
-import { JamModelLibraryModule } from './../../jam-model-library/jam-model-library';
-import { JamTreeModule, JamBounceSpinnerModule } from './../../jam-ui-library/jam-ui-library';
+import { JamBounceSpinnerModule, JamTreeModule } from './../../jam/ui-library';
 
 /*  App Modules  */
-import { AccountRoutingModule } from './account-routing.module';
-import { AccountFormComponent } from './account-form.component';
-import { AccountDetailComponent } from './account-detail.component';
+import { accountRoutes } from './account.routes';
+import { accountReducers, AccountEffects } from './account.store';
 import { AccountComponent } from './account.component';
-import { accountReducers } from './account.reducers';
-import { AccountEffects } from './account.effects';
+import { AccountDetailComponent } from './account-detail.component';
+import { AccountFormComponent } from './account-form.component';
 
 @NgModule( {
 	declarations: [
@@ -45,10 +44,9 @@ import { AccountEffects } from './account.effects';
 		MatTooltipModule,
 		StoreModule.forFeature( 'accountState', accountReducers ),
 		EffectsModule.forFeature( [ AccountEffects ] ),
-		JamModelLibraryModule,
-		JamTreeModule,
 		JamBounceSpinnerModule,
-		AccountRoutingModule
+		JamTreeModule,
+		RouterModule.forChild( accountRoutes )
 	]
 } )
 export class AccountModule { }

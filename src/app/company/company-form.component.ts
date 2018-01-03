@@ -3,13 +3,10 @@ import { MatStepper, MatDatepicker } from '@angular/material';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { ActivatedRoute, Router } from "@angular/router";
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, AbstractControl } from "@angular/forms";
-import { EventManager, EventStatus } from '../../jam-event-manager/jam-event-manager';
 import { DatabaseService } from '../shared/database.service';
-import { DatabaseOperations, Table } from '../../jam-firestore/jam-firestore';
+import { Table } from '../../jam/firestore';
 import { UserService } from '../user/user.service';
-import { Company } from '../company/company.model';
-import { Pages } from '../shared/pages.enum';
-import { UserAccount } from '../user/user-account.model';
+import { Company, UserAccount, Pages } from '../model';
 
 @Component( {
 	selector: 'app-company-form',
@@ -29,7 +26,6 @@ export class CompanyFormComponent implements OnInit
 	constructor ( private activatedRoute: ActivatedRoute,
 		private router: Router,
 		private formBuilder: FormBuilder,
-		private eventManager: EventManager,
 		private db: DatabaseService,
 		private userService: UserService )
 	{
@@ -49,13 +45,11 @@ export class CompanyFormComponent implements OnInit
 		 */
 		this.formGroups[ 0 ].controls[ 'name' ].valueChanges.subscribe( () =>
 		{
-			console.log( 'name-changed', this.convertNameToId( this.formGroups[ 0 ].controls[ 'name' ].value ) );
 			this.formGroups[ 3 ].controls[ 'id' ].setValue( this.convertNameToId( this.formGroups[ 0 ].controls[ 'name' ].value ) );
 		} );
 
 		this.stepper.selectionChange.subscribe( ( stepperEvent: StepperSelectionEvent ) =>
 		{
-			console.log( 'stepper event', stepperEvent.selectedIndex, stepperEvent );
 			this.refresh( stepperEvent.selectedIndex );
 		} )
 	}
@@ -101,7 +95,6 @@ export class CompanyFormComponent implements OnInit
 
 	private nextStepper ()
 	{
-		console.log( 'next' );
 		if ( this.stepper.selectedIndex == this.finalStep ) {
 			this.submit();
 		} else {
@@ -113,13 +106,12 @@ export class CompanyFormComponent implements OnInit
 	{
 		this.refresh( this.finalStep );
 		this.company = await this.db.tables.Company.insert( this.company );
-		this.db.EnterCollection( 'Company', this.company.key );
+		// this.db.EnterCollection( 'Company', this.company.key );
 		var existingUserAccount = this.userService.userAccount;
 		existingUserAccount.companies.push( this.company.key );
 		const newUserAccount = new UserAccount( { key: existingUserAccount.key, companies: existingUserAccount.companies } );
 		await this.db.tables.UserAccount.updateFields( newUserAccount );
 		await Table.clone( this.db.tables.PresetAccount, this.db.tables.Account, true );
-		// this.eventManager.emitPageRequestEvent( Pages.Company, EventStatus.Requested, [ { key: 'company', value: this.company.key }] );
 	}
 
 	private convertNameToId ( name: string )
