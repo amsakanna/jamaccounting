@@ -1,4 +1,4 @@
-Assets1
+Assets1=====================
     Current Assets1
         Bank Accountaa
         Cash In Handaaa
@@ -7,9 +7,8 @@ Assets1
         Stock In Hand
         Sundry Debtors
     Fixed Assets
-    Investments-----------------------------
+    Investments
     Miscellaneous Expenses
-
 Liabilities
     Loans
         Bank OD Account - Current Liabilities
