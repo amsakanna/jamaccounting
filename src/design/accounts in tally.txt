@@ -2,12 +2,12 @@ Assets1
     Current Assets1
         Bank Accountaa
         Cash In Handaaa
-        Deposits----------
+        Deposits
         Loans And Advances
         Stock In Hand
         Sundry Debtors
     Fixed Assets
-    Investments
+    Investments-----------------------------
     Miscellaneous Expenses
 
 Liabilities
