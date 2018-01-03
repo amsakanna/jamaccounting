@@ -1,7 +1,7 @@
 Assets1
     Current Assets1
-        Bank Account
-        Cash In Hand
+        Bank Accountaa
+        Cash In Handaaa
         Deposits
         Loans And Advances
         Stock In Hand
