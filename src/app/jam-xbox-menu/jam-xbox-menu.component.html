@@ -1,9 +1,0 @@
-<div class="jam-menu">
-	<a mat-button disableRipple
-	*ngFor="let menuItem of menu"
-		class="jam-menu-link compact no-focus"
-		[style.color]="( menuItem.$key == selectedItem?.$key ) ? '#000' : '#aaa'"
-		(click)="_select(menuItem)">
-		{{ menuItem.text }}
-	</a>
-</div>
