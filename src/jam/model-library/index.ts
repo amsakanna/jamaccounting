@@ -1,6 +1,7 @@
 export * from './data.model';
 export * from './flat-tree.model';
 export * from './key-value.model';
+export * from './observabled.type';
 export * from './picture.model';
 export * from './statuses.enum';
 export * from './error.model';

@@ -1,6 +1,6 @@
 import { Data } from "../../../jam/model-library";
 
-export interface JamEntityState<T extends Data>
+export interface JamEntityState<T extends Data = Data>
 {
 	initialized: boolean;
 

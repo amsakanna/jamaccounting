@@ -9,5 +9,5 @@ export interface Product extends Data
 	brandKey: string;
 	color: string;
 	pictures: Picture[];
-	features: ProductFeature;
+	features: ProductFeature[];
 }
