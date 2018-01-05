@@ -34,9 +34,48 @@ export class JamEntityService<T extends Data, S extends JamEntityState<T>> imple
 		Object.keys( this ).forEach( property => this[ property ] = this.store.select( property as keyof JamEntityState<T> ) );
 	}
 
+
+	public checkAndSelect ( key: string ): void
+	{
+		var selectedItem;
+		this.selectedItem.subscribe( value => selectedItem = value );
+		if ( !selectedItem || selectedItem.key != key ) {
+			this.store.dispatch( this.actions.Select( key ) )
+		}
+	}
+
 	public select ( item: T ): void
 	{
 		this.store.dispatch( this.actions.Select( item.key ) );
+	}
+
+	public create (): void
+	{
+		this.store.dispatch( this.actions.Create() );
+	}
+
+	public edit ( item: T ): void
+	{
+		this.store.dispatch( this.actions.Edit( item ) );
+	}
+
+	public remove ( key: string ): void
+	{
+		this.store.dispatch( this.actions.Remove( key ) );
+	}
+
+	public submit (): void
+	{
+		this.creating
+			? this.store.dispatch( this.actions.Add( item ) )
+			: this.store.dispatch( this.actions.Modify( item ) );
+	}
+
+	public cancel (): void
+	{
+		this.creating
+			? this.store.dispatch( this.actions.CancelCreate() )
+			: this.store.dispatch( this.actions.CancelEdit() );
 	}
 
 }
