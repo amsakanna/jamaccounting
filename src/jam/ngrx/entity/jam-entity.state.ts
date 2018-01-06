@@ -1,3 +1,4 @@
+import { FormGroup } from "@angular/forms";
 import { Data } from "../../../jam/model-library";
 
 export interface JamEntityState<T extends Data = Data>
@@ -5,6 +6,7 @@ export interface JamEntityState<T extends Data = Data>
 	initialized: boolean;
 
 	list: T[];
+	form: FormGroup;
 
 	loading: boolean;
 	creating: boolean;
@@ -15,6 +17,8 @@ export interface JamEntityState<T extends Data = Data>
 
 	defaultItem: T;
 	selectedItem: T;
+	emptyItem: T;
+	formItem: T;
 
 	itemBeingSelectedKey: string;
 	itemBeingCreated: T;

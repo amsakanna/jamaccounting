@@ -1,13 +1,16 @@
+import { FormGroup } from "@angular/forms";
 import { Store } from "@ngrx/store";
-import { Observabled, Data } from "../../model-library";
+import { Data } from "../../model-library";
+import { buildModelFromForm } from "../../functions";
 import { JamEntityState } from "./jam-entity.state";
-import { JamEntityActions } from "../index";
+import { JamEntityActions } from "./jam-entity.actions";
 
 export class JamEntityService<T extends Data, S> implements JamEntityState<T>
 {
 
 	public initialized: boolean;
 	public list: T[];
+	public form: FormGroup;
 	public loading: boolean;
 	public creating: boolean;
 	public editing: boolean;
@@ -16,6 +19,8 @@ export class JamEntityService<T extends Data, S> implements JamEntityState<T>
 	public removing: boolean;
 	public defaultItem: T;
 	public selectedItem: T;
+	public emptyItem: T;
+	public formItem: T;
 	public itemBeingSelectedKey: string;
 	public itemBeingCreated: T;
 	public itemBeingEdited: T;
@@ -40,11 +45,6 @@ export class JamEntityService<T extends Data, S> implements JamEntityState<T>
 	public subscribeProperty ( property: string )
 	{
 		this.store.select( this.stateName as keyof S, property as keyof S[ keyof S ] )
-			.map( value =>
-			{
-				console.log( value );
-				return value;
-			} )
 			.subscribe( value => this[ property ] = value );
 	}
 
@@ -76,8 +76,9 @@ export class JamEntityService<T extends Data, S> implements JamEntityState<T>
 		this.store.dispatch( this.actions.Remove( key ) );
 	}
 
-	public submit ( item: T ): void
+	public submit ( item?: T ): void
 	{
+		item = item || buildModelFromForm( this.formItem, this.form );
 		this.creating
 			? this.store.dispatch( this.actions.Add( item ) )
 			: this.store.dispatch( this.actions.Modify( item ) );

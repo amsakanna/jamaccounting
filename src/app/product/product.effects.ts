@@ -8,8 +8,7 @@ import { switchMapResultSelector } from "../../jam/functions";
 import { Action, Store } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
 import { ProductModuleState, ProductState } from './product.state';
-import { ProductActionTypes, ProductAction } from './product.actions';
-import { productActions } from './product.reducers';
+import { productActions } from './product.action';
 import { Product, Pages } from '../model';
 import { ProductFormComponent } from "./product-form.component";
 import { JamEntityAction } from "../../jam/ngrx";
@@ -48,14 +47,14 @@ export class ProductEffects
 			.filter( company => !!company )
 			.switchMap( company => this.db.tables.Product.list )
 			.switchMap( list => this.db.tables.ProductCategory.list, ( outerValue, innerValue ) => ( { productList: outerValue, productCategoryList: innerValue } ) )
-			.map( result => productActions.Initialized( result.productList, { categoryList: result.productCategoryList } ) );
+			.map( result => productActions.Initialized( result.productList, { defaultItem: result.productList[ 0 ] || null, categoryList: result.productCategoryList } ) );
 
-		this.initialized$ = this.actions$.ofType<ProductAction.Initialized>( ProductActionTypes.initialized )
+		this.initialized$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.initialized )
 			.withLatestFrom( this.store.select( state => state.productState ) )
 			.filter( ( [ action, state ] ) => !state.creating && !state.editing )
-			.map( ( [ action, state ] ) => new ProductAction.Select() );
+			.map( ( [ action, state ] ) => productActions.Select() );
 
-		this.select$ = this.actions$.ofType<ProductAction.Select>( ProductActionTypes.select )
+		this.select$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.select )
 			.withLatestFrom( this.store.select( state => state.productState ) )
 			.map( ( [ action, state ] ) =>
 			{
@@ -67,62 +66,64 @@ export class ProductEffects
 				return selectedItem;
 			} )
 			.switchMap( selectedItem => selectedItem ? this.db.tables.ProductCategory.get( selectedItem.categoryKey ) : Observable.of( null ), ( outerValue, innerValue ) => ( { selectedItem: outerValue, selectedItemCategory: innerValue } ) )
-			.map( result => result.selectedItem ? new ProductAction.Selected( result.selectedItem, result.selectedItemCategory ) : new ProductAction.SelectFailed() );
+			.map( result => result.selectedItem
+				? productActions.Selected( result.selectedItem, { selectedItemCategory: result.selectedItemCategory } )
+				: productActions.SelectFailed() );
 
-		this.selected$ = this.actions$.ofType<ProductAction.Selected>( ProductActionTypes.selected )
+		this.selected$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.selected )
 			.map( action =>
 			{
 				const param = { key: 'product', value: action.item ? action.item.key : '' };
 				return new NavigatorAction.Navigate( Pages.Product, [ param ] );
 			} );
 
-		this.cancelCreate$ = this.actions$.ofType<ProductAction.CancelCreate>( ProductActionTypes.cancelCreate )
+		this.cancelCreate$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.cancelCreate )
 			.map( action => this.formDialog.close() )
 			.map( dialog => null );
 
-		this.create$ = this.actions$.ofType<ProductAction.Create>( ProductActionTypes.create )
+		this.create$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.create )
 			.map( action => this.formDialog = this.dialog.open( ProductFormComponent, {
 				width: '800px',
 				position: { bottom: '150px' }
 			} ) )
 			.map( dialog => null );
 
-		this.add$ = this.actions$.ofType<ProductAction.Add>( ProductActionTypes.add )
+		this.add$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.add )
 			.switchMap( action => this.db.tables.Product.insert( action.item ) )
-			.map( item => new ProductAction.Added( item ) );
+			.map( item => productActions.Added( item ) );
 
-		this.added$ = this.actions$.ofType<ProductAction.Added>( ProductActionTypes.added )
+		this.added$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.added )
 			.map( action => this.formDialog.close() )
 			.map( dialog => this.snackBar.open( 'item added', 'Ok', { duration: 5000 } ) )
 			.map( snackbar => null );
 
-		this.edit$ = this.actions$.ofType<ProductAction.Edit>( ProductActionTypes.edit )
+		this.edit$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.edit )
 			.map( action => this.formDialog = this.dialog.open( ProductFormComponent, {
 				width: '800px',
 				position: { bottom: '150px' }
 			} ) )
 			.map( dialog => null );
 
-		this.cancelEdit$ = this.actions$.ofType<ProductAction.CancelEdit>( ProductActionTypes.cancelEdit )
+		this.cancelEdit$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.cancelEdit )
 			.map( action => this.formDialog.close() )
 			.map( dialog => null );
 
-		this.modify$ = this.actions$.ofType<ProductAction.Modify>( ProductActionTypes.modify )
+		this.modify$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.modify )
 			.switchMap( action => this.db.tables.Product.update( action.item ) )
-			.map( item => new ProductAction.Modified( item ) );
+			.map( item => productActions.Modified( item ) );
 
-		this.modified$ = this.actions$.ofType<ProductAction.Modified>( ProductActionTypes.modified )
+		this.modified$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.modified )
 			.map( action => this.formDialog.close() )
 			.map( action => this.snackBar.open( 'item saved', 'Ok', { duration: 5000 } ) )
 			.map( snackbar => null );
 
-		this.remove$ = this.actions$.ofType<ProductAction.Remove>( ProductActionTypes.remove )
+		this.remove$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.remove )
 			.switchMap( action => this.db.tables.Product.remove( action.key ) )
-			.map( item => item ? new ProductAction.Removed( item ) : new ProductAction.RemoveFailed );
+			.map( item => item ? productActions.Removed( item ) : productActions.RemoveFailed() );
 
-		this.removed$ = this.actions$.ofType<ProductAction.Removed>( ProductActionTypes.removed )
+		this.removed$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.removed )
 			.map( action => this.snackBar.open( 'item removed', 'Ok', { duration: 5000 } ) )
-			.map( snackbar => new ProductAction.Select() );
+			.map( snackbar => productActions.Select() );
 
 	}
 }

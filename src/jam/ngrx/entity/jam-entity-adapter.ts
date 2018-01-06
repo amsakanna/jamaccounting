@@ -1,5 +1,7 @@
+import { FormGroup } from "@angular/forms";
 import { Data } from "../../../jam/model-library";
 import { JamEntityState } from "./jam-entity.state";
+import { buildFormFromModel } from "../../functions/build-form-from-model.function";
 
 export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamEntityState<T>>
 {
@@ -9,6 +11,7 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 		const entityState: JamEntityState<T> = {
 			initialized: false,
 			list: [],
+			form: null,
 			loading: false,
 			creating: false,
 			editing: false,
@@ -17,6 +20,8 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 			removing: false,
 			defaultItem: null,
 			selectedItem: null,
+			emptyItem: null,
+			formItem: null,
 			itemBeingSelectedKey: null,
 			itemBeingCreated: null,
 			itemBeingEdited: null,
@@ -42,9 +47,16 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 		return this.newState( state, { initialized: false, loading: true } );
 	}
 
-	public initialized ( state: S, list: T[], defaultItem: T = null ): S
+	public initialized ( state: S, list: T[], defaultItem: T = null, emptyItem: T = null, formElements: any = null ): S
 	{
-		return this.newState( state, { initialized: true, list: list, defaultItem: defaultItem, loading: false } );
+		return this.newState( state, {
+			initialized: true,
+			loading: false,
+			defaultItem: defaultItem,
+			emptyItem: emptyItem,
+			form: new FormGroup( formElements ),
+			list: list
+		} );
 	}
 
 	public initializeFailed ( state: S ): S
@@ -74,7 +86,14 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 
 	public create ( state: S ): S
 	{
-		return this.newState( state, { creating: true } );
+		state.form.reset();
+		const formItem = JSON.parse( JSON.stringify( state.emptyItem ) );
+		return this.newState( state, {
+			creating: true,
+			itemBeingCreated: formItem,
+			formItem: formItem,
+			form: buildFormFromModel( state.formItem, state.form )
+		} );
 	}
 
 	public cancelCreate ( state: S ): S
@@ -104,7 +123,8 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 
 	public edit ( state: S, item: T ): S
 	{
-		return this.newState( state, { editing: true, itemBeingEdited: item } );
+		const formItem = JSON.parse( JSON.stringify( item ) );
+		return this.newState( state, { editing: true, itemBeingEdited: item, formItem: formItem } );
 	}
 
 	public cancelEdit ( state: S ): S

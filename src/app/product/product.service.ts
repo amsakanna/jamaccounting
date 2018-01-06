@@ -11,9 +11,6 @@ export class ProductService extends JamEntityService<Product, ProductModuleState
 {
 	public categoryList: ProductCategory[];
 	public selectedItemCategory: ProductCategory;
-	public form: FormGroup;
-	public formItem: Product;
-	public emptyItem: Product;
 	public featureForms: FormGroup[];
 
 	constructor (
@@ -21,31 +18,8 @@ export class ProductService extends JamEntityService<Product, ProductModuleState
 		public formBuilder: FormBuilder
 	)
 	{
-
 		super( 'productState', productActions );
-
-		this.emptyItem = {
-			key: null,
-			sku: null,
-			name: '',
-			categoryKey: null,
-			brandKey: null,
-			color: null,
-			pictures: [],
-			features: []
-		};
-
-		this.formItem = JSON.parse( JSON.stringify( this.emptyItem ) );
-		this.form = this.formBuilder.group( {
-			name: [ '', Validators.required ],
-			sku: [ '' ]
-		} );
-		this.featureForms = [];
-
-		this.subscribeProperties( [ 'list', 'selectedItem', 'loading', 'adding', 'modifying' ] );
-		this.store
-			.select( 'productState', 'adding' )
-			.subscribe( value => console.log( value ) );
+		this.subscribeProperties( [ 'list', 'form', 'selectedItem', 'formItem', 'loading', 'adding', 'modifying' ] );
 
 		this.store.select( state => state.companyState.selectedItem )
 			.filter( company => !!company )
@@ -54,41 +28,27 @@ export class ProductService extends JamEntityService<Product, ProductModuleState
 			.subscribe( categoryList => this.categoryList = categoryList );
 		this.store.select( state => state.productState.selectedItemCategory )
 			.subscribe( selectedItemCategory => this.selectedItemCategory = selectedItemCategory );
-
 		this.store.select( state => state.productState.creating )
 			.filter( creating => creating )
-			.subscribe( creating =>
-			{
-				this.formItem = JSON.parse( JSON.stringify( this.emptyItem ) );
-				this.form.setValue( {
-					name: this.formItem.name,
-					sku: this.formItem.sku
-				} );
-			} );
-
+			.subscribe( creating => this.buildFeatureForms() );
 		this.store.select( state => state.productState.editing )
 			.filter( editing => editing )
-			.subscribe( editing =>
-			{
-				this.formItem = JSON.parse( JSON.stringify( this.selectedItem ) );
-				this.form.setValue( {
-					name: this.formItem.name,
-					sku: this.formItem.sku
-				} );
-			} );
+			.subscribe( editing => this.buildFeatureForms() );
 
 	}
 
 	public submit (): void
 	{
 		this.buildFeatureModels()
-		const item = buildModelFromForm( this.formItem, this.form );
-		super.submit( item );
+		super.submit();
 	}
 
 	private buildFeatureForms (): void
 	{
-		const defaultFeatures = this.selectedItemCategory.features.map( feature => ( { name: feature.name, value: null } ) );
+		this.featureForms = [];
+		const defaultFeatures = this.selectedItemCategory
+			? this.selectedItemCategory.features.map( feature => ( { name: feature.name, value: null } ) )
+			: [];
 		this.formItem.features = concatUniqueKeys( 'name', defaultFeatures, this.formItem.features );
 		this.formItem.features.forEach( feature =>
 		{
