@@ -2,38 +2,15 @@ import { Injectable } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { buildModelFromForm, concatUniqueKeys } from "../../jam/functions";
 import { Store } from "@ngrx/store";
-import { ProductModuleState, ProductState, ProductAction } from "./product.store";
+import { JamEntityService } from "../../jam/ngrx";
+import { ProductModuleState, ProductState, productActions } from "./product.store";
 import { Product, ProductCategory } from "../model";
-import { Observabled } from "../../jam/model-library";
-import { Observable } from "rxjs";
 
 @Injectable()
-export class ProductService implements Observabled<ProductState>
+export class ProductService extends JamEntityService<Product, ProductModuleState>
 {
-	categoryList: Observable<ProductCategory[]>;
-	selectedItemCategory: ProductCategory;
-	initialized: boolean;
-	list: Product[];
-	loading: boolean;
-	creating: boolean;
-	editing: boolean;
-	adding: boolean;
-	modifying: boolean;
-	removing: boolean;
-	defaultItem: Product;
-	selectedItem: Product;
-	itemBeingSelectedKey: string;
-	itemBeingCreated: Product;
-	itemBeingEdited: Product;
-	itemBeingAdded: Product;
-	itemBeingModified: Product;
-	itemBeingRemovedKey: string;
-	itemBeingRemovedIndex: number;
-	lastAddedItem: Product;
-	lastModifiedItem: Product;
-	lastRemovedItem: Product;
-	lastRemovedItemIndex: number;
-
+	public categoryList: ProductCategory[];
+	public selectedItemCategory: ProductCategory;
 	public form: FormGroup;
 	public formItem: Product;
 	public emptyItem: Product;
@@ -45,6 +22,8 @@ export class ProductService implements Observabled<ProductState>
 	)
 	{
 
+		super( 'productState', productActions );
+
 		this.emptyItem = {
 			key: null,
 			sku: null,
@@ -52,129 +31,80 @@ export class ProductService implements Observabled<ProductState>
 			categoryKey: null,
 			brandKey: null,
 			color: null,
-			pictures: null,
-			features: null
+			pictures: [],
+			features: []
 		};
 
 		this.formItem = JSON.parse( JSON.stringify( this.emptyItem ) );
-
 		this.form = this.formBuilder.group( {
 			name: [ '', Validators.required ],
 			sku: [ '' ]
 		} );
+		this.featureForms = [];
 
-		this.storeSelect( 'list' );
-		this.storeSelect( 'selectedItem' );
-		this.storeSelect( 'loading' );
-		this.storeSelect( 'adding' );
-		this.storeSelect( 'modifying' );
-		this.storeSelect( 'creating', ( creating ) =>
-		{
-			if ( !creating ) return;
-			this.formItem = JSON.parse( JSON.stringify( this.emptyItem ) );
-			this.featureForms = [];
-			if ( this.selectedItemCategory.features )
-				this.formItem.features = this.selectedItemCategory.features
-					.map( feature => ( { name: feature.name, value: null } ) );
-			this.formItem.features = this.formItem.features || [];
-			this.formItem.features.forEach( feature =>
-			{
-				this.featureForms.push( this.formBuilder.group( {
-					value: [ feature.value ]
-				} ) );
-			} );
-			this.form.reset();
-		} );
-		this.storeSelect( 'editing', ( editing ) =>
-		{
-			if ( !editing ) return;
-			this.formItem = JSON.parse( JSON.stringify( this.selectedItem ) );
-			this.form.setValue( {
-				name: this.formItem.name,
-				sku: this.formItem.sku
-			} );
-			this.featureForms = [];
-			const defaultFeatures = this.selectedItemCategory.features.map( feature => ( { name: feature.name, value: null } ) );
-			this.formItem.features = concatUniqueKeys( 'name', defaultFeatures, this.formItem.features );
-			this.formItem.features = this.formItem.features || [];
-			this.formItem.features.forEach( feature =>
-			{
-				this.featureForms.push( this.formBuilder.group( {
-					value: [ feature.value ]
-				} ) );
-			} );
-		} );
+		this.subscribeProperties( [ 'list', 'selectedItem', 'loading', 'adding', 'modifying' ] );
+		this.store
+			.select( 'productState', 'adding' )
+			.subscribe( value => console.log( value ) );
 
 		this.store.select( state => state.companyState.selectedItem )
 			.filter( company => !!company )
-			.subscribe( company => this.store.dispatch( new ProductAction.Initialize() ) );
-
+			.subscribe( company => this.store.dispatch( productActions.Initialize() ) );
 		this.store.select( state => state.productState.categoryList )
 			.subscribe( categoryList => this.categoryList = categoryList );
-
 		this.store.select( state => state.productState.selectedItemCategory )
 			.subscribe( selectedItemCategory => this.selectedItemCategory = selectedItemCategory );
 
-	}
+		this.store.select( state => state.productState.creating )
+			.filter( creating => creating )
+			.subscribe( creating =>
+			{
+				this.formItem = JSON.parse( JSON.stringify( this.emptyItem ) );
+				this.form.setValue( {
+					name: this.formItem.name,
+					sku: this.formItem.sku
+				} );
+			} );
 
-	private storeSelect ( key: keyof ProductState, onSubscribe?: ( value: any ) => void ): void
-	{
-		this.store.select( 'productState', key )
-			.map( value => this[ key as string ] = value )
-			.subscribe( onSubscribe );
-	}
+		this.store.select( state => state.productState.editing )
+			.filter( editing => editing )
+			.subscribe( editing =>
+			{
+				this.formItem = JSON.parse( JSON.stringify( this.selectedItem ) );
+				this.form.setValue( {
+					name: this.formItem.name,
+					sku: this.formItem.sku
+				} );
+			} );
 
-	public fn ( actionName: string )
-	{
-		this.store.dispatch( new ProductAction[ actionName ]() );
-	}
-
-	public checkAndSelect ( key: string ): void
-	{
-		if ( !this.selectedItem || this.selectedItem.key != key ) {
-			this.store.dispatch( new ProductAction.Select( key ) )
-		}
-	}
-
-	public select ( item: Product ): void
-	{
-		this.store.dispatch( new ProductAction[ 'Select' ]( item.key ) );
-	}
-
-	public create (): void
-	{
-		this.store.dispatch( new ProductAction.Create() );
-	}
-
-	public edit (): void
-	{
-		this.store.dispatch( new ProductAction.Edit() );
-	}
-
-	public remove ( key: string ): void
-	{
-		this.store.dispatch( new ProductAction.Remove( key ) );
 	}
 
 	public submit (): void
+	{
+		this.buildFeatureModels()
+		const item = buildModelFromForm( this.formItem, this.form );
+		super.submit( item );
+	}
+
+	private buildFeatureForms (): void
+	{
+		const defaultFeatures = this.selectedItemCategory.features.map( feature => ( { name: feature.name, value: null } ) );
+		this.formItem.features = concatUniqueKeys( 'name', defaultFeatures, this.formItem.features );
+		this.formItem.features.forEach( feature =>
+		{
+			this.featureForms.push( this.formBuilder.group( {
+				value: [ feature.value ]
+			} ) );
+		} );
+	}
+
+	private buildFeatureModels (): void
 	{
 		for ( let i = 0; i < this.formItem.features.length; i++ ) {
 			if ( this.featureForms[ i ].controls[ 'value' ].value ) {
 				this.formItem.features[ i ].value = this.featureForms[ i ].controls[ 'value' ].value;
 			}
 		}
-		const item = buildModelFromForm( this.formItem, this.form );
-
-		this.creating
-			? this.store.dispatch( new ProductAction.Add( item ) )
-			: this.store.dispatch( new ProductAction.Modify( item ) );
-	}
-
-	public cancel (): void
-	{
-		this.creating
-			? this.store.dispatch( new ProductAction.CancelCreate() )
-			: this.store.dispatch( new ProductAction.CancelEdit() );
 	}
 
 }

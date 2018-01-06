@@ -4,7 +4,8 @@ import { Product, ProductCategory } from '../model';
 
 const productAdapter = new JamEntityAdapter<Product, ProductState>();
 const initialState = productAdapter.getInitialState();
-export const productActions = new JamEntityActions( '[product]' );
+
+export const productActions = new JamEntityActions<Product>( '[Product]' );
 
 interface ProductAction extends JamEntityAction<Product>
 {

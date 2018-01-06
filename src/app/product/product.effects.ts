@@ -9,8 +9,10 @@ import { Action, Store } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
 import { ProductModuleState, ProductState } from './product.state';
 import { ProductActionTypes, ProductAction } from './product.actions';
+import { productActions } from './product.reducers';
 import { Product, Pages } from '../model';
 import { ProductFormComponent } from "./product-form.component";
+import { JamEntityAction } from "../../jam/ngrx";
 
 @Injectable()
 export class ProductEffects
@@ -41,12 +43,12 @@ export class ProductEffects
 	)
 	{
 
-		this.initialize$ = this.actions$.ofType<ProductAction.Initialize>( ProductActionTypes.initialize )
+		this.initialize$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.initialize )
 			.switchMap( action => this.store.select( state => state.companyState.selectedItem ) )
 			.filter( company => !!company )
 			.switchMap( company => this.db.tables.Product.list )
 			.switchMap( list => this.db.tables.ProductCategory.list, ( outerValue, innerValue ) => ( { productList: outerValue, productCategoryList: innerValue } ) )
-			.map( result => new ProductAction.Initialized( result.productList, result.productCategoryList ) );
+			.map( result => productActions.Initialized( result.productList, { categoryList: result.productCategoryList } ) );
 
 		this.initialized$ = this.actions$.ofType<ProductAction.Initialized>( ProductActionTypes.initialized )
 			.withLatestFrom( this.store.select( state => state.productState ) )

@@ -29,7 +29,7 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 			lastRemovedItem: null,
 			lastRemovedItemIndex: -1
 		};
-		return { entityState, ...additionalStates };
+		return { ...entityState, ...additionalStates };
 	}
 
 	private newState ( state: S, newObject?: any )
