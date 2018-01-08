@@ -1,0 +1,52 @@
+<div class="container">
+	<jam-bounce-spinner *ngIf="$.adding || $.modifying"></jam-bounce-spinner>
+	<form [formGroup]="$.form" novalidate
+		class="tax-form"
+		(ngSubmit)="$.submit()"
+		[class.blur]="$.adding || $.modifying">
+
+		<h2 mat-dialog-title> {{ $.creating ? 'New Item' : 'Edit Item' }} </h2>
+
+		<mat-dialog-content>
+
+			<div><mat-form-field class="name">
+				<input matInput placeholder="Name" formControlName="name"/>
+			</mat-form-field></div>
+			<div><mat-form-field class="full-name">
+				<input matInput placeholder="Full Name" formControlName="fullName"/>
+			</mat-form-field></div>
+			<div><mat-select placeholder="Taxability" [(value)]="$.formItem.taxability">
+				<mat-option *ngFor="let taxability of $.taxabilities" [value]="taxability">
+					{{ taxability }}
+				</mat-option>
+			</mat-select></div>
+			<div><mat-form-field class="rate">
+				<input matInput type="number" placeholder="Rate" formControlName="rate"/>
+			</mat-form-field></div>
+			<div><mat-form-field class="date">
+				<input matInput type="date" placeholder="Date" formControlName="effectiveDate"/>
+			</mat-form-field></div>
+
+		</mat-dialog-content>
+
+		<mat-dialog-actions>
+			<div class="left">
+				<button mat-button type="button"
+					class="reset-button no-animation"
+					(click)="$.form.reset()"> RESET
+				</button>
+			</div>
+			<div class="right">
+				<button mat-button type="button"
+					class="cancel-button no-animation"
+					(click)="$.cancel()"> CANCEL
+				</button>
+				<button mat-raised-button color="primary" type="submit"
+					class="save-button"
+					[disabled]="!$.form.valid"> SAVE
+				</button>
+			</div>
+		</mat-dialog-actions>
+
+	</form>
+</div>

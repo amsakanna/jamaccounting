@@ -1,10 +1,15 @@
 import { FormGroup } from "@angular/forms";
+import { KeyValue } from "../model-library";
 
 export function buildFormFromModel<T>( model: T, form: FormGroup ): FormGroup
 {
-	Object.keys( form ).forEach( property =>
-		form.controls[ property ] = model[ property ]
-			? model[ property ]
-			: form.controls[ property ].value );
+	if ( !model || !form ) return form;
+
+	var patchObject = Object.keys( form.controls )
+		.map( key => ( { key: key, value: model[ key ] } ) as KeyValue )
+		.filter( property => property.value !== undefined )
+		.reduce( ( obj, property ) => ( { ...obj, [ property.key ]: property.value } ), {} );
+	form.patchValue( patchObject );
+
 	return form;
 }

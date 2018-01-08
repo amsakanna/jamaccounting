@@ -12,9 +12,10 @@ export const companyRoutes: Routes = [
 					{ path: 'account', loadChildren: '../account/account.module#AccountModule' },
 					{ path: 'product', loadChildren: '../product/product.module#ProductModule' },
 					{ path: 'product-category', loadChildren: '../product-category/product-category.module#ProductCategoryModule' },
-					{ path: 'inventory', loadChildren: '../inventory/inventory.module#InventoryModule' }
+					{ path: 'inventory', loadChildren: '../inventory/inventory.module#InventoryModule' },
 					// { path: 'voucher-type', loadChildren: '../voucher-type/voucher-type.module#VoucherTypeModule' },
 					// { path: 'voucher', loadChildren: '../voucher/voucher.module#VoucherModule' }
+					{ path: 'tax', loadChildren: '../tax/tax.module#TaxModule' }
 				]
 			},
 		]

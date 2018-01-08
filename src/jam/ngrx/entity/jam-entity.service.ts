@@ -39,13 +39,14 @@ export class JamEntityService<T extends Data, S> implements JamEntityState<T>
 
 	public subscribeProperties ( subscribables: ( keyof JamEntityState<T> )[] = [] )
 	{
+		this.subscribeProperty( 'creating' );
 		subscribables.forEach( property => this.subscribeProperty( property ) );
 	}
 
-	public subscribeProperty ( property: string )
+	public subscribeProperty ( property: keyof JamEntityState<T> )
 	{
 		this.store.select( this.stateName as keyof S, property as keyof S[ keyof S ] )
-			.subscribe( value => this[ property ] = value );
+			.subscribe( value => this[ property as string ] = value );
 	}
 
 	public checkAndSelect ( key: string ): void
@@ -62,7 +63,6 @@ export class JamEntityService<T extends Data, S> implements JamEntityState<T>
 
 	public create (): void
 	{
-		console.log( this );
 		this.store.dispatch( this.actions.Create() );
 	}
 

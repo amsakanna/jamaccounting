@@ -29,5 +29,9 @@ export enum Pages
     InventoryItem = '/company/:company/inventory/:inventory',
 
     Vouchers = '/company/:company/voucher',
-    Voucher = '/company/:company/voucher/:voucher'
+    Voucher = '/company/:company/voucher/:voucher',
+
+    Taxes = '/company/:company/tax',
+    Tax = '/company/:company/tax/:tax'
+
 }

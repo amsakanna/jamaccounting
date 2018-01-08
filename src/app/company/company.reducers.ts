@@ -11,7 +11,7 @@ export function companyReducers ( state = initialState, action: CompanyAction.Al
 {
 	switch ( action.type ) {
 		case CompanyActionTypes.initialize: return companyAdapter.initialize( state );
-		case CompanyActionTypes.initialized: return companyAdapter.initialized( state, null, null );
+		case CompanyActionTypes.initialized: return companyAdapter.initialized( state, [], null );
 		case CompanyActionTypes.select: return companyAdapter.select( state, action.key );
 		case CompanyActionTypes.selected: return companyAdapter.selected( state, action.item );
 		case CompanyActionTypes.selectFailed: return companyAdapter.selectFailed( state );

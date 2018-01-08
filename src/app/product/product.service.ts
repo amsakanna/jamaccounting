@@ -19,7 +19,7 @@ export class ProductService extends JamEntityService<Product, ProductModuleState
 	)
 	{
 		super( 'productState', productActions );
-		this.subscribeProperties( [ 'list', 'form', 'selectedItem', 'formItem', 'loading', 'adding', 'modifying' ] );
+		this.subscribeProperties( [ 'list', 'form', 'selectedItem', 'formItem', 'loading', 'editing', 'adding', 'modifying' ] );
 
 		this.store.select( state => state.companyState.selectedItem )
 			.filter( company => !!company )
@@ -34,7 +34,6 @@ export class ProductService extends JamEntityService<Product, ProductModuleState
 		this.store.select( state => state.productState.editing )
 			.filter( editing => editing )
 			.subscribe( editing => this.buildFeatureForms() );
-
 	}
 
 	public submit (): void

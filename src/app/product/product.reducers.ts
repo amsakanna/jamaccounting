@@ -2,7 +2,7 @@ import { JamEntityAdapter, jamEntityReducer, JamEntityActions, JamEntityAction }
 import { ProductState } from './product.state';
 import { ProductAction, productActions } from './product.action';
 import { Product, ProductCategory } from '../model';
-import { Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 const productAdapter = new JamEntityAdapter<Product, ProductState>();
 const initialState = productAdapter.getInitialState( { categoryList: [], selectedItemCategory: null } );
@@ -22,8 +22,8 @@ export function productReducers ( state = initialState, action: ProductAction ):
 				features: []
 			};
 			const formElements = {
-				name: [ '', Validators.required ],
-				sku: [ '' ]
+				name: new FormControl( '', Validators.required ),
+				sku: new FormControl( '' )
 			};
 			return { ...productAdapter.initialized( state, action.list, action.defaultItem, emptyItem, formElements ), categoryList: action.categoryList };
 
