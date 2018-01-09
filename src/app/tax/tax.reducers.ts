@@ -5,7 +5,7 @@ import { TaxAction, taxActions } from './tax.action';
 import { Tax } from '../model';
 
 const taxAdapter = new JamEntityAdapter<Tax, TaxState>();
-const initialState = taxAdapter.getInitialState( { categoryList: [], selectedItemCategory: null } );
+const initialState = taxAdapter.getInitialState( { taxTypeList: [], selectedItemType: null } );
 
 export function taxReducers ( state = initialState, action: TaxAction ): TaxState
 {
@@ -14,21 +14,20 @@ export function taxReducers ( state = initialState, action: TaxAction ): TaxStat
 			const emptyItem: Tax = {
 				key: null,
 				name: '',
-				fullName: '',
+				typeKey: null,
 				taxability: 'Undefined',
-				rate: null,
-				effectiveDate: new Date()
+				rate: null
 			};
 			const formElements = {
 				name: new FormControl( '', Validators.required ),
-				fullName: new FormControl( '' ),
 				rate: new FormControl( 0 ),
-				effectiveDate: new FormControl( '' )
 			};
-			return taxAdapter.initialized( state, action.list, action.defaultItem, emptyItem, formElements );
+			return taxAdapter.initialized( state, action.list, action.defaultItem, emptyItem, formElements, action.extras );
 
 		case taxActions.selected:
-			return taxAdapter.selected( state, action.item );
+			const selectedItemType = state.taxTypeList.find( item => item.key == action.item.typeKey ) || null;
+			console.log( action.item.key, selectedItemType )
+			return taxAdapter.selected( state, action.item, { selectedItemType: selectedItemType } );
 
 		default:
 			return jamEntityReducer( state, action, taxActions, taxAdapter );

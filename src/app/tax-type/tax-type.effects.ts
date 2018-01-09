@@ -7,14 +7,14 @@ import { KeyValue } from "../../jam/model-library";
 import { switchMapResultSelector } from "../../jam/functions";
 import { Action, Store } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
-import { TaxModuleState, TaxState } from './tax.state';
-import { taxActions } from './tax.action';
-import { Tax, Pages } from '../model';
-import { TaxFormComponent } from "./tax-form.component";
+import { TaxTypeModuleState, TaxTypeState } from './tax-type.state';
+import { taxTypeActions } from './tax-type.action';
+import { TaxType, Pages } from '../model';
+import { TaxTypeFormComponent } from "./tax-type-form.component";
 import { JamEntityAction } from "../../jam/ngrx";
 
 @Injectable()
-export class TaxEffects
+export class TaxTypeEffects
 {
 	@Effect() public initialize$: Observable<Action>;
 	@Effect() public initialized$: Observable<Action>;
@@ -31,36 +31,30 @@ export class TaxEffects
 	@Effect() public remove$: Observable<Action>;
 	@Effect() public removed$: Observable<Action>;
 
-	private formDialog: MatDialogRef<TaxFormComponent>;
+	private formDialog: MatDialogRef<TaxTypeFormComponent>;
 
 	constructor (
 		private actions$: Actions,
-		private store: Store<TaxModuleState>,
+		private store: Store<TaxTypeModuleState>,
 		private db: DatabaseService,
 		private dialog: MatDialog,
 		private snackBar: MatSnackBar
 	)
 	{
 
-		this.initialize$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.initialize )
+		this.initialize$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.initialize )
 			.switchMap( action => this.store.select( state => state.companyState.selectedItem ) )
 			.filter( company => !!company )
-			.switchMap( company => this.db.tables.Tax.list )
-			.switchMap( list => this.db.tables.TaxType.list, ( outerValue, innerValue ) => ( { taxList: outerValue, taxTypeList: innerValue } ) )
-			.map( result =>
-			{
-				console.log( result );
-				return result;
-			} )
-			.map( result => taxActions.Initialized( result.taxList, null, { taxTypeList: result.taxTypeList } ) );
+			.switchMap( company => this.db.tables.TaxType.list )
+			.map( list => taxTypeActions.Initialized( list ) );
 
-		this.initialized$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.initialized )
-			.withLatestFrom( this.store.select( state => state.taxState ) )
+		this.initialized$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.initialized )
+			.withLatestFrom( this.store.select( state => state.taxTypeState ) )
 			.filter( ( [ action, state ] ) => !state.creating && !state.editing )
-			.map( ( [ action, state ] ) => taxActions.Select() );
+			.map( ( [ action, state ] ) => taxTypeActions.Select() );
 
-		this.select$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.select )
-			.withLatestFrom( this.store.select( state => state.taxState ) )
+		this.select$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.select )
+			.withLatestFrom( this.store.select( state => state.taxTypeState ) )
 			.map( ( [ action, state ] ) =>
 			{
 				const selectKey = action.key || state.itemBeingSelectedKey || ( state.initialized && state.defaultItem ? state.defaultItem.key : null );
@@ -70,62 +64,62 @@ export class TaxEffects
 					: null
 				return selectedItem;
 			} )
-			.map( selectedItem => selectedItem ? taxActions.Selected( selectedItem ) : taxActions.SelectFailed() );
+			.map( selectedItem => selectedItem ? taxTypeActions.Selected( selectedItem ) : taxTypeActions.SelectFailed() );
 
-		this.selected$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.selected )
+		this.selected$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.selected )
 			.map( action =>
 			{
-				const param = { key: 'tax', value: action.item ? action.item.key : '' };
-				return new NavigatorAction.Navigate( Pages.Tax, [ param ] );
+				const param = { key: 'tax-type', value: action.item ? action.item.key : '' };
+				return new NavigatorAction.Navigate( Pages.TaxType, [ param ] );
 			} );
 
-		this.create$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.create )
-			.map( action => this.formDialog = this.dialog.open( TaxFormComponent, {
+		this.create$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.create )
+			.map( action => this.formDialog = this.dialog.open( TaxTypeFormComponent, {
 				width: '800px',
 				position: { bottom: '150px' }
 			} ) )
 			.map( dialog => null );
 
-		this.cancelCreate$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.cancelCreate )
+		this.cancelCreate$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.cancelCreate )
 			.map( action => this.formDialog.close() )
 			.map( dialog => null );
 
-		this.add$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.add )
-			.switchMap( action => this.db.tables.Tax.insert( action.item ) )
-			.map( item => taxActions.Added( item ) );
+		this.add$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.add )
+			.switchMap( action => this.db.tables.TaxType.insert( action.item ) )
+			.map( item => taxTypeActions.Added( item ) );
 
-		this.added$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.added )
+		this.added$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.added )
 			.map( action => this.formDialog.close() )
 			.map( dialog => this.snackBar.open( 'item added', 'Ok', { duration: 5000 } ) )
 			.map( snackbar => null );
 
-		this.edit$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.edit )
-			.map( action => this.formDialog = this.dialog.open( TaxFormComponent, {
+		this.edit$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.edit )
+			.map( action => this.formDialog = this.dialog.open( TaxTypeFormComponent, {
 				width: '800px',
 				position: { bottom: '150px' }
 			} ) )
 			.map( dialog => null );
 
-		this.cancelEdit$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.cancelEdit )
+		this.cancelEdit$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.cancelEdit )
 			.map( action => this.formDialog.close() )
 			.map( dialog => null );
 
-		this.modify$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.modify )
-			.switchMap( action => this.db.tables.Tax.update( action.item ) )
-			.map( item => taxActions.Modified( item ) );
+		this.modify$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.modify )
+			.switchMap( action => this.db.tables.TaxType.update( action.item ) )
+			.map( item => taxTypeActions.Modified( item ) );
 
-		this.modified$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.modified )
+		this.modified$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.modified )
 			.map( action => this.formDialog.close() )
 			.map( action => this.snackBar.open( 'item saved', 'Ok', { duration: 5000 } ) )
 			.map( snackbar => null );
 
-		this.remove$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.remove )
-			.switchMap( action => this.db.tables.Tax.remove( action.key ) )
-			.map( item => item ? taxActions.Removed( item ) : taxActions.RemoveFailed() );
+		this.remove$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.remove )
+			.switchMap( action => this.db.tables.TaxType.remove( action.key ) )
+			.map( item => item ? taxTypeActions.Removed( item ) : taxTypeActions.RemoveFailed() );
 
-		this.removed$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.removed )
+		this.removed$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.removed )
 			.map( action => this.snackBar.open( 'item removed', 'Ok', { duration: 5000 } ) )
-			.map( snackbar => taxActions.Select() );
+			.map( snackbar => taxTypeActions.Select() );
 
 	}
 }

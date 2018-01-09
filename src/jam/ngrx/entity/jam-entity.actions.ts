@@ -28,9 +28,9 @@ export class JamEntityActions<T extends Data>
 	constructor ( public readonly entityName: string = '', public readonly ifs: string = ' ' ) { }
 
 	public Initialize (): JamEntityAction<T> { return { type: this.initialize }; }
-	public Initialized ( list: T[], extras: any = {} ): JamEntityAction<T> { return { type: this.initialized, list: list, ...extras }; };
+	public Initialized ( list: T[], defaultItem: T = null, extras: any = {} ): JamEntityAction<T> { return { type: this.initialized, list: list, defaultItem: defaultItem, extras: extras }; };
 	public Select ( key?: string ): JamEntityAction<T> { return { type: this.select, key: key }; }
-	public Selected ( item: T, extras: any = {} ): JamEntityAction<T> { return { type: this.selected, item: item, ...extras }; }
+	public Selected ( item: T, extras: any = {} ): JamEntityAction<T> { return { type: this.selected, item: item, extras: extras }; }
 	public SelectFailed (): JamEntityAction<T> { return { type: this.selectFailed }; }
 	public Create (): JamEntityAction<T> { return { type: this.create }; }
 	public CancelCreate (): JamEntityAction<T> { return { type: this.cancelCreate }; }

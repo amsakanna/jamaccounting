@@ -32,6 +32,9 @@ export enum Pages
     Voucher = '/company/:company/voucher/:voucher',
 
     Taxes = '/company/:company/tax',
-    Tax = '/company/:company/tax/:tax'
+    Tax = '/company/:company/tax/:tax',
+
+    TaxTypes = '/company/:company/tax-type',
+    TaxType = '/company/:company/tax-type/:tax-type'
 
 }

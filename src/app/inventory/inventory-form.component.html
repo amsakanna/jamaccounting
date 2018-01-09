@@ -1,7 +1,7 @@
 <div class="container">
 	<jam-bounce-spinner *ngIf="$.adding || $.modifying"></jam-bounce-spinner>
 	<form [formGroup]="$.form" novalidate
-		class="product-form"
+		class="form"
 		(ngSubmit)="$.submit()"
 		[class.blur]="$.adding || $.modifying">
 

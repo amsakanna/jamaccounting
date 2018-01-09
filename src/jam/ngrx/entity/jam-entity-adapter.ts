@@ -48,7 +48,7 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 		return this.newState( state, { initialized: false, loading: true } );
 	}
 
-	public initialized ( state: S, list: T[], defaultItem: T = null, emptyItem: T = null, formElements: any = null ): S
+	public initialized ( state: S, list: T[], defaultItem: T = null, emptyItem: T = null, formElements: any = null, extras: any = {} ): S
 	{
 		return this.newState( state, {
 			initialized: true,
@@ -56,7 +56,8 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 			defaultItem: defaultItem || list[ 0 ] || null,
 			emptyItem: emptyItem,
 			form: formElements ? new FormGroup( formElements ) : null,
-			list: list
+			list: list,
+			...extras
 		} );
 	}
 
@@ -75,9 +76,9 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 		return this.newState( state, key ? { itemBeingSelectedKey: key } : {} );
 	}
 
-	public selected ( state: S, item: T ): S
+	public selected ( state: S, item: T, extras: any = {} ): S
 	{
-		return this.newState( state, { selectedItem: item } );
+		return this.newState( state, { selectedItem: item, ...extras } );
 	}
 
 	public selectFailed ( state: S ): S

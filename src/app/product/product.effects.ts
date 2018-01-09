@@ -47,7 +47,7 @@ export class ProductEffects
 			.filter( company => !!company )
 			.switchMap( company => this.db.tables.Product.list )
 			.switchMap( list => this.db.tables.ProductCategory.list, ( outerValue, innerValue ) => ( { productList: outerValue, productCategoryList: innerValue } ) )
-			.map( result => productActions.Initialized( result.productList, { defaultItem: result.productList[ 0 ] || null, categoryList: result.productCategoryList } ) );
+			.map( result => productActions.Initialized( result.productList, result.productList[ 0 ] || null, { categoryList: result.productCategoryList } ) );
 
 		this.initialized$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.initialized )
 			.withLatestFrom( this.store.select( state => state.productState ) )

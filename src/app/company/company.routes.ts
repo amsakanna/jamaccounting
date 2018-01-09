@@ -15,7 +15,8 @@ export const companyRoutes: Routes = [
 					{ path: 'inventory', loadChildren: '../inventory/inventory.module#InventoryModule' },
 					// { path: 'voucher-type', loadChildren: '../voucher-type/voucher-type.module#VoucherTypeModule' },
 					// { path: 'voucher', loadChildren: '../voucher/voucher.module#VoucherModule' }
-					{ path: 'tax', loadChildren: '../tax/tax.module#TaxModule' }
+					{ path: 'tax', loadChildren: '../tax/tax.module#TaxModule' },
+					{ path: 'tax-type', loadChildren: '../tax-type/tax-type.module#TaxTypeModule' }
 				]
 			},
 		]

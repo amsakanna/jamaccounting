@@ -6,4 +6,5 @@ export interface JamEntityAction<T> extends Action
 	item?: T;
 	list?: T[];
 	defaultItem?: T;
+	extras?: any;
 }

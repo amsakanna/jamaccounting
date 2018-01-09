@@ -10,6 +10,7 @@ export * from './product-category.model';
 export * from './product-feature.model';
 export * from './product.model';
 export * from './serial-number.model';
+export * from './tax-type.model';
 export * from './tax.model';
 export * from './user-account.model';
 export * from './voucher-type.model';

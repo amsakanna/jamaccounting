@@ -10,12 +10,16 @@
     height: 100%;
 }
 
-.form > main {
+mat-dialog-content {
     padding: 50px 100px;
     height: calc(100% - 200px);
 }
 
-.form > footer {
+mat-dialog-content .description {
+    width: 400px;
+}
+
+mat-dialog-actions {
     height: 100px;
     padding: 0px 50px;
     display: flex;
@@ -23,10 +27,10 @@
     align-items: center;
 }
 
-.reset-button, .cancel-button {
-    color: royalblue;
+mat-dialog-actions > .left {
+    flex-grow: 1;
 }
 
-.form > footer > .left {
-    flex-grow: 1;
+mat-dialog-actions > .reset-button, .cancel-button {
+    color: royalblue;
 }

@@ -10,7 +10,8 @@ import
 	Product,
 	ProductCategory,
 	Inventory,
-	Tax
+	Tax,
+	TaxType
 } from '../model';
 
 export class Tables
@@ -26,6 +27,7 @@ export class Tables
 	public ProductCategory: Table<ProductCategory>;
 	public Inventory: Table<Inventory>;
 	public Tax: Table<Tax>;
+	public TaxType: Table<TaxType>;
 
 	constructor () { }
 
