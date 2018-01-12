@@ -25,10 +25,10 @@ export function productReducers ( state = initialState, action: ProductAction ):
 				name: new FormControl( '', Validators.required ),
 				sku: new FormControl( '' )
 			};
-			return { ...productAdapter.initialized( state, action.list, action.defaultItem, emptyItem, formElements ), categoryList: action.categoryList };
+			return productAdapter.initialized( state, action.list, action.defaultItem, emptyItem, formElements, action.extras );
 
 		case productActions.selected:
-			return { ...productAdapter.selected( state, action.item ), selectedItemCategory: action.selectedItemCategory };
+			return { ...productAdapter.selected( state, action.item ), selectedItemCategory: action.extras.selectedItemCategory };
 
 		default:
 			return jamEntityReducer( state, action, productActions, productAdapter );

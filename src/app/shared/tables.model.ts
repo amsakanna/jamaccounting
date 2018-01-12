@@ -11,7 +11,8 @@ import
 	ProductCategory,
 	Inventory,
 	Tax,
-	TaxType
+	TaxType,
+	Brand
 } from '../model';
 
 export class Tables
@@ -25,6 +26,7 @@ export class Tables
 	public Account: Table<Account>;
 	public Product: Table<Product>;
 	public ProductCategory: Table<ProductCategory>;
+	public Brand: Table<Brand>;
 	public Inventory: Table<Inventory>;
 	public Tax: Table<Tax>;
 	public TaxType: Table<TaxType>;

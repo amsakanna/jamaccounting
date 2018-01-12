@@ -68,7 +68,7 @@ export class ProductCategoryEffects
 			.map( action =>
 			{
 				const param = { key: 'product-category', value: action.item ? action.item.key : '' };
-				return new NavigatorAction.Navigate( Pages.ProductCategory, [ param ] );
+				return new NavigatorAction.Navigate( Pages.ProductCategoryDetail, [ param ] );
 			} );
 
 		this.cancelCreate$ = this.actions$.ofType<ProductCategoryAction.CancelCreate>( ProductCategoryActionTypes.cancelCreate )

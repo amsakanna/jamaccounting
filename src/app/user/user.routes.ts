@@ -6,12 +6,8 @@ import { SubscriptionComponent } from "./subscription.component";
 import { CompaniesComponent } from './companies.component';
 
 export const userRoutes: Routes = [
-	{
-		path: '', component: UserComponent, children: [
-			{ path: '', redirectTo: 'companies', pathMatch: 'full' },
-			{ path: 'profile', component: ProfileComponent },
-			{ path: 'subscription', component: SubscriptionComponent },
-			{ path: 'companies', component: CompaniesComponent }
-		]
-	},
+	{ path: '', redirectTo: 'companies', pathMatch: 'full' },
+	{ path: 'profile', component: ProfileComponent },
+	{ path: 'subscription', component: SubscriptionComponent },
+	{ path: 'companies', component: CompaniesComponent }
 ]

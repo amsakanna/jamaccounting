@@ -19,22 +19,25 @@ export enum Pages
     Account = '/company/:company/account/:account',
     EditAccount = '/company/:company/account/:account/edit',
 
-    Products = '/company/:company/product',
-    Product = '/company/:company/product/:product',
+    Product = '/company/:company/product',
+    ProductDetail = '/company/:company/product/:product',
 
-    ProductCategories = '/company/:company/product-category',
-    ProductCategory = '/company/:company/product-category/:product-category',
+    ProductCategory = '/company/:company/product-category',
+    ProductCategoryDetail = '/company/:company/product-category/:product-category',
+
+    Brand = '/company/:company/brand',
+    BrandDetail = '/company/:company/brand/:brand',
 
     Inventory = '/company/:company/inventory',
-    InventoryItem = '/company/:company/inventory/:inventory',
+    InventoryDetail = '/company/:company/inventory/:inventory',
 
-    Vouchers = '/company/:company/voucher',
-    Voucher = '/company/:company/voucher/:voucher',
+    Voucher = '/company/:company/voucher',
+    VoucherDetail = '/company/:company/voucher/:voucher',
 
-    Taxes = '/company/:company/tax',
-    Tax = '/company/:company/tax/:tax',
+    Tax = '/company/:company/tax',
+    TaxDetail = '/company/:company/tax/:tax',
 
-    TaxTypes = '/company/:company/tax-type',
-    TaxType = '/company/:company/tax-type/:tax-type'
+    TaxType = '/company/:company/tax-type',
+    TaxTypeDetail = '/company/:company/tax-type/:tax-type'
 
 }

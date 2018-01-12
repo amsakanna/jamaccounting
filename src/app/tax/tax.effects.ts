@@ -76,7 +76,7 @@ export class TaxEffects
 			.map( action =>
 			{
 				const param = { key: 'tax', value: action.item ? action.item.key : '' };
-				return new NavigatorAction.Navigate( Pages.Tax, [ param ] );
+				return new NavigatorAction.Navigate( Pages.TaxDetail, [ param ] );
 			} );
 
 		this.create$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.create )

@@ -8,7 +8,7 @@ const initialState: NavigatorState = {
 	navigating: false,
 	pristine: true,
 	pages: null,
-	params: new Array<KeyValue>(),
+	params: [],
 	previousPage: null,
 	currentPage: null,
 	requestedPage: null,

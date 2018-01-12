@@ -1,23 +1,8 @@
 import { Data } from "../../jam/model-library";
 
-export class Brand implements Data
+export interface Brand extends Data
 {
-
-	constructor (
-		public key: string,
-		public id: string,
-		public name: string,
-		public logo: string = null
-	) { }
-
-	public toObject ()
-	{
-		return {
-			key: this.key,
-			id: this.id,
-			name: this.name,
-			logo: this.logo
-		}
-	}
-
+	id?: string;
+	name?: string;
+	logo?: string;
 }

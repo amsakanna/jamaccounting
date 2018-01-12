@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatIconModule, MatButtonModule, MatInputModule, MatSelectModule } from '@angular/material';
+import { MatIconModule, MatButtonModule, MatInputModule } from '@angular/material';
 import { ReadableErrorPipe } from './readable-error.pipe';
 import { AuthGuard } from './auth-guard.service';
 import { SignInComponent } from './sign-in.component';
@@ -13,8 +13,7 @@ import { RegisterComponent } from './register.component';
         ReactiveFormsModule,
         MatIconModule,
         MatButtonModule,
-        MatInputModule,
-        MatSelectModule
+        MatInputModule
     ],
     declarations: [ ReadableErrorPipe, SignInComponent, RegisterComponent ],
     providers: [ AuthGuard ],

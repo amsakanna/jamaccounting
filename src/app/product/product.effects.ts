@@ -47,7 +47,8 @@ export class ProductEffects
 			.filter( company => !!company )
 			.switchMap( company => this.db.tables.Product.list )
 			.switchMap( list => this.db.tables.ProductCategory.list, ( outerValue, innerValue ) => ( { productList: outerValue, productCategoryList: innerValue } ) )
-			.map( result => productActions.Initialized( result.productList, result.productList[ 0 ] || null, { categoryList: result.productCategoryList } ) );
+			.switchMap( result => this.db.tables.Brand.list, ( outerValue, innerValue ) => ( { ...outerValue, brandList: innerValue } ) )
+			.map( result => productActions.Initialized( result.productList, result.productList[ 0 ] || null, { categoryList: result.productCategoryList, brandList: result.brandList } ) );
 
 		this.initialized$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.initialized )
 			.withLatestFrom( this.store.select( state => state.productState ) )
@@ -74,7 +75,7 @@ export class ProductEffects
 			.map( action =>
 			{
 				const param = { key: 'product', value: action.item ? action.item.key : '' };
-				return new NavigatorAction.Navigate( Pages.Product, [ param ] );
+				return new NavigatorAction.Navigate( Pages.ProductDetail, [ param ] );
 			} );
 
 		this.cancelCreate$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.cancelCreate )

@@ -13,23 +13,8 @@ body {
     height: 100%;
     overflow: scroll;
     font-family: Roboto;
-    background-color: rgb(238, 241, 247);
+    /* background-color: rgb(238, 241, 247); */
     background-color: rgb(182, 186, 198);
-    /* background-color: rgb(223, 226, 232); */
-    /* background-image: url( 'https://firebasestorage.googleapis.com/v0/b/firebase-jamdeck.appspot.com/o/brushed-alu.png?alt=media&token=148bc048-30ac-47bb-85e2-75bf4358e384' );     */
-}
-
-body > .background {
-    display: none;
-    z-index: -1;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: url(https://t3.ftcdn.net/jpg/01/27/70/04/240_F_127700403_dDOFBhESmPnqWeY8K9sWKqL0aGTWgNYA.jpg);
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    filter: blur( 4px );
 }
 
 @keyframes blink {

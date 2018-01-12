@@ -1,28 +1,28 @@
 import { Injectable, Inject } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { configToken, defaults } from "./jam-firestore.config";
-import { JamFirestoreConfig } from './jam-firestore-config.model';
+import { configToken, defaults } from "./database.config";
+import { DatabaseConfig } from './database-config.model';
 import { Data, TableBase } from "../../jam/model-library";
 import { concatPaths } from '../../jam/functions';
 import { Table } from './table.model';
 import { Database } from './database.model';
 
 @Injectable()
-export class JamFirestore
+export class DatabaseService
 {
 	public loadStatus: Subject<boolean>;
 	public tablesMeta: Array<TableBase>
 	public tables: Array<Table<Data>>;
 	public databasePath: string;
 
-	constructor ( @Inject( configToken ) config: JamFirestoreConfig,
+	constructor ( @Inject( configToken ) config: DatabaseConfig,
 		private firestore: AngularFirestore )
 	{
 		this.loadStatus = new Subject<boolean>();
 		this.tables = new Array<Table<Data>>();
 
-		const databaseMetadataPath = config.databaseMetadataPath || defaults.databaseMetadataPath;
+		const databaseMetadataPath = config.metadataPath || defaults.databaseMetadataPath;
 
 		this.firestore.doc<Database>( databaseMetadataPath )
 			.valueChanges().take( 1 )

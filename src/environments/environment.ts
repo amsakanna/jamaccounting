@@ -17,8 +17,9 @@ export const database = {
 		storageBucket: "firebase-jamdeck.appspot.com",
 		messagingSenderId: "41851418000"
 	},
-	jamFireStoreConfig: {
-		databaseMetadataPath: 'Metadata/Database'
+
+	config: {
+		metadataPath: 'Metadata/Database'
 	}
-	
+
 }

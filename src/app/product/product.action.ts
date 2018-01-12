@@ -1,10 +1,6 @@
 import { JamEntityAction, JamEntityActions } from "../../jam/ngrx";
-import { Product, ProductCategory } from "../model";
+import { Product, ProductCategory, Brand } from "../model";
 
 export const productActions = new JamEntityActions<Product>( '[Product]' );
 
-export interface ProductAction extends JamEntityAction<Product>
-{
-	categoryList: ProductCategory[];
-	selectedItemCategory: ProductCategory;
-}
+export interface ProductAction extends JamEntityAction<Product> { }

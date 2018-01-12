@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../app.store';
+import { AppModuleState } from '../app.store';
 import { Tables } from './tables.model';
 
 @Injectable()
@@ -8,7 +8,7 @@ export class DatabaseService
 {
 	public tables: Tables;
 
-	constructor ( private store: Store<AppState> )
+	constructor ( private store: Store<AppModuleState> )
 	{
 		this.store
 			.select( state => state.databaseState.tables )

@@ -1,8 +1,8 @@
-import { AppState } from "../app.store";
+import { AppModuleState } from "../app.store";
 import { UserAccount } from '../model';
 import { User } from "../../jam/auth";
 
-export interface UserModuleState extends AppState
+export interface UserModuleState extends AppModuleState
 {
 	userState: UserState;
 }

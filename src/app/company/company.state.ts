@@ -1,9 +1,9 @@
-import { AppState } from "../app.store";
+import { AppModuleState } from "../app.store";
 import { UserModuleState } from "../user";
 import { JamEntityState } from "../../jam/ngrx";
 import { Company } from "../model";
 
-export interface CompanyModuleState extends AppState, UserModuleState
+export interface CompanyModuleState extends AppModuleState, UserModuleState
 {
 	companyState: CompanyState;
 }

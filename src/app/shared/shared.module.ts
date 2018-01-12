@@ -1,18 +1,16 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SharedService } from './shared.service';
+import { DatabaseService } from './database.service';
 
 @NgModule( {
-	imports: [ CommonModule ],
-	providers: [ SharedService ]
+	providers: [ DatabaseService ]
 } )
-export class JamFirestoreModule
+export class SharedModule
 {
 	static forRoot (): ModuleWithProviders
 	{
 		return {
-			ngModule: JamFirestoreModule,
-			providers: [ SharedService ]
+			ngModule: SharedModule,
+			providers: [ DatabaseService ]
 		};
 	}
 }
