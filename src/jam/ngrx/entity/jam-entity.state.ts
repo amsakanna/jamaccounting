@@ -8,6 +8,7 @@ export interface JamEntityState<T extends Data = Data>
 	list: T[];
 	form: FormGroup;
 
+	processing: boolean;
 	loading: boolean;
 	creating: boolean;
 	editing: boolean;

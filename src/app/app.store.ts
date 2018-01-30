@@ -1,11 +1,14 @@
+import { ActionReducerMap } from "@ngrx/store";
+
+import { CoreState, coreReducers, CoreEffects } from './core/core.store';
+import { NavigatorState, navigatorReducers, NavigatorEffects } from '../jam/navigator';
+import { AuthState, authReducers, AuthEffects } from '../jam/auth';
+import { DatabaseState, databaseReducers, DatabaseEffects } from '../jam/firestore';
+import { NotificationState, notificationReducer, NotificationEffect } from '../jam/notification';
+
 /**
  * All States
  */
-
-import { CoreState } from './core/core.store';
-import { NavigatorState } from '../jam/navigator';
-import { AuthState } from '../jam/auth';
-import { DatabaseState } from '../jam/firestore';
 
 export interface AppModuleState
 {
@@ -13,37 +16,30 @@ export interface AppModuleState
 	navigatorState: NavigatorState;
 	authState: AuthState;
 	databaseState: DatabaseState;
+	notificationState: NotificationState;
 }
 
 /**
  * All Reducers
  */
 
-import { ActionReducerMap } from "@ngrx/store";
-import { coreReducers } from "./core/core.store";
-import { navigatorReducers } from "../jam/navigator";
-import { authReducers } from "../jam/auth";
-import { databaseReducers } from "../jam/firestore";
 
 export const appReducers: ActionReducerMap<AppModuleState> = {
 	coreState: coreReducers,
 	navigatorState: navigatorReducers,
 	authState: authReducers,
-	databaseState: databaseReducers
+	databaseState: databaseReducers,
+	notificationState: notificationReducer
 }
 
 /**
  * All Effects
  */
 
-import { CoreEffects } from "./core/core.store";
-import { NavigatorEffects } from "../jam/navigator";
-import { DatabaseEffects } from "../jam/firestore";
-import { AuthEffects } from "../jam/auth";
-
 export const appEffects = [
 	CoreEffects,
 	NavigatorEffects,
 	DatabaseEffects,
-	AuthEffects
+	AuthEffects,
+	NotificationEffect
 ]

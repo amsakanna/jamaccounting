@@ -1,39 +1,33 @@
 <div class="container">
 	<jam-bounce-spinner *ngIf="$.loading"></jam-bounce-spinner>
 	<div class="component floating-box" [class.blur]="$.loading">
-		<header class="title-box"> Categories </header>
+		<header class="title-box"> Voucher Types </header>
 		<section class="list">
 			<main>
-				<p-tree
-					[value]="$.tree"
-					selectionMode="single"
-					[(selection)]="$.selectedNode"
-					(onNodeSelect)="$.select( $event?.node?.data )"
-					[style]="{ border:'1px solid black;' }"
-					draggableNodes="true"
-					droppableNodes="true">
-					<ng-template let-node  pTemplate="default">
-						<span class="list-item-container">
-							<span class="list-item"
-							> {{ node.label }} </span>
-						</span>
-					</ng-template>
-				</p-tree>
+				<mat-nav-list>
+					<mat-list-item *ngFor="let item of $.list"
+						[class.active]="item.key == $.selectedItem?.key"
+						(click)="$.select( item )">
+						{{ item.name }}
+					</mat-list-item>
+				</mat-nav-list>
 			</main>
 			<footer class="flex-center">
 				<button mat-raised-button color="primary"
 					class="add-button small"
 					(click)="$.create()">
-					<span> New Category </span>
+					<span> New Voucher Type </span>
 				</button>
 			</footer>
 		</section>
 		<section class="detail">
 			<header *ngIf="$.selectedItem">
-				<h3> {{ $.selectedItem.name }} </h3>
+				<div class="title">
+					<div class="item-name">{{ $.selectedItem.name }}</div>
+				</div>
 				<div class="action">
 					<button mat-button color="primary"
-						(click)="$.edit()">
+						(click)="$.edit( $.selectedItem )">
 						<mat-icon> edit </mat-icon>
 					</button>
 					<button mat-button color="warn"

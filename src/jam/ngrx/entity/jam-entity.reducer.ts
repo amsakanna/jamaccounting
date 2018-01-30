@@ -14,9 +14,9 @@ export function jamEntityReducer<T extends Data, S extends JamEntityState<T>, A 
 {
 	switch ( action.type ) {
 		case actions.initialize: return adapter.initialize( state );
-		case actions.initialized: return adapter.initialized( state, action.list );
+		case actions.initialized: return adapter.initialized( state, action.list, action.defaultItem, action.extras );
 		case actions.select: return adapter.select( state, action.key );
-		case actions.selected: return adapter.selected( state, action.item );
+		case actions.selected: return adapter.selected( state, action.item, action.extras );
 		case actions.selectFailed: return adapter.selectFailed( state );
 		case actions.create: return adapter.create( state );
 		case actions.cancelCreate: return adapter.cancelCreate( state );

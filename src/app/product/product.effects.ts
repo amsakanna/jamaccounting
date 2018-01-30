@@ -1,17 +1,17 @@
 import { Injectable } from "@angular/core";
 import { Observable } from 'rxjs/Observable';
 import { MatDialog, MatDialogRef, MatSnackBar } from "@angular/material";
-import { DatabaseService } from "../shared/database.service";
-import { NavigatorAction } from "../../jam/navigator";
 import { KeyValue } from "../../jam/model-library";
-import { switchMapResultSelector } from "../../jam/functions";
+import { DatabaseService } from "../shared/database.service";
 import { Action, Store } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
-import { ProductModuleState, ProductState } from './product.state';
-import { productActions } from './product.action';
+import { NavigatorAction } from "../../jam/navigator";
+import { JamEntityAction } from "../../jam/ngrx";
+import { ProductModuleState, productActions } from './product.store';
 import { Product, Pages } from '../model';
 import { ProductFormComponent } from "./product-form.component";
-import { JamEntityAction } from "../../jam/ngrx";
+import { config } from './product.config';
+import { NotificationAction } from "../../jam/notification/index";
 
 @Injectable()
 export class ProductEffects
@@ -23,7 +23,7 @@ export class ProductEffects
 	@Effect( { dispatch: false } ) public create$: Observable<Action>;
 	@Effect( { dispatch: false } ) public cancelCreate$: Observable<Action>;
 	@Effect() public add$: Observable<Action>;
-	@Effect( { dispatch: false } ) public added$: Observable<Action>;
+	@Effect( { dispatch: false } ) public added$: Observable<any>;
 	@Effect( { dispatch: false } ) public edit$: Observable<Action>;
 	@Effect( { dispatch: false } ) public cancelEdit$: Observable<Action>;
 	@Effect() public modify$: Observable<Action>;
@@ -66,7 +66,9 @@ export class ProductEffects
 					: null
 				return selectedItem;
 			} )
-			.switchMap( selectedItem => selectedItem ? this.db.tables.ProductCategory.get( selectedItem.categoryKey ) : Observable.of( null ), ( outerValue, innerValue ) => ( { selectedItem: outerValue, selectedItemCategory: innerValue } ) )
+			.switchMap( selectedItem => selectedItem
+				? this.db.tables.ProductCategory.get( selectedItem.categoryKey )
+				: Observable.of( null ), ( outerValue, innerValue ) => ( { selectedItem: outerValue, selectedItemCategory: innerValue } ) )
 			.map( result => result.selectedItem
 				? productActions.Selected( result.selectedItem, { selectedItemCategory: result.selectedItemCategory } )
 				: productActions.SelectFailed() );
@@ -74,7 +76,7 @@ export class ProductEffects
 		this.selected$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.selected )
 			.map( action =>
 			{
-				const param = { key: 'product', value: action.item ? action.item.key : '' };
+				const param = { key: config.urlParamKey, value: action.item.key || '' };
 				return new NavigatorAction.Navigate( Pages.ProductDetail, [ param ] );
 			} );
 
@@ -83,26 +85,22 @@ export class ProductEffects
 			.map( dialog => null );
 
 		this.create$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.create )
-			.map( action => this.formDialog = this.dialog.open( ProductFormComponent, {
-				width: '800px',
-				position: { bottom: '150px' }
-			} ) )
+			.map( action => this.formDialog = this.dialog.open( ProductFormComponent, { width: '650px' } ) )
 			.map( dialog => null );
 
 		this.add$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.add )
 			.switchMap( action => this.db.tables.Product.insert( action.item ) )
-			.map( item => productActions.Added( item ) );
+			.map( item => item ? productActions.Added( item ) : productActions.AddFailed() );
 
 		this.added$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.added )
 			.map( action => this.formDialog.close() )
-			.map( dialog => this.snackBar.open( 'item added', 'Ok', { duration: 5000 } ) )
-			.map( snackbar => null );
+			.map( dialog => null );
+		// .map( dialog => new NotificationAction.Show( 'Item Added' ) );
+		// .map( dialog => this.snackBar.open( 'item added', 'Ok', { duration: 5000 } ) )
+		// .map( snackbar => null );
 
 		this.edit$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.edit )
-			.map( action => this.formDialog = this.dialog.open( ProductFormComponent, {
-				width: '800px',
-				position: { bottom: '150px' }
-			} ) )
+			.map( action => this.formDialog = this.dialog.open( ProductFormComponent, { width: '650px' } ) )
 			.map( dialog => null );
 
 		this.cancelEdit$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.cancelEdit )
@@ -123,7 +121,7 @@ export class ProductEffects
 			.map( item => item ? productActions.Removed( item ) : productActions.RemoveFailed() );
 
 		this.removed$ = this.actions$.ofType<JamEntityAction<Product>>( productActions.removed )
-			.map( action => this.snackBar.open( 'item removed', 'Ok', { duration: 5000 } ) )
+			// .map( action => this.snackBar.open( 'item removed', 'Ok', { duration: 5000 } ) )
 			.map( snackbar => productActions.Select() );
 
 	}

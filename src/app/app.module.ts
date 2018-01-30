@@ -23,6 +23,7 @@ import { appReducers, appEffects } from './app.store';
 import { DatabaseService } from './shared/database.service';
 import { AppComponent } from './app.component';
 import { HomeModule } from './home/home.module';
+import { JamNotificationModule } from '../jam/notification';
 
 @NgModule( {
 	declarations: [
@@ -40,6 +41,7 @@ import { HomeModule } from './home/home.module';
 		JamNavigatorModule,
 		JamFirestoreModule.forRoot( database.config, database.firebaseAppConfig ),
 		JamAuthModule.forRoot(),
+		JamNotificationModule.forRoot(),
 		HomeModule
 	],
 	providers: [ DatabaseService ],

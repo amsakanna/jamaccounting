@@ -1,0 +1,56 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.form {
+    width: 100%;
+    height: 100%;
+}
+
+mat-dialog-content {
+    padding: 50px 100px;
+    height: calc(100% - 200px);
+}
+
+mat-dialog-content .description {
+    width: 400px;
+}
+
+mat-dialog-actions {
+    height: 100px;
+    padding: 0px 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+mat-dialog-actions > .left {
+    flex-grow: 1;
+}
+
+mat-dialog-actions > .reset-button, .cancel-button {
+    color: royalblue;
+}
+
+.dialog-title-wrapper {
+    margin-left: -24px;
+    border-left: 5px solid #333;
+    padding: 6px 0px;
+}
+
+.dialog-title-container {
+    background: beige;
+    width: 30%;
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+    padding: 5px 0px;
+}
+
+.dialog-title {
+    padding-left: 20px;
+    font-weight: bold;
+    font-size: 16px;
+}

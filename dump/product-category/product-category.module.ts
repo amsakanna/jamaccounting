@@ -16,19 +16,14 @@ import
 	MatExpansionModule,
 	MatListModule
 } from '@angular/material';
-import
-{
-	TreeModule, TreeDragDropService
-} from 'primeng/primeng';
-
 /*  3rd Party Modules  */
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-
 /*  My Library Modules  */
 import { JamBounceSpinnerModule, JamListModule } from './../../jam/ui-library';
-
 /*  App Modules  */
+import { ExplorerModule, FormDialogModule } from '../ui';
+/*  App Components  */
 import { productCategoryRoutes } from './product-category.routes';
 import { productCategoryReducers } from './product-category.reducers';
 import { ProductCategoryEffects } from './product-category.effects';
@@ -56,13 +51,14 @@ import { ProductCategoryFormComponent } from './product-category-form.component'
 		MatSnackBarModule,
 		MatExpansionModule,
 		MatListModule,
-		TreeModule,
+		RouterModule.forChild( productCategoryRoutes ),
 		StoreModule.forFeature( 'productCategoryState', productCategoryReducers ),
 		EffectsModule.forFeature( [ ProductCategoryEffects ] ),
 		JamBounceSpinnerModule,
 		JamListModule,
-		RouterModule.forChild( productCategoryRoutes )
+		ExplorerModule,
+		FormDialogModule
 	],
-	providers: [ ProductCategoryService, TreeDragDropService ]
+	providers: [ ProductCategoryService ]
 } )
 export class ProductCategoryModule { }

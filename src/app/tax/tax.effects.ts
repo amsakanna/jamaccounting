@@ -47,11 +47,6 @@ export class TaxEffects
 			.filter( company => !!company )
 			.switchMap( company => this.db.tables.Tax.list )
 			.switchMap( list => this.db.tables.TaxType.list, ( outerValue, innerValue ) => ( { taxList: outerValue, taxTypeList: innerValue } ) )
-			.map( result =>
-			{
-				console.log( result );
-				return result;
-			} )
 			.map( result => taxActions.Initialized( result.taxList, null, { taxTypeList: result.taxTypeList } ) );
 
 		this.initialized$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.initialized )
@@ -80,10 +75,7 @@ export class TaxEffects
 			} );
 
 		this.create$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.create )
-			.map( action => this.formDialog = this.dialog.open( TaxFormComponent, {
-				width: '800px',
-				position: { bottom: '150px' }
-			} ) )
+			.map( action => this.formDialog = this.dialog.open( TaxFormComponent, { width: '800px' } ) )
 			.map( dialog => null );
 
 		this.cancelCreate$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.cancelCreate )
@@ -100,10 +92,7 @@ export class TaxEffects
 			.map( snackbar => null );
 
 		this.edit$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.edit )
-			.map( action => this.formDialog = this.dialog.open( TaxFormComponent, {
-				width: '800px',
-				position: { bottom: '150px' }
-			} ) )
+			.map( action => this.formDialog = this.dialog.open( TaxFormComponent, { width: '800px' } ) )
 			.map( dialog => null );
 
 		this.cancelEdit$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.cancelEdit )

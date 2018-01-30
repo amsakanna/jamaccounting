@@ -74,10 +74,7 @@ export class BrandEffects
 			} );
 
 		this.create$ = this.actions$.ofType<JamEntityAction<Brand>>( brandActions.create )
-			.map( action => this.formDialog = this.dialog.open( BrandFormComponent, {
-				width: '800px',
-				position: { bottom: '150px' }
-			} ) )
+			.map( action => this.formDialog = this.dialog.open( BrandFormComponent, { width: '800px' } ) )
 			.map( dialog => null );
 
 		this.cancelCreate$ = this.actions$.ofType<JamEntityAction<Brand>>( brandActions.cancelCreate )
@@ -94,10 +91,7 @@ export class BrandEffects
 			.map( snackbar => null );
 
 		this.edit$ = this.actions$.ofType<JamEntityAction<Brand>>( brandActions.edit )
-			.map( action => this.formDialog = this.dialog.open( BrandFormComponent, {
-				width: '800px',
-				position: { bottom: '150px' }
-			} ) )
+			.map( action => this.formDialog = this.dialog.open( BrandFormComponent, { width: '800px' } ) )
 			.map( dialog => null );
 
 		this.cancelEdit$ = this.actions$.ofType<JamEntityAction<Brand>>( brandActions.cancelEdit )
@@ -118,7 +112,7 @@ export class BrandEffects
 			.map( item => item ? brandActions.Removed( item ) : brandActions.RemoveFailed() );
 
 		this.removed$ = this.actions$.ofType<JamEntityAction<Brand>>( brandActions.removed )
-			.map( action => this.snackBar.open( 'item removed', 'Ok', { duration: 5000 } ) )
+			// .map( action => this.snackBar.open( 'item removed', 'Ok', { duration: 5000 } ) )
 			.map( snackbar => brandActions.Select() );
 
 	}

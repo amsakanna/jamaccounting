@@ -11,6 +11,7 @@ export class JamEntityService<T extends Data, S> implements JamEntityState<T>
 	public initialized: boolean;
 	public list: T[];
 	public form: FormGroup;
+	public processing: boolean;
 	public loading: boolean;
 	public creating: boolean;
 	public editing: boolean;
@@ -89,6 +90,11 @@ export class JamEntityService<T extends Data, S> implements JamEntityState<T>
 		this.creating
 			? this.store.dispatch( this.actions.CancelCreate() )
 			: this.store.dispatch( this.actions.CancelEdit() );
+	}
+
+	public reset (): void
+	{
+		this.form.reset();
 	}
 
 }

@@ -80,10 +80,7 @@ export class InventoryEffects
 			.map( dialog => null );
 
 		this.create$ = this.actions$.ofType<InventoryAction.Create>( InventoryActionTypes.create )
-			.map( action => this.formDialog = this.dialog.open( InventoryFormComponent, {
-				width: '800px',
-				position: { bottom: '150px' }
-			} ) )
+			.map( action => this.formDialog = this.dialog.open( InventoryFormComponent, { width: '800px' } ) )
 			.map( dialog => null );
 
 		this.add$ = this.actions$.ofType<InventoryAction.Add>( InventoryActionTypes.add )
@@ -96,10 +93,7 @@ export class InventoryEffects
 			.map( snackbar => null );
 
 		this.edit$ = this.actions$.ofType<InventoryAction.Edit>( InventoryActionTypes.edit )
-			.map( action => this.formDialog = this.dialog.open( InventoryFormComponent, {
-				width: '800px',
-				position: { bottom: '150px' }
-			} ) )
+			.map( action => this.formDialog = this.dialog.open( InventoryFormComponent, { width: '800px' } ) )
 			.map( dialog => null );
 
 		this.cancelEdit$ = this.actions$.ofType<InventoryAction.CancelEdit>( InventoryActionTypes.cancelEdit )

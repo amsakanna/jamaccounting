@@ -10,7 +10,7 @@ export function productCategoryReducers ( state = initialState, action: ProductC
 {
 	switch ( action.type ) {
 		case ProductCategoryActionTypes.initialize: return productCategoryAdapter.initialize( state );
-		case ProductCategoryActionTypes.initialized: return productCategoryAdapter.initialized( state, action.list, null );
+		case ProductCategoryActionTypes.initialized: return productCategoryAdapter.initialized( state, action.list );
 		case ProductCategoryActionTypes.select: return productCategoryAdapter.select( state, action.key );
 		case ProductCategoryActionTypes.selected: return productCategoryAdapter.selected( state, action.item );
 		case ProductCategoryActionTypes.selectFailed: return productCategoryAdapter.selectFailed( state );

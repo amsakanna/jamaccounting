@@ -5,6 +5,7 @@ import { NavigatorAction } from '../jam/navigator';
 import { DbAction } from '../jam/firestore';
 import { AuthAction } from '../jam/auth';
 import { Pages } from './model';
+import { NotificationAction } from '../jam/notification';
 
 @Component( {
 	selector: 'app-root',
@@ -66,6 +67,7 @@ export class AppComponent
 		this.store.dispatch( new NavigatorAction.Initialize( this.pages ) );
 		this.store.dispatch( new DbAction.Initialize() );
 		this.store.dispatch( new AuthAction.Initialize() );
+		this.store.dispatch( new NotificationAction.Initialize() );
 
 		this.store.select( state => state.authState.authenticated )
 			.subscribe( authenticated => this.authenticated = authenticated );
@@ -79,4 +81,3 @@ export class AppComponent
 	}
 
 }
-

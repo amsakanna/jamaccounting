@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ProductService } from "./product.service";
+import { config } from "./product.config";
 
 @Component( {
 	selector: 'app-product-detail',
@@ -11,7 +12,7 @@ export class ProductDetailComponent
 {
 	constructor ( private $: ProductService, private activatedRoute: ActivatedRoute )
 	{
-		const key: string = this.activatedRoute.snapshot.params[ 'product' ] || '';
+		const key: string = this.activatedRoute.snapshot.params[ config.urlParamKey ] || '';
 		this.$.checkAndSelect( key );
 	}
 }

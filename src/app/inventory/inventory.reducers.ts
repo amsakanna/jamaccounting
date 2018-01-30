@@ -4,15 +4,19 @@ import { InventoryState } from './inventory.state';
 import { Inventory } from '../model';
 
 const inventoryAdapter = new JamEntityAdapter<Inventory, InventoryState>();
-const initialState = inventoryAdapter.getInitialState();
+const initialState = inventoryAdapter.getInitialState( {
+	selectedItemProduct: null,
+	selectedItemCategory: null,
+	taxList: []
+} );
 
 export function inventoryReducers ( state = initialState, action: InventoryAction.All ): InventoryState
 {
 	switch ( action.type ) {
 		case InventoryActionTypes.initialize: return inventoryAdapter.initialize( state );
-		case InventoryActionTypes.initialized: return { ...inventoryAdapter.initialized( state, action.list, null ), taxList: action.taxList };
+		case InventoryActionTypes.initialized: return inventoryAdapter.initialized( state, action.list, null, { taxList: action.taxList } );
 		case InventoryActionTypes.select: return inventoryAdapter.select( state, action.key );
-		case InventoryActionTypes.selected: return { ...inventoryAdapter.selected( state, action.item ), selectedItemProduct: action.product, selectedItemCategory: action.category };
+		case InventoryActionTypes.selected: return inventoryAdapter.selected( state, action.item, { selectedItemProduct: action.product, selectedItemCategory: action.category } );
 		case InventoryActionTypes.selectFailed: return inventoryAdapter.selectFailed( state );
 		case InventoryActionTypes.create: return inventoryAdapter.create( state );
 		case InventoryActionTypes.cancelCreate: return inventoryAdapter.cancelCreate( state );

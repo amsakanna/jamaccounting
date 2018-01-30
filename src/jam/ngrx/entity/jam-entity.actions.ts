@@ -25,7 +25,7 @@ export class JamEntityActions<T extends Data>
 	public get removed (): string { return this.entityName + this.ifs + JamEntityActionTypes.removed; };
 	public get removeFailed (): string { return this.entityName + this.ifs + JamEntityActionTypes.removeFailed; };
 
-	constructor ( public readonly entityName: string = '', public readonly ifs: string = ' ' ) { }
+	constructor ( private readonly entityName: string = '', private readonly ifs: string = ' ' ) { }
 
 	public Initialize (): JamEntityAction<T> { return { type: this.initialize }; }
 	public Initialized ( list: T[], defaultItem: T = null, extras: any = {} ): JamEntityAction<T> { return { type: this.initialized, list: list, defaultItem: defaultItem, extras: extras }; };

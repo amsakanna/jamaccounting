@@ -1,36 +1,28 @@
-.container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
+.label {
+	width:140px;
 }
 
-.form {
-    width: 100%;
-    height: 100%;
+.row {
+	display: flex;
+	align-items: center;
 }
 
-mat-dialog-content {
-    padding: 50px 100px;
-    height: calc(100% - 200px);
+.no-underline /deep/ .mat-form-field-underline {
+	/* display: none; */
 }
 
-mat-dialog-content .description {
-    width: 400px;
+.no-underline /deep/ .mat-form-field-infix {
+	/* -webkit-box-shadow: inset 0px 0px 22px -2px rgb(206, 206, 176);
+	-moz-box-shadow: inset 0px 0px 22px -2px rgb(206, 206, 176);
+	box-shadow: inset 0px 0px 22px -2px rgb(206, 206, 176);
+	border:none;
+	background:beige; */
 }
 
-mat-dialog-actions {
-    height: 100px;
-    padding: 0px 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.no-underline /deep/ .mat-select-value-text {
+	padding-left:15px;
 }
 
-mat-dialog-actions > .left {
-    flex-grow: 1;
-}
-
-mat-dialog-actions > .reset-button, .cancel-button {
-    color: royalblue;
+.no-underline /deep/ .mat-select-arrow {
+	margin-right:15px;
 }

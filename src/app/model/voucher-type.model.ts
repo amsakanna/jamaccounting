@@ -3,6 +3,7 @@ import { SerialNumber } from "./serial-number.model";
 
 export interface VoucherType extends Data
 {
-    parentKey: string;
-    serialNumber: SerialNumber;
+    name?: string;
+    parentKey?: string;
+    serialNumber?: SerialNumber;
 }

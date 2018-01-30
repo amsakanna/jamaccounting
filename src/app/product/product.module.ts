@@ -15,17 +15,16 @@ import
 	MatSnackBarModule,
 	MatListModule
 } from '@angular/material';
-
 /*  3rd Party Modules  */
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-
 /*  My Library Modules  */
-import { JamBounceSpinnerModule } from './../../jam/ui-library';
-
+import { JamBounceSpinnerModule, JamFacebookSpinnerModule } from './../../jam/ui-library';
 /*  App Modules  */
+import { FormDialogModule, ExplorerModule } from '../ui';
+/*  App Components  */
 import { productRoutes } from './product.routes';
-import { productReducers } from './product.reducers';
+import { productReducer } from './product.store';
 import { ProductEffects } from './product.effects';
 import { ProductService } from './product.service';
 import { ProductComponent } from './product.component';
@@ -50,10 +49,13 @@ import { ProductFormComponent } from './product-form.component';
 		MatDialogModule,
 		MatSnackBarModule,
 		MatListModule,
-		StoreModule.forFeature( 'productState', productReducers ),
+		StoreModule.forFeature( 'productState', productReducer ),
 		EffectsModule.forFeature( [ ProductEffects ] ),
 		JamBounceSpinnerModule,
-		RouterModule.forChild( productRoutes )
+		JamFacebookSpinnerModule,
+		RouterModule.forChild( productRoutes ),
+		FormDialogModule,
+		ExplorerModule
 	],
 	providers: [ ProductService ]
 } )

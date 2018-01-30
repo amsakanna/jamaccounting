@@ -4,12 +4,13 @@ import { Action, Store } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
 import { ProductCategoryModuleState, ProductCategoryState } from './product-category.state';
 import { DatabaseService } from "../shared/database.service";
-import { ProductCategoryActionTypes, ProductCategoryAction } from './product-category.actions';
+import { productCategoryActions } from './product-category.store';
 import { NavigatorAction } from "../../jam/navigator";
 import { KeyValue } from "../../jam/model-library";
 import { ProductCategory, Pages } from '../model';
 import { MatDialog, MatDialogRef, MatSnackBar } from "@angular/material";
 import { ProductCategoryFormComponent } from "./product-category-form.component";
+import { JamEntityAction } from "../../jam/ngrx/index";
 
 @Injectable()
 export class ProductCategoryEffects
@@ -40,18 +41,18 @@ export class ProductCategoryEffects
 	)
 	{
 
-		this.initialize$ = this.actions$.ofType<ProductCategoryAction.Initialize>( ProductCategoryActionTypes.initialize )
+		this.initialize$ = this.actions$.ofType<JamEntityAction<ProductCategory>>( productCategoryActions.initialize )
 			.switchMap( action => this.store.select( state => state.companyState.selectedItem ) )
 			.filter( company => !!company )
 			.switchMap( company => this.db.tables.ProductCategory.list )
-			.map( ( list ) => new ProductCategoryAction.Initialized( list ) );
+			.map( ( list ) => productCategoryActions.Initialized( list ) );
 
-		this.initialized$ = this.actions$.ofType<ProductCategoryAction.Initialized>( ProductCategoryActionTypes.initialized )
+		this.initialized$ = this.actions$.ofType<JamEntityAction<ProductCategory>>( productCategoryActions.initialized )
 			.withLatestFrom( this.store.select( state => state.productCategoryState ) )
 			.filter( ( [ action, state ] ) => !state.creating && !state.editing )
-			.map( ( [ action, state ] ) => new ProductCategoryAction.Select() );
+			.map( ( [ action, state ] ) => productCategoryActions.Select() );
 
-		this.select$ = this.actions$.ofType<ProductCategoryAction.Select>( ProductCategoryActionTypes.select )
+		this.select$ = this.actions$.ofType<JamEntityAction<ProductCategory>>( productCategoryActions.select )
 			.withLatestFrom( this.store.select( state => state.productCategoryState ) )
 			.map( ( [ action, state ] ) =>
 			{
@@ -62,62 +63,56 @@ export class ProductCategoryEffects
 					: null
 				return selectedItem;
 			} )
-			.map( selectedItem => selectedItem ? new ProductCategoryAction.Selected( selectedItem ) : new ProductCategoryAction.SelectFailed() );
+			.map( selectedItem => selectedItem ? productCategoryActions.Selected( selectedItem ) : productCategoryActions.SelectFailed() );
 
-		this.selected$ = this.actions$.ofType<ProductCategoryAction.Selected>( ProductCategoryActionTypes.selected )
+		this.selected$ = this.actions$.ofType<JamEntityAction<ProductCategory>>( productCategoryActions.selected )
 			.map( action =>
 			{
 				const param = { key: 'product-category', value: action.item ? action.item.key : '' };
 				return new NavigatorAction.Navigate( Pages.ProductCategoryDetail, [ param ] );
 			} );
 
-		this.cancelCreate$ = this.actions$.ofType<ProductCategoryAction.CancelCreate>( ProductCategoryActionTypes.cancelCreate )
+		this.cancelCreate$ = this.actions$.ofType<JamEntityAction<ProductCategory>>( productCategoryActions.cancelCreate )
 			.map( action => this.formDialog.close() )
 			.map( dialog => null );
 
-		this.create$ = this.actions$.ofType<ProductCategoryAction.Create>( ProductCategoryActionTypes.create )
-			.map( action => this.formDialog = this.dialog.open( ProductCategoryFormComponent, {
-				width: '800px',
-				position: { bottom: '150px' }
-			} ) )
+		this.create$ = this.actions$.ofType<JamEntityAction<ProductCategory>>( productCategoryActions.create )
+			.map( action => this.formDialog = this.dialog.open( ProductCategoryFormComponent, { width: '800px' } ) )
 			.map( dialog => null );
 
-		this.add$ = this.actions$.ofType<ProductCategoryAction.Add>( ProductCategoryActionTypes.add )
+		this.add$ = this.actions$.ofType<JamEntityAction<ProductCategory>>( productCategoryActions.add )
 			.switchMap( action => this.db.tables.ProductCategory.insert( action.item ) )
-			.map( item => new ProductCategoryAction.Added( item ) );
+			.map( item => productCategoryActions.Added( item ) );
 
-		this.added$ = this.actions$.ofType<ProductCategoryAction.Added>( ProductCategoryActionTypes.added )
+		this.added$ = this.actions$.ofType<JamEntityAction<ProductCategory>>( productCategoryActions.added )
 			.map( action => this.formDialog.close() )
 			.map( dialog => this.snackBar.open( 'item added', 'Ok', { duration: 5000 } ) )
 			.map( snackbar => null );
 
-		this.edit$ = this.actions$.ofType<ProductCategoryAction.Edit>( ProductCategoryActionTypes.edit )
-			.map( action => this.formDialog = this.dialog.open( ProductCategoryFormComponent, {
-				width: '800px',
-				position: { bottom: '150px' }
-			} ) )
+		this.edit$ = this.actions$.ofType<JamEntityAction<ProductCategory>>( productCategoryActions.edit )
+			.map( action => this.formDialog = this.dialog.open( ProductCategoryFormComponent, { width: '800px' } ) )
 			.map( dialog => null );
 
-		this.cancelEdit$ = this.actions$.ofType<ProductCategoryAction.CancelEdit>( ProductCategoryActionTypes.cancelEdit )
+		this.cancelEdit$ = this.actions$.ofType<JamEntityAction<ProductCategory>>( productCategoryActions.cancelEdit )
 			.map( action => this.formDialog.close() )
 			.map( dialog => null );
 
-		this.modify$ = this.actions$.ofType<ProductCategoryAction.Modify>( ProductCategoryActionTypes.modify )
+		this.modify$ = this.actions$.ofType<JamEntityAction<ProductCategory>>( productCategoryActions.modify )
 			.switchMap( action => this.db.tables.ProductCategory.update( action.item ) )
-			.map( item => new ProductCategoryAction.Modified( item ) );
+			.map( item => productCategoryActions.Modified( item ) );
 
-		this.modified$ = this.actions$.ofType<ProductCategoryAction.Modified>( ProductCategoryActionTypes.modified )
+		this.modified$ = this.actions$.ofType<JamEntityAction<ProductCategory>>( productCategoryActions.modified )
 			.map( action => this.formDialog.close() )
 			.map( action => this.snackBar.open( 'item saved', 'Ok', { duration: 5000 } ) )
 			.map( snackbar => null );
 
-		this.remove$ = this.actions$.ofType<ProductCategoryAction.Remove>( ProductCategoryActionTypes.remove )
+		this.remove$ = this.actions$.ofType<JamEntityAction<ProductCategory>>( productCategoryActions.remove )
 			.switchMap( action => this.db.tables.ProductCategory.remove( action.key ) )
-			.map( item => item ? new ProductCategoryAction.Removed( item ) : new ProductCategoryAction.RemoveFailed );
+			.map( item => item ? productCategoryActions.Removed( item ) : productCategoryActions.RemoveFailed() );
 
-		this.removed$ = this.actions$.ofType<ProductCategoryAction.Removed>( ProductCategoryActionTypes.removed )
+		this.removed$ = this.actions$.ofType<JamEntityAction<ProductCategory>>( productCategoryActions.removed )
 			.map( action => this.snackBar.open( 'item removed', 'Ok', { duration: 5000 } ) )
-			.map( snackbar => new ProductCategoryAction.Select() );
+			.map( snackbar => productCategoryActions.Select() );
 
 	}
 }

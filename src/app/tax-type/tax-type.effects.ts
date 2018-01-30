@@ -74,10 +74,7 @@ export class TaxTypeEffects
 			} );
 
 		this.create$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.create )
-			.map( action => this.formDialog = this.dialog.open( TaxTypeFormComponent, {
-				width: '800px',
-				position: { bottom: '150px' }
-			} ) )
+			.map( action => this.formDialog = this.dialog.open( TaxTypeFormComponent, { width: '800px' } ) )
 			.map( dialog => null );
 
 		this.cancelCreate$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.cancelCreate )
@@ -94,10 +91,7 @@ export class TaxTypeEffects
 			.map( snackbar => null );
 
 		this.edit$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.edit )
-			.map( action => this.formDialog = this.dialog.open( TaxTypeFormComponent, {
-				width: '800px',
-				position: { bottom: '150px' }
-			} ) )
+			.map( action => this.formDialog = this.dialog.open( TaxTypeFormComponent, { width: '800px' } ) )
 			.map( dialog => null );
 
 		this.cancelEdit$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.cancelEdit )
@@ -118,7 +112,7 @@ export class TaxTypeEffects
 			.map( item => item ? taxTypeActions.Removed( item ) : taxTypeActions.RemoveFailed() );
 
 		this.removed$ = this.actions$.ofType<JamEntityAction<TaxType>>( taxTypeActions.removed )
-			.map( action => this.snackBar.open( 'item removed', 'Ok', { duration: 5000 } ) )
+			// .map( action => this.snackBar.open( 'item removed', 'Ok', { duration: 5000 } ) )
 			.map( snackbar => taxTypeActions.Select() );
 
 	}

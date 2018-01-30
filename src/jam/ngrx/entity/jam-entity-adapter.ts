@@ -1,18 +1,59 @@
-import { FormGroup } from "@angular/forms";
 import { Data } from "../../../jam/model-library";
 import { JamEntityState } from "./jam-entity.state";
+import { JamEntityActions } from "./jam-entity.actions";
 import { buildFormFromModel } from "../../functions/build-form-from-model.function";
-import { FormBuilder } from "@angular/forms/src/form_builder";
+import { JamEntityAction } from "./jam-entity-action.model";
 
-export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamEntityState<T>>
+export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamEntityState<T>, A extends JamEntityAction<T> = JamEntityAction<T>>
 {
 
-	public getInitialState ( additionalStates: any = {} ): S
+	public readonly actions: JamEntityActions<T>;
+	private readonly additionalStates: Partial<S>;
+
+	constructor ( actionPrefix: string = '', additionalStates: Partial<S> = {} )
+	{
+		this.actions = new JamEntityActions<T>( actionPrefix );
+		this.additionalStates = additionalStates;
+	}
+
+	public get reducer (): ( state: S, action: A ) => S
+	{
+		const initialState = this.getInitialState( this.additionalStates );
+		const adapter = this;
+		const actions = this.actions;
+		return ( state: S = initialState, action: A ) =>
+		{
+			switch ( action.type ) {
+				case actions.initialize: return adapter.initialize( state );
+				case actions.initialized: return adapter.initialized( state, action.list, action.defaultItem, action.extras );
+				case actions.select: return adapter.select( state, action.key );
+				case actions.selected: return adapter.selected( state, action.item, action.extras );
+				case actions.selectFailed: return adapter.selectFailed( state );
+				case actions.create: return adapter.create( state );
+				case actions.cancelCreate: return adapter.cancelCreate( state );
+				case actions.add: return adapter.add( state, action.item );
+				case actions.added: return adapter.added( state, action.item );
+				case actions.addFailed: return adapter.addFailed( state );
+				case actions.edit: return adapter.edit( state, action.item );
+				case actions.cancelEdit: return adapter.cancelEdit( state );
+				case actions.modify: return adapter.modify( state, action.item );
+				case actions.modified: return adapter.modified( state, action.item );
+				case actions.modifyFailed: return adapter.modifyFailed( state );
+				case actions.remove: return adapter.remove( state, action.key );
+				case actions.removed: return adapter.removed( state, action.item );
+				case actions.removeFailed: return adapter.removeFailed( state );
+				default: return state;
+			}
+		};
+	}
+
+	public getInitialState ( additionalStates: Partial<S> = {} ): S
 	{
 		const entityState: JamEntityState<T> = {
 			initialized: false,
 			list: [],
 			form: null,
+			processing: false,
 			loading: false,
 			creating: false,
 			editing: false,
@@ -35,40 +76,38 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 			lastRemovedItem: null,
 			lastRemovedItemIndex: -1
 		};
-		return { ...entityState, ...additionalStates };
+		return this.newState( entityState as S, additionalStates );
 	}
 
-	private newState ( state: S, newObject?: any )
+	private newState ( state: S, newObject: any = {} ): S
 	{
 		return Object.assign( {}, state, newObject );
 	}
 
 	public initialize ( state: S ): S
 	{
-		return this.newState( state, { initialized: false, loading: true } );
+		return this.newState( state, { initialized: false, loading: true, processing: true } );
 	}
 
-	public initialized ( state: S, list: T[], defaultItem: T = null, emptyItem: T = null, formElements: any = null, extras: any = {} ): S
+	public initialized ( state: S, list: T[], defaultItem: T = null, extras: any = {} ): S
 	{
-		return this.newState( state, {
+		return this.newState( state, Object.assign( {
 			initialized: true,
 			loading: false,
+			processing: false,
 			defaultItem: defaultItem || list[ 0 ] || null,
-			emptyItem: emptyItem,
-			form: formElements ? new FormGroup( formElements ) : null,
-			list: list,
-			...extras
-		} );
+			list: list
+		}, extras ) );
 	}
 
 	public initializeFailed ( state: S ): S
 	{
-		return this.newState( state, { initialized: false, loading: false } );
+		return this.newState( state, { initialized: false, loading: false, processing: false } );
 	}
 
 	public reloaded ( state: S ): S
 	{
-		return this.newState( state, { loading: false } );
+		return this.newState( state, { loading: false, processing: false } );
 	}
 
 	public select ( state: S, key: string ): S
@@ -76,9 +115,9 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 		return this.newState( state, key ? { itemBeingSelectedKey: key } : {} );
 	}
 
-	public selected ( state: S, item: T, extras: any = {} ): S
+	public selected ( state: S, item: T, extras: Partial<S> = {} ): S
 	{
-		return this.newState( state, { selectedItem: item, ...extras } );
+		return this.newState( state, Object.assign( { selectedItem: item }, extras ) );
 	}
 
 	public selectFailed ( state: S ): S
@@ -105,22 +144,23 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 
 	public add ( state: S, item: T ): S
 	{
-		return this.newState( state, { adding: true, itemBeingAdded: item } );
+		return this.newState( state, { adding: true, processing: true, itemBeingAdded: item } );
 	}
 
 	public added ( state: S, item: T ): S
 	{
 		return this.newState( state, {
+			creating: false,
 			adding: false,
+			processing: false,
 			lastAddedItem: item,
 			itemBeingAdded: null,
-			creating: false
 		} );
 	}
 
 	public addFailed ( state: S ): S
 	{
-		return this.newState( state, { adding: false, itemBeingAdded: null } );
+		return this.newState( state, { adding: false, processing: false, itemBeingAdded: null } );
 	}
 
 	public edit ( state: S, item: T ): S
@@ -141,22 +181,23 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 
 	public modify ( state: S, item: T ): S
 	{
-		return this.newState( state, { modifying: true, itemBeingModified: item } );
+		return this.newState( state, { modifying: true, processing: true, itemBeingModified: item } );
 	}
 
 	public modified ( state: S, item: T ): S
 	{
 		return this.newState( state, {
+			editing: false,
 			modifying: false,
+			processing: false,
 			lastModifiedItem: item,
-			itemBeingModified: null,
-			editing: false
+			itemBeingModified: null
 		} );
 	}
 
 	public modifyFailed ( state: S ): S
 	{
-		return this.newState( state, { modifying: false, itemBeingModified: null } );
+		return this.newState( state, { modifying: false, processing: false, itemBeingModified: null } );
 	}
 
 	public remove ( state: S, itemKey: string ): S
@@ -164,6 +205,7 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 		const itemBeingRemovedIndex = state.list.findIndex( item => item.key == itemKey );
 		return this.newState( state, {
 			removing: true,
+			processing: true,
 			itemBeingRemovedKey: itemKey,
 			itemBeingRemovedIndex: itemBeingRemovedIndex
 		} );
@@ -176,6 +218,7 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 			|| { key: null };
 		return this.newState( state, {
 			removing: false,
+			processing: false,
 			lastRemovedItem: item,
 			lastRemovedItemIndex: state.itemBeingRemovedIndex,
 			itemBeingRemovedKey: null,
@@ -188,6 +231,7 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 	{
 		return this.newState( state, {
 			removing: false,
+			processing: false,
 			itemBeingRemovedKey: null,
 			itemBeingRemovedIndex: -1
 		} );

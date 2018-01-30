@@ -1,0 +1,31 @@
+<div class="container">
+	<jam-facebook-spinner *ngIf="$.adding || $.modifying"></jam-facebook-spinner>
+	<form [formGroup]="$.form" novalidate
+		class="form"
+		(ngSubmit)="$.submit()"
+		[class.blur]="$.adding || $.modifying">
+
+		<div mat-dialog-title>
+			<div class="dialog-title-wrapper">
+				<div class="dialog-title-container">
+					<div class="dialog-title"> {{ $.creating ? 'New Item' : $.editing ? 'Edit Item' : '' }} </div>
+				</div>
+			</div>
+		</div>
+
+		<mat-dialog-content>
+			<ng-content></ng-content>
+		</mat-dialog-content>
+
+		<mat-dialog-actions>
+			<div class="left">
+				<button mat-button type="button" class="reset-button no-animation" (click)="$.reset()"> RESET </button>
+			</div>
+			<div class="right">
+				<button mat-button type="button" class="cancel-button no-animation" (click)="$.cancel()"> CANCEL </button>
+				<button mat-raised-button color="primary" type="submit" class="save-button" [disabled]="!$.form.valid"> SAVE </button>
+			</div>
+		</mat-dialog-actions>
+
+	</form>
+</div>

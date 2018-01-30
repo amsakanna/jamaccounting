@@ -80,8 +80,8 @@ export class ProductEffects
 
 		this.create$ = this.actions$.ofType<ProductAction.Create>( ProductActionTypes.create )
 			.map( action => this.formDialog = this.dialog.open( ProductFormComponent, {
-				width: '800px',
-				position: { bottom: '150px' }
+				width: '800px'
+
 			} ) )
 			.map( dialog => null );
 
@@ -96,8 +96,8 @@ export class ProductEffects
 
 		this.edit$ = this.actions$.ofType<ProductAction.Edit>( ProductActionTypes.edit )
 			.map( action => this.formDialog = this.dialog.open( ProductFormComponent, {
-				width: '800px',
-				position: { bottom: '150px' }
+				width: '800px'
+
 			} ) )
 			.map( dialog => null );
 
