@@ -41,7 +41,7 @@ import { JamNotificationModule } from '../jam/notification';
 		JamNavigatorModule,
 		JamFirestoreModule.forRoot( database.config, database.firebaseAppConfig ),
 		JamAuthModule.forRoot(),
-		JamNotificationModule.forRoot(),
+		JamNotificationModule,
 		HomeModule
 	],
 	providers: [ DatabaseService ],

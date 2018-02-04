@@ -4,16 +4,24 @@ import { NotificationMessage } from './notification-message.model';
 
 const initialState: NotificationState = {
 	notifying: false,
+	defaultMessage: null,
 	currentMessage: null,
 	messageHistory: [],
 	triggers: []
 }
 
-export function notificationReducer ( state = initialState, action: NotificationAction.All )
+export function notificationReducer ( state = initialState, action: NotificationAction.All ): NotificationState
 {
 	switch ( action.type ) {
 
-		case NotificationActionTypes.show:
+		case NotificationActionTypes.initialize:
+			return {
+				...state,
+				defaultMessage: action.defaultMessage,
+				triggers: action.triggers
+			};
+
+		case NotificationActionTypes.open:
 			return {
 				...state,
 				notifying: true,
@@ -30,13 +38,14 @@ export function notificationReducer ( state = initialState, action: Notification
 		case NotificationActionTypes.closed:
 			return {
 				...state,
+				currentMessage: { ...state.currentMessage, attended: true },
 				notifying: false
 			};
 
-		case NotificationActionTypes.addTrigger:
+		case NotificationActionTypes.addTriggers:
 			return {
 				...state,
-				triggers: [ ...state.triggers, action.trigger ]
+				triggers: [ ...state.triggers, ...action.triggers ]
 			};
 
 		default:

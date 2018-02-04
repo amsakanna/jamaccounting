@@ -1,4 +1,4 @@
-export function switchMapOuterSelector<T>( outerValue: T ): T
+export const switchMapOuterSelector = function <T>( outerValue: T ): T
 {
 	return outerValue;
 }

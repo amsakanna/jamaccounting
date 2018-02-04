@@ -1,14 +1,15 @@
 import { Action } from '@ngrx/store';
 import { KeyValue } from '../../jam/model-library';
 import { NotificationMessage } from './notification-message.model';
+import { ActionMessagePair } from './action-message-pair.model';
 
 export const enum NotificationActionTypes
 {
 	initialize = '[Notification] initialize',
-	show = '[Notification] show',
+	open = '[Notification] open',
 	close = '[Notification] close',
 	closed = '[Notification] closed',
-	addTrigger = '[Notification] add trigger'
+	addTriggers = '[Notification] add triggers'
 }
 
 export namespace NotificationAction
@@ -17,22 +18,13 @@ export namespace NotificationAction
 	export class Initialize implements Action
 	{
 		public readonly type = NotificationActionTypes.initialize;
-		constructor () { }
+		constructor ( public defaultMessage: NotificationMessage, public triggers: ActionMessagePair[] ) { }
 	}
 
-	export class Show implements Action
+	export class Open implements Action
 	{
-		public readonly type = NotificationActionTypes.show;
-		public message: NotificationMessage;
-		constructor ( message?: string, action?: string, duration?: number )
-		{
-			this.message = {
-				content: message,
-				action: action,
-				duration: duration,
-				attended: false
-			}
-		}
+		public readonly type = NotificationActionTypes.open;
+		constructor ( public message: NotificationMessage ) { }
 	}
 
 	export class Close implements Action
@@ -47,17 +39,19 @@ export namespace NotificationAction
 		constructor () { }
 	}
 
-	export class AddTrigger implements Action
+	export class AddTriggers implements Action
 	{
-		public readonly type = NotificationActionTypes.addTrigger;
-		constructor ( public trigger: string ) {}
+		public readonly type = NotificationActionTypes.addTriggers;
+		public triggers: ActionMessagePair[];
+		constructor ( ...triggers: ActionMessagePair[] ) { this.triggers = triggers; }
 	}
 
 	export type All
-		= Show
+		= Initialize
+		| Open
 		| Close
 		| Closed
-		| AddTrigger
+		| AddTriggers
 		;
 
 }

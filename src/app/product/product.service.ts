@@ -44,7 +44,6 @@ export class ProductService extends JamEntityService<Product, ProductModuleState
 			.filter( editing => editing )
 			.subscribe( editing => this.buildFeatureForms() );
 
-		this.store.dispatch( new NotificationAction.AddTrigger( '[Product] added' ) );
 	}
 
 	public submit (): void

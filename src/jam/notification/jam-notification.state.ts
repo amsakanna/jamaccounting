@@ -1,4 +1,5 @@
 import { NotificationMessage } from './notification-message.model';
+import { ActionMessagePair } from './action-message-pair.model';
 
 export interface NotificationModuleState
 {
@@ -8,7 +9,8 @@ export interface NotificationModuleState
 export interface NotificationState
 {
 	notifying: boolean;
+	defaultMessage: NotificationMessage;
 	currentMessage: NotificationMessage;
 	messageHistory: NotificationMessage[];
-	triggers: string[];
+	triggers: ActionMessagePair[]
 }
