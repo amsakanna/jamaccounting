@@ -1,16 +1,16 @@
 import { Action } from '@ngrx/store';
 
-export const coreAction = '[Core] core action ...';
+export const coreAction = '[Core] core action';
 export class CoreAction implements Action
 {
 	public readonly type = coreAction;
 
-	constructor ( public payload: string )
+	constructor ()
 	{
 	}
 }
 
-export const coreSuccessAction = '[Core] coreSuccess action ...';
+export const coreSuccessAction = '[Core] coreSuccess action';
 export class CoreSuccessAction implements Action
 {
 	public readonly type = coreSuccessAction;

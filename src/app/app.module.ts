@@ -23,7 +23,21 @@ import { appReducers, appEffects } from './app.store';
 import { DatabaseService } from './shared/database.service';
 import { AppComponent } from './app.component';
 import { HomeModule } from './home/home.module';
-import { JamNotificationModule } from '../jam/notification';
+import { JamNotificationModule, NotificationAction } from '../jam/notification';
+import { JamEventBrokerModule } from '../jam/event-broker';
+import { EventPair } from '../jam/event-broker/event-pair.model';
+
+const myEventPairs: EventPair[] = [
+	{
+		if: '[Product] Create', then: [
+			new NotificationAction.Open( { content: 'Create pannugiren', duration: 5000 } )
+		]
+	}, {
+		if: /\[.*\] Removed .*/, then: [
+			new NotificationAction.Open( { content: 'Remove pannugiren', duration: 5000 } )
+		]
+	}
+];
 
 @NgModule( {
 	declarations: [
@@ -42,6 +56,7 @@ import { JamNotificationModule } from '../jam/notification';
 		JamFirestoreModule.forRoot( database.config, database.firebaseAppConfig ),
 		JamAuthModule.forRoot(),
 		JamNotificationModule,
+		JamEventBrokerModule.forRoot( myEventPairs ),
 		HomeModule
 	],
 	providers: [ DatabaseService ],

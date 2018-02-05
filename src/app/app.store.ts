@@ -5,6 +5,7 @@ import { NavigatorState, navigatorReducers, NavigatorEffects } from '../jam/navi
 import { AuthState, authReducers, AuthEffects } from '../jam/auth';
 import { DatabaseState, databaseReducers, DatabaseEffects } from '../jam/firestore';
 import { NotificationState, notificationReducer, NotificationEffect } from '../jam/notification';
+import { EventBrokerState, eventBrokerReducer, EventBrokerEffect } from "../jam/event-broker";
 
 /**
  * All States
@@ -17,6 +18,7 @@ export interface AppModuleState
 	authState: AuthState;
 	databaseState: DatabaseState;
 	notificationState: NotificationState;
+	eventBrokerState: EventBrokerState;
 }
 
 /**
@@ -29,7 +31,8 @@ export const appReducers: ActionReducerMap<AppModuleState> = {
 	navigatorState: navigatorReducers,
 	authState: authReducers,
 	databaseState: databaseReducers,
-	notificationState: notificationReducer
+	notificationState: notificationReducer,
+	eventBrokerState: eventBrokerReducer
 }
 
 /**
@@ -41,5 +44,6 @@ export const appEffects = [
 	NavigatorEffects,
 	DatabaseEffects,
 	AuthEffects,
-	NotificationEffect
+	NotificationEffect,
+	EventBrokerEffect
 ]
