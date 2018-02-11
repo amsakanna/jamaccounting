@@ -36,17 +36,7 @@ mat-dialog-actions > .reset-button, .cancel-button {
 }
 
 .dialog-title-wrapper {
-    margin-left: -24px;
-    border-left: 5px solid #333;
     padding: 6px 0px;
-}
-
-.dialog-title-container {
-    background: beige;
-    width: 30%;
-    border-bottom-right-radius: 3px;
-    border-top-right-radius: 3px;
-    padding: 5px 0px;
 }
 
 .dialog-title {

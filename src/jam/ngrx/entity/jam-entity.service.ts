@@ -1,11 +1,10 @@
 import { FormGroup } from "@angular/forms";
 import { Store } from "@ngrx/store";
-import { Data } from "../../model-library";
 import { buildModelFromForm } from "../../functions";
 import { JamEntityState } from "./jam-entity.state";
 import { JamEntityActions } from "./jam-entity.actions";
 
-export class JamEntityService<T extends Data, S> implements JamEntityState<T>
+export class JamEntityService<T, S extends JamEntityState<T> = JamEntityState<T>, AS extends JamEntityActions<T> = JamEntityActions<T>> implements JamEntityState<T>
 {
 
 	public initialized: boolean;
@@ -22,6 +21,8 @@ export class JamEntityService<T extends Data, S> implements JamEntityState<T>
 	public selectedItem: T;
 	public emptyItem: T;
 	public formItem: T;
+	public defaultItemKey: string;
+	public selectedItemKey: string;
 	public itemBeingSelectedKey: string;
 	public itemBeingCreated: T;
 	public itemBeingEdited: T;
@@ -34,32 +35,29 @@ export class JamEntityService<T extends Data, S> implements JamEntityState<T>
 	public lastRemovedItem: T;
 	public lastRemovedItemIndex: number;
 
-	public store: Store<S>;
+	constructor ( public store: Store<S>, public actions: AS ) { }
 
-	constructor ( public stateName: string, public actions: JamEntityActions<T> ) { }
-
-	public subscribeProperties ( subscribables: ( keyof JamEntityState<T> )[] = [] )
+	public subscribeProperties ( ...subscribables: ( keyof S )[] )
 	{
-		this.subscribeProperty( 'creating' );
 		subscribables.forEach( property => this.subscribeProperty( property ) );
 	}
 
-	public subscribeProperty ( property: keyof JamEntityState<T> )
+	public subscribeProperty ( property: keyof S )
 	{
-		this.store.select( this.stateName as keyof S, property as keyof S[ keyof S ] )
+		this.store.select( property )
 			.subscribe( value => this[ property as string ] = value );
 	}
 
-	public checkAndSelect ( key: string ): void
+	public checkAndSelect ( key: string, keyColumn: string = 'key' ): void
 	{
-		if ( !this.selectedItem || this.selectedItem.key != key ) {
+		if ( !this.selectedItem || this.selectedItem[ keyColumn ] != key ) {
 			this.store.dispatch( this.actions.Select( key ) )
 		}
 	}
 
-	public select ( item: T ): void
+	public select ( item: T, keyColumn: string = 'key' ): void
 	{
-		this.store.dispatch( this.actions.Select( item.key ) );
+		this.store.dispatch( this.actions.Select( item[ keyColumn ] ) );
 	}
 
 	public create (): void

@@ -11,7 +11,6 @@ import { NotificationMessage } from "./notification-message.model";
 @Injectable()
 export class NotificationEffect
 {
-	@Effect() public trigger$: Observable<Action>;
 	@Effect() public open$: Observable<Action>;
 
 	constructor (
@@ -20,11 +19,6 @@ export class NotificationEffect
 		private matSnackBar: MatSnackBar
 	)
 	{
-
-		this.trigger$ = this.actions$.filter( action => action.type.indexOf( '-n' ) >= 0 )
-			.withLatestFrom( this.store.select( state => state.notificationState.triggers ) )
-			.map( ( [ action, triggers ] ) => triggers.find( item => !!action.type.match( item.actionType ) ) )
-			.map( trigger => trigger ? new NotificationAction.Open( trigger.message ) : null )
 
 		this.open$ = this.actions$.ofType<NotificationAction.Open>( NotificationActionTypes.open )
 			.withLatestFrom( this.store.select( state => state.notificationState.defaultMessage ) )

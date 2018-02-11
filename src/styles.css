@@ -215,7 +215,7 @@ mat-horizontal-stepper /deep/ .mat-horizontal-stepper-content[aria-expanded="tru
 }
 
 mat-list-item.active {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 mat-list-item .mat-list-item-content {

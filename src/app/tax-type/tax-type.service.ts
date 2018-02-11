@@ -7,20 +7,21 @@ import { TaxTypeModuleState, TaxTypeState, taxTypeActions } from "./tax-type.sto
 import { TaxType } from "../model";
 
 @Injectable()
-export class TaxTypeService extends JamEntityService<TaxType, TaxTypeModuleState>
+export class TaxTypeService extends JamEntityService<TaxType, TaxTypeState>
 {
 
 	public taxabilities: string[];
 
 	constructor (
-		public store: Store<TaxTypeModuleState>,
+		public rootStore: Store<TaxTypeModuleState>,
+		public store: Store<TaxTypeState>,
 		public formBuilder: FormBuilder
 	)
 	{
-		super( 'taxTypeState', taxTypeActions );
-		this.subscribeProperties( [ 'list', 'form', 'selectedItem', 'formItem', 'loading', 'adding', 'modifying' ] );
+		super( rootStore.select( state => state.taxTypeState ), taxTypeActions );
+		this.subscribeProperties( 'list', 'form', 'selectedItem', 'formItem', 'loading', 'adding', 'modifying' );
 
-		this.store.select( state => state.companyState.selectedItem )
+		this.rootStore.select( state => state.companyState.selectedItem )
 			.filter( company => !!company )
 			.subscribe( company => this.store.dispatch( taxTypeActions.Initialize() ) );
 	}

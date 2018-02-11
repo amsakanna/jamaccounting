@@ -1,25 +1,18 @@
 import { Action } from '@ngrx/store';
+import { FeatureModule } from '../../jam/model-library';
 
-export const coreAction = '[Core] core action';
-export class CoreAction implements Action
+export const enum CoreActionTypes
 {
-	public readonly type = coreAction;
-
-	constructor ()
-	{
-	}
+	addModule = '[Core] add module'
 }
-
-export const coreSuccessAction = '[Core] coreSuccess action';
-export class CoreSuccessAction implements Action
+export namespace CoreAction
 {
-	public readonly type = coreSuccessAction;
-
-	constructor ( public payload: string )
+	export class AddModule implements Action
 	{
+		public readonly type = CoreActionTypes.addModule;
+		constructor ( public featureModule: FeatureModule ) { }
 	}
-}
 
-export type All
-	= CoreAction
-	| CoreSuccessAction;
+	export type All
+		= AddModule;
+}

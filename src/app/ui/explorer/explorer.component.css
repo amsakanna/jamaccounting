@@ -1,49 +1,56 @@
 .component {
-    width: 70%; max-width: 1500px;
+    width: 70%;
+    max-width: 1500px;
     height: 100%;
     display: flex;
-    position: relative;
     background: transparent;
 }
 
-.component > header {
-    position: absolute;
-    top: -20px;
-    left: 30px;
-    padding: 10px 30px;
-    min-width: 160px;
-    display: flex;
-    align-items: center;
-    font-size: 1.2em;
-}
-
-.list {
-    padding-top: 50px;
-    padding-bottom: 20px;
+section.list {
     width: 400px;
-    height: calc( 100% - 70px );
+    height: 100%;
     background-color: rgba(247, 250, 255, 0.65);
     font-size: 0.8em;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
-.list-item {
+section.list > header {
+    display: flex;
+    align-items: center;
+    padding-left: 40px;
+    height: 80px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+section.list > header .title {
+    flex-grow: 1;
+}
+
+section.list-item {
     padding: 10px 30px;
 }
 
-.list > main {
-    height: calc( 100% - 50px );
+section.list > main {
+    height: calc( 100% - 80px );
 }
 
-.list /deep/ .mat-list-item-content {
+section.list /deep/ .mat-list-item-content {
     padding-left: 40px !important;
 }
 
-.list /deep/ .mat-list-item {
-    font-size: 14px;
+section.list /deep/ .mat-list-item.active {
+    border-left: 5px solid cornflowerblue;
+    font-weight: bold;
 }
 
-.list > footer {
-    height: 50px;
+section.list /deep/ .mat-list-item.active .mat-list-item-content {
+    padding-left: 33px !important;
+}
+
+section.list /deep/ .mat-list-item {
+    font-size: 14px;
 }
 
 section.detail {
@@ -51,6 +58,8 @@ section.detail {
     width: 100%;
     height: calc( 100% - 50px);
     background-color: rgba(247, 250, 255, 0.8);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 section.detail > header {

@@ -5,11 +5,14 @@ import { ProductService } from "./product.service";
 	selector: 'app-product',
 	template: `
 		<app-explorer [$]="$">
-			<router-outlet></router-outlet>
+			<app-product-detail></app-product-detail>
 		</app-explorer>
 	`
 } )
 export class ProductComponent
 {
-	constructor ( private $: ProductService ) { }
+	constructor ( private $: ProductService )
+	{
+		console.log( 'ProductComponent' );
+	}
 }

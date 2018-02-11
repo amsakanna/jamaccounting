@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { MatIconModule, MatButtonModule } from '@angular/material';
+import { MatIconModule, MatButtonModule, MatDialogModule } from '@angular/material';
 
 /*    3rd Party Modules    */
 import { AngularFireModule } from 'angularfire2';
@@ -15,6 +15,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { JamNavigatorModule } from '../jam/navigator';
 import { JamFirestoreModule } from "../jam/firestore";
 import { JamAuthModule } from "../jam/auth";
+import { JamNotificationModule } from '../jam/notification';
 
 /*    App Modules    */
 import { database, environment } from "../environments/environment";
@@ -23,21 +24,6 @@ import { appReducers, appEffects } from './app.store';
 import { DatabaseService } from './shared/database.service';
 import { AppComponent } from './app.component';
 import { HomeModule } from './home/home.module';
-import { JamNotificationModule, NotificationAction } from '../jam/notification';
-import { JamEventBrokerModule } from '../jam/event-broker';
-import { EventPair } from '../jam/event-broker/event-pair.model';
-
-const myEventPairs: EventPair[] = [
-	{
-		if: '[Product] Create', then: [
-			new NotificationAction.Open( { content: 'Create pannugiren', duration: 5000 } )
-		]
-	}, {
-		if: /\[.*\] Removed .*/, then: [
-			new NotificationAction.Open( { content: 'Remove pannugiren', duration: 5000 } )
-		]
-	}
-];
 
 @NgModule( {
 	declarations: [
@@ -46,7 +32,7 @@ const myEventPairs: EventPair[] = [
 	imports: [
 		BrowserModule,
 		BrowserAnimationsModule,
-		MatButtonModule, MatIconModule,
+		MatButtonModule, MatIconModule, MatDialogModule,
 		RouterModule.forRoot( appRoutes ),
 		AngularFireModule.initializeApp( database.firebaseAppConfig ),
 		StoreModule.forRoot( appReducers ),
@@ -56,7 +42,6 @@ const myEventPairs: EventPair[] = [
 		JamFirestoreModule.forRoot( database.config, database.firebaseAppConfig ),
 		JamAuthModule.forRoot(),
 		JamNotificationModule,
-		JamEventBrokerModule.forRoot( myEventPairs ),
 		HomeModule
 	],
 	providers: [ DatabaseService ],

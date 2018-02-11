@@ -1,7 +1,7 @@
 import { CompanyModuleState } from '../company';
 import { JamEntityState, JamEntityAction, JamEntityActions, JamEntityAdapter, jamEntityReducer } from "../../jam/ngrx";
 import { Product, ProductCategory, Brand } from "../model";
-import { config } from "./product.config";
+import { actionPrefix, additionalStates } from "./product.config";
 
 export interface ProductModuleState extends CompanyModuleState
 {
@@ -16,6 +16,17 @@ export interface ProductState extends JamEntityState<Product>
 	selectedItemBrand: Brand;
 }
 
-export const productAdapter = new JamEntityAdapter<Product, ProductState>( config.actionPrefix, config.additionalStates );
-export const productActions = productAdapter.actions;
+class ProductAdapter extends JamEntityAdapter<Product, ProductState>
+{
+	public select ( state: ProductState, key: string ): ProductState
+	{
+		const newState = super.select( state, key );
+		const selectedItemCategory = state.categoryList.find( item => item.key == newState.selectedItem.categoryKey );
+		const selectedItemBrand = state.brandList.find( item => item.key == newState.selectedItem.brandKey );
+		return this.newState( newState, { selectedItemCategory, selectedItemBrand } );
+	}
+}
+
+export const productActions = new JamEntityActions<Product>( actionPrefix );
+export const productAdapter = new ProductAdapter( productActions, additionalStates );
 export const productReducer = productAdapter.reducer;

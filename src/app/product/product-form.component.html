@@ -1,19 +1,19 @@
-
 <app-form-dialog [$]="$" [formGroup]="$.form">
-	<div class="row"><div class="label">Name :</div><mat-form-field class="name">
+
+	<div class="row"><div class="label"> Name : </div><mat-form-field class="name">
 		<input matInput placeholder="Name" formControlName="name"/>
 	</mat-form-field></div>
-	<div class="row"><div class="label">SKU :</div><mat-form-field class="sku">
+	<div class="row"><div class="label"> SKU : </div><mat-form-field class="sku">
 		<input matInput placeholder="SKU" formControlName="sku"/>
 	</mat-form-field></div>
-	<div class="row"><div class="label">Category :</div><mat-form-field class="category">
+	<div class="row"><div class="label"> Category : </div><mat-form-field class="category">
 		<mat-select [(value)]="$.formItem.categoryKey">
 			<mat-option *ngFor="let category of $.categoryList" [value]="category.key">
 				{{ category.name }}
 			</mat-option>
 		</mat-select>
 	</mat-form-field></div>
-	<div class="row"><div class="label">Brand :</div><mat-form-field class="brand">
+	<div class="row"><div class="label"> Brand : </div><mat-form-field class="brand">
 		<mat-select [(value)]="$.formItem.brandKey">
 			<mat-option *ngFor="let brand of $.brandList" [value]="brand.key">
 				{{ brand.name }}

@@ -1,18 +1,22 @@
-import { Data } from "../../../jam/model-library";
 import { JamEntityState } from "./jam-entity.state";
 import { JamEntityActions } from "./jam-entity.actions";
 import { buildFormFromModel } from "../../functions/build-form-from-model.function";
 import { JamEntityAction } from "./jam-entity-action.model";
 
-export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamEntityState<T>, A extends JamEntityAction<T> = JamEntityAction<T>>
+export class JamEntityAdapter<
+	T,
+	S extends JamEntityState<T> = JamEntityState<T>,
+	A extends JamEntityAction<T> = JamEntityAction<T>,
+	AS extends JamEntityActions<T> = JamEntityActions<T>
+	>
 {
 
-	public readonly actions: JamEntityActions<T>;
+	public readonly actions: AS;
 	private readonly additionalStates: Partial<S>;
 
-	constructor ( actionPrefix: string = '', additionalStates: Partial<S> = {} )
+	constructor ( actions: AS = null, additionalStates: Partial<S> = {} )
 	{
-		this.actions = new JamEntityActions<T>( actionPrefix );
+		this.actions = actions;
 		this.additionalStates = additionalStates;
 	}
 
@@ -25,7 +29,7 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 		{
 			switch ( action.type ) {
 				case actions.initialize: return adapter.initialize( state );
-				case actions.initialized: return adapter.initialized( state, action.list, action.defaultItem, action.extras );
+				case actions.initialized: return adapter.initialized( state, action.list, action.extras, action.defaultItem );
 				case actions.select: return adapter.select( state, action.key );
 				case actions.selected: return adapter.selected( state, action.item, action.extras );
 				case actions.selectFailed: return adapter.selectFailed( state );
@@ -64,6 +68,8 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 			selectedItem: null,
 			emptyItem: null,
 			formItem: null,
+			defaultItemKey: null,
+			selectedItemKey: null,
 			itemBeingSelectedKey: null,
 			itemBeingCreated: null,
 			itemBeingEdited: null,
@@ -79,7 +85,7 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 		return this.newState( entityState as S, additionalStates );
 	}
 
-	private newState ( state: S, newObject: any = {} ): S
+	public newState ( state: S, newObject: any = {} ): S
 	{
 		return Object.assign( {}, state, newObject );
 	}
@@ -89,13 +95,15 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 		return this.newState( state, { initialized: false, loading: true, processing: true } );
 	}
 
-	public initialized ( state: S, list: T[], defaultItem: T = null, extras: any = {} ): S
+	public initialized ( state: S, list: T[], extras: any = {}, defaultItem: T = null, keyColumn: string = 'key' ): S
 	{
+		console.log( extras );
+		defaultItem = defaultItem || list[ 0 ];
 		return this.newState( state, Object.assign( {
 			initialized: true,
 			loading: false,
 			processing: false,
-			defaultItem: defaultItem || list[ 0 ] || null,
+			defaultItemKey: defaultItem ? defaultItem[ keyColumn ] : null,
 			list: list
 		}, extras ) );
 	}
@@ -110,9 +118,12 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 		return this.newState( state, { loading: false, processing: false } );
 	}
 
-	public select ( state: S, key: string ): S
+	public select ( state: S, key: string, keyColumn: string = 'key' ): S
 	{
-		return this.newState( state, key ? { itemBeingSelectedKey: key } : {} );
+		const selectKey = key || state.defaultItemKey;
+		const selectedItem = ( selectKey && state.list.find( item => item[ keyColumn ] == selectKey ) ) || state.selectedItem;
+		console.log( selectKey, selectedItem );
+		return this.newState( state, { selectedItem: selectedItem } );
 	}
 
 	public selected ( state: S, item: T, extras: Partial<S> = {} ): S
@@ -200,9 +211,9 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 		return this.newState( state, { modifying: false, processing: false, itemBeingModified: null } );
 	}
 
-	public remove ( state: S, itemKey: string ): S
+	public remove ( state: S, itemKey: string, keyColumn: string = 'key' ): S
 	{
-		const itemBeingRemovedIndex = state.list.findIndex( item => item.key == itemKey );
+		const itemBeingRemovedIndex = state.list.findIndex( item => item[ keyColumn ] == itemKey );
 		return this.newState( state, {
 			removing: true,
 			processing: true,
@@ -211,9 +222,9 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 		} );
 	}
 
-	public removed ( state: S, item: T ): S
+	public removed ( state: S, item: T, keyColumn: string = 'key' ): S
 	{
-		const itemToBeSelected: Data = state.list[ state.itemBeingRemovedIndex ]
+		const itemToBeSelected = state.list[ state.itemBeingRemovedIndex ]
 			|| state.list[ state.itemBeingRemovedIndex - 1 ]
 			|| { key: null };
 		return this.newState( state, {
@@ -223,7 +234,7 @@ export class JamEntityAdapter<T extends Data, S extends JamEntityState<T> = JamE
 			lastRemovedItemIndex: state.itemBeingRemovedIndex,
 			itemBeingRemovedKey: null,
 			itemBeingRemovedIndex: -1,
-			itemBeingSelectedKey: itemToBeSelected.key
+			itemBeingSelectedKey: itemToBeSelected[ keyColumn ]
 		} );
 	}
 

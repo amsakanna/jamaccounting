@@ -30,6 +30,7 @@ import { ProductService } from './product.service';
 import { ProductComponent } from './product.component';
 import { ProductDetailComponent } from './product-detail.component';
 import { ProductFormComponent } from './product-form.component';
+import { FeatureModule } from '../../jam/model-library';
 
 @NgModule( {
 	declarations: [
@@ -57,6 +58,7 @@ import { ProductFormComponent } from './product-form.component';
 		FormDialogModule,
 		ExplorerModule
 	],
+	entryComponents: [ ProductFormComponent ],
 	providers: [ ProductService ]
 } )
 export class ProductModule { }

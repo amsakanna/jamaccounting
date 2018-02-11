@@ -1,34 +1,33 @@
 import { Action } from "@ngrx/store";
-import { Data } from "../../model-library";
 import { JamEntityActionTypes } from "./jam-entity-action-types.enum";
 import { JamEntityAction } from "./jam-entity-action.model";
 
-export class JamEntityActions<T extends Data>
+export class JamEntityActions<T>
 {
 
-	public get initialize (): string { return this.entityName + this.ifs + JamEntityActionTypes.initialize; };
-	public get initialized (): string { return this.entityName + this.ifs + JamEntityActionTypes.initialized; };
-	public get select (): string { return this.entityName + this.ifs + JamEntityActionTypes.select; };
-	public get selected (): string { return this.entityName + this.ifs + JamEntityActionTypes.selected; };
-	public get selectFailed (): string { return this.entityName + this.ifs + JamEntityActionTypes.selectFailed; };
-	public get create (): string { return this.entityName + this.ifs + JamEntityActionTypes.create; };
-	public get cancelCreate (): string { return this.entityName + this.ifs + JamEntityActionTypes.cancelCreate; };
-	public get add (): string { return this.entityName + this.ifs + JamEntityActionTypes.add; };
-	public get added (): string { return this.entityName + this.ifs + JamEntityActionTypes.added; };
-	public get addFailed (): string { return this.entityName + this.ifs + JamEntityActionTypes.addFailed; };
-	public get edit (): string { return this.entityName + this.ifs + JamEntityActionTypes.edit; };
-	public get cancelEdit (): string { return this.entityName + this.ifs + JamEntityActionTypes.cancelEdit; };
-	public get modify (): string { return this.entityName + this.ifs + JamEntityActionTypes.modify; };
-	public get modified (): string { return this.entityName + this.ifs + JamEntityActionTypes.modified; };
-	public get modifyFailed (): string { return this.entityName + this.ifs + JamEntityActionTypes.modifyFailed; };
-	public get remove (): string { return this.entityName + this.ifs + JamEntityActionTypes.remove; };
-	public get removed (): string { return this.entityName + this.ifs + JamEntityActionTypes.removed; };
-	public get removeFailed (): string { return this.entityName + this.ifs + JamEntityActionTypes.removeFailed; };
+	constructor ( public readonly actionPrefix: string = '', public readonly ifs: string = ' ' ) { }
 
-	constructor ( private readonly entityName: string = '', private readonly ifs: string = ' ' ) { }
+	public get initialize (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.initialize; };
+	public get initialized (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.initialized; };
+	public get select (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.select; };
+	public get selected (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.selected; };
+	public get selectFailed (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.selectFailed; };
+	public get create (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.create; };
+	public get cancelCreate (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.cancelCreate; };
+	public get add (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.add; };
+	public get added (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.added; };
+	public get addFailed (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.addFailed; };
+	public get edit (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.edit; };
+	public get cancelEdit (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.cancelEdit; };
+	public get modify (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.modify; };
+	public get modified (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.modified; };
+	public get modifyFailed (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.modifyFailed; };
+	public get remove (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.remove; };
+	public get removed (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.removed; };
+	public get removeFailed (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.removeFailed; };
 
 	public Initialize (): JamEntityAction<T> { return { type: this.initialize }; }
-	public Initialized ( list: T[], defaultItem: T = null, extras: any = {} ): JamEntityAction<T> { return { type: this.initialized, list: list, defaultItem: defaultItem, extras: extras }; };
+	public Initialized ( list: T[], extras: any = {}, defaultItem: T = null ): JamEntityAction<T> { return { type: this.initialized, list: list, extras: extras, defaultItem: defaultItem }; };
 	public Select ( key?: string ): JamEntityAction<T> { return { type: this.select, key: key }; }
 	public Selected ( item: T, extras: any = {} ): JamEntityAction<T> { return { type: this.selected, item: item, extras: extras }; }
 	public SelectFailed (): JamEntityAction<T> { return { type: this.selectFailed }; }

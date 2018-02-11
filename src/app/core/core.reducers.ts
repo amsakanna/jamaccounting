@@ -1,25 +1,20 @@
 import { CoreState } from './core.state';
-import * as CoreActions from './core.actions';
+import { CoreActionTypes, CoreAction } from './core.actions';
 
 const initialState: CoreState = {
-	names: []
+	featureModules: [],
+	dialogs: []
 }
 
-export function coreReducers ( state = initialState, action: CoreActions.All )
+export function coreReducers ( state = initialState, action: CoreAction.All ): CoreState
 {
 	switch ( action.type ) {
 
-		case CoreActions.coreAction:
+		case CoreActionTypes.addModule:
 			return {
 				...state,
-				processing: true
-			};
-
-		case CoreActions.coreSuccessAction:
-			return {
-				...state,
-				names: [ ...state.names, action.payload ],
-				processing: false
+				featureModules: [ ...state.featureModules, action.featureModule ],
+				dialogs: [ ...state.dialogs, ...action.featureModule.dialogs ]
 			};
 
 		default:

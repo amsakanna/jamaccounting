@@ -5,44 +5,50 @@ import { Store } from "@ngrx/store";
 import { JamEntityService } from "../../jam/ngrx";
 import { ProductModuleState, ProductState, productActions } from "./product.store";
 import { Product, ProductCategory, Brand } from "../model";
-import { config } from './product.config';
-import { NotificationAction } from "../../jam/notification/index";
+import { module } from './product.config';
+import { CoreAction } from "../core";
 
 @Injectable()
-export class ProductService extends JamEntityService<Product, ProductModuleState>
+export class ProductService extends JamEntityService<Product, ProductState>
 {
-	public get moduleName (): string { return config.moduleName };
+	public get moduleName (): string { return module.name }
 	public categoryList: ProductCategory[];
-	public selectedItemCategory: ProductCategory;
-	public featureForms: FormGroup[];
 	public brandList: Brand[];
+	public selectedItemCategory: ProductCategory;
 	public selectedItemBrand: Brand;
+	public featureForms: FormGroup[];
 
 	constructor (
-		public store: Store<ProductModuleState>,
+		public rootStore: Store<ProductModuleState>,
 		public formBuilder: FormBuilder
 	)
 	{
-		super( 'productState', productActions );
-		this.subscribeProperties( [ 'list', 'form', 'selectedItem', 'formItem', 'processing', 'loading', 'editing', 'adding', 'modifying' ] );
+		/*  Initialize service  */
+		super( rootStore.select( state => state.productState ), productActions );
+		this.subscribeProperties( 'list', 'form', 'selectedItem', 'formItem', 'processing', 'loading', 'editing', 'adding', 'modifying' );
 
-		this.store.select( state => state.companyState.selectedItem )
+		/*  Select from store  */
+		this.rootStore.select( state => state.companyState.selectedItem )
 			.filter( company => !!company )
 			.subscribe( company => this.store.dispatch( productActions.Initialize() ) );
-		this.store.select( state => state.productState.categoryList )
+		this.store.select( state => state.categoryList )
 			.subscribe( categoryList => this.categoryList = categoryList );
-		this.store.select( state => state.productState.selectedItemCategory )
-			.subscribe( selectedItemCategory => this.selectedItemCategory = selectedItemCategory );
-		this.store.select( state => state.productState.brandList )
+		this.store.select( state => state.brandList )
 			.subscribe( brandList => this.brandList = brandList );
-		this.store.select( state => state.productState.selectedItemBrand )
+		this.store.select( state => state.selectedItemCategory )
+			.subscribe( selectedItemCategory => this.selectedItemCategory = selectedItemCategory );
+		this.store.select( state => state.selectedItemBrand )
 			.subscribe( selectedItemBrand => this.selectedItemBrand = selectedItemBrand );
-		this.store.select( state => state.productState.creating )
+		this.store.select( state => state.creating )
 			.filter( creating => creating )
 			.subscribe( creating => this.buildFeatureForms() );
-		this.store.select( state => state.productState.editing )
+		this.store.select( state => state.editing )
 			.filter( editing => editing )
 			.subscribe( editing => this.buildFeatureForms() );
+
+		/*  Dispatch Actions  */
+		console.log( 'ProductService' );
+		this.store.dispatch( new CoreAction.AddModule( module ) );
 
 	}
 

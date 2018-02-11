@@ -7,3 +7,4 @@ export * from './statuses.enum';
 export * from './error.model';
 export * from './operation.model';
 export * from './table-base.model';
+export * from './feature-module.model';

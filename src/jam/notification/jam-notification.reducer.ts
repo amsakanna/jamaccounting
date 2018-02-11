@@ -6,8 +6,7 @@ const initialState: NotificationState = {
 	notifying: false,
 	defaultMessage: null,
 	currentMessage: null,
-	messageHistory: [],
-	triggers: []
+	messageHistory: []
 }
 
 export function notificationReducer ( state = initialState, action: NotificationAction.All ): NotificationState
@@ -17,8 +16,7 @@ export function notificationReducer ( state = initialState, action: Notification
 		case NotificationActionTypes.initialize:
 			return {
 				...state,
-				defaultMessage: action.defaultMessage,
-				triggers: action.triggers
+				defaultMessage: action.defaultMessage
 			};
 
 		case NotificationActionTypes.open:
@@ -29,23 +27,11 @@ export function notificationReducer ( state = initialState, action: Notification
 				messageHistory: [ ...state.messageHistory, action.message ]
 			};
 
-		case NotificationActionTypes.close:
-			return {
-				...state,
-				currentMessage: { ...state.currentMessage, attended: true }
-			};
-
 		case NotificationActionTypes.closed:
 			return {
 				...state,
 				currentMessage: { ...state.currentMessage, attended: true },
 				notifying: false
-			};
-
-		case NotificationActionTypes.addTriggers:
-			return {
-				...state,
-				triggers: [ ...state.triggers, ...action.triggers ]
 			};
 
 		default:

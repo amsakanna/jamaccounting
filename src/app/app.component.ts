@@ -67,14 +67,7 @@ export class AppComponent
 		this.store.dispatch( new NavigatorAction.Initialize( this.pages ) );
 		this.store.dispatch( new DbAction.Initialize() );
 		this.store.dispatch( new AuthAction.Initialize() );
-		this.store.dispatch( new NotificationAction.Initialize(
-			{ content: 'Done', action: 'Ok', duration: 5000, attended: false },
-			[
-				{ actionType: /\[.*\] Added .*/, message: { content: 'Item Added' } },
-				{ actionType: /\[.*\] Modified .*/, message: { content: 'Item Modified' } },
-				{ actionType: /\[.*\] Removed .*/, message: { content: 'Item Removed' } }
-			]
-		) );
+		this.store.dispatch( new NotificationAction.Initialize( { content: 'Done', action: 'Ok', duration: 5000, attended: false } ) );
 
 		this.store.select( state => state.authState.authenticated )
 			.subscribe( authenticated => this.authenticated = authenticated );

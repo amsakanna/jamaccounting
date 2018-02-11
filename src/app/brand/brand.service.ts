@@ -7,20 +7,21 @@ import { BrandModuleState, BrandState, brandActions } from "./brand.store";
 import { Brand } from "../model";
 
 @Injectable()
-export class BrandService extends JamEntityService<Brand, BrandModuleState>
+export class BrandService extends JamEntityService<Brand, BrandState>
 {
 
 	public taxabilities: string[];
 
 	constructor (
-		public store: Store<BrandModuleState>,
+		public rootStore: Store<BrandModuleState>,
+		public store: Store<BrandState>,
 		public formBuilder: FormBuilder
 	)
 	{
-		super( 'brandState', brandActions );
-		this.subscribeProperties( [ 'list', 'form', 'selectedItem', 'formItem', 'loading', 'adding', 'modifying' ] );
+		super( rootStore.select( state => state.brandState ), brandActions );
+		this.subscribeProperties( 'list', 'form', 'selectedItem', 'formItem', 'loading', 'adding', 'modifying' );
 
-		this.store.select( state => state.companyState.selectedItem )
+		this.rootStore.select( state => state.companyState.selectedItem )
 			.filter( company => !!company )
 			.subscribe( company => this.store.dispatch( brandActions.Initialize() ) );
 	}

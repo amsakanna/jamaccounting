@@ -47,7 +47,7 @@ export class TaxEffects
 			.filter( company => !!company )
 			.switchMap( company => this.db.tables.Tax.list )
 			.switchMap( list => this.db.tables.TaxType.list, ( outerValue, innerValue ) => ( { taxList: outerValue, taxTypeList: innerValue } ) )
-			.map( result => taxActions.Initialized( result.taxList, null, { taxTypeList: result.taxTypeList } ) );
+			.map( result => taxActions.Initialized( result.taxList, { taxTypeList: result.taxTypeList } ) );
 
 		this.initialized$ = this.actions$.ofType<JamEntityAction<Tax>>( taxActions.initialized )
 			.withLatestFrom( this.store.select( state => state.taxState ) )

@@ -7,7 +7,7 @@ import { TaxModuleState, TaxState, taxActions } from "./tax.store";
 import { Tax, TaxType } from "../model";
 
 @Injectable()
-export class TaxService extends JamEntityService<Tax, TaxModuleState>
+export class TaxService extends JamEntityService<Tax, TaxState>
 {
 
 	public taxabilities: string[];
@@ -15,21 +15,21 @@ export class TaxService extends JamEntityService<Tax, TaxModuleState>
 	public selectedItemType: TaxType;
 
 	constructor (
-		public store: Store<TaxModuleState>,
+		public rootStore: Store<TaxModuleState>,
 		public formBuilder: FormBuilder
 	)
 	{
-		super( 'taxState', taxActions );
-		this.subscribeProperties( [ 'list', 'form', 'selectedItem', 'formItem', 'loading', 'adding', 'modifying' ] );
+		super( rootStore.select( state => state.taxState ), taxActions );
+		this.subscribeProperties( 'list', 'form', 'selectedItem', 'formItem', 'loading', 'adding', 'modifying' );
 
-		this.store.select( state => state.companyState.selectedItem )
+		this.rootStore.select( state => state.companyState.selectedItem )
 			.filter( company => !!company )
 			.subscribe( company => this.store.dispatch( taxActions.Initialize() ) );
 
-		this.store.select( state => state.taxState.taxTypeList )
+		this.store.select( state => state.taxTypeList )
 			.subscribe( taxTypeList => this.taxTypeList = taxTypeList );
 
-		this.store.select( state => state.taxState.selectedItemType )
+		this.store.select( state => state.selectedItemType )
 			.subscribe( selectedItemType => this.selectedItemType = selectedItemType );
 
 		this.taxabilities = [ 'Undefined', 'Exempt', 'NilRated', 'Taxable' ];

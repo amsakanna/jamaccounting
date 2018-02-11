@@ -1,4 +1,3 @@
-export * from './action-message-pair.model';
 export * from './notification-message.model';
 export * from './jam-notification.state';
 export * from './jam-notification.action';

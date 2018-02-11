@@ -20,7 +20,6 @@ export enum Pages
     EditAccount = '/company/:company/account/:account/edit',
 
     Product = '/company/:company/product',
-    ProductDetail = '/company/:company/product/:product',
 
     ProductCategory = '/company/:company/product-category',
     ProductCategoryDetail = '/company/:company/product-category/:product-category',

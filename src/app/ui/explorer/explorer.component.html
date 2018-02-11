@@ -1,8 +1,15 @@
 <div class="container">
 	<jam-facebook-spinner *ngIf="$.processing"></jam-facebook-spinner>
 	<div class="component floating-box" [class.blur]="$.processing">
-		<header class="title-box"> {{ $.moduleName }} </header>
 		<section class="list">
+			<header>
+				<div class="title"> {{ $.moduleName }} </div>
+				<button mat-button disableRipple color="primary"
+					class="add-button no-focus"
+					(click)="$.create()">
+					<mat-icon> add </mat-icon>
+				</button>
+			</header>
 			<main class="v-scrollable">
 				<mat-nav-list>
 					<mat-list-item *ngFor="let item of $.list"
@@ -12,9 +19,6 @@
 					</mat-list-item>
 				</mat-nav-list>
 			</main>
-			<footer class="flex-center">
-				<button mat-raised-button color="primary" class="add-button small" (click)="$.create()"> New {{ $.moduleName }} </button>
-			</footer>
 		</section>
 		<section class="detail">
 			<header *ngIf="$.selectedItem">

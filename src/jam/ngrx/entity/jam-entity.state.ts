@@ -21,6 +21,9 @@ export interface JamEntityState<T extends Data = Data>
 	emptyItem: T;
 	formItem: T;
 
+	defaultItemKey: string;
+	selectedItemKey: string;
+
 	itemBeingSelectedKey: string;
 	itemBeingCreated: T;
 	itemBeingEdited: T;

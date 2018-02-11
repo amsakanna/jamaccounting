@@ -14,7 +14,7 @@ export function inventoryReducers ( state = initialState, action: InventoryActio
 {
 	switch ( action.type ) {
 		case InventoryActionTypes.initialize: return inventoryAdapter.initialize( state );
-		case InventoryActionTypes.initialized: return inventoryAdapter.initialized( state, action.list, null, { taxList: action.taxList } );
+		case InventoryActionTypes.initialized: return inventoryAdapter.initialized( state, action.list, { taxList: action.taxList } );
 		case InventoryActionTypes.select: return inventoryAdapter.select( state, action.key );
 		case InventoryActionTypes.selected: return inventoryAdapter.selected( state, action.item, { selectedItemProduct: action.product, selectedItemCategory: action.category } );
 		case InventoryActionTypes.selectFailed: return inventoryAdapter.selectFailed( state );
