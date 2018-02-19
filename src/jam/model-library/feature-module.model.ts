@@ -1,7 +1,9 @@
-import { ComponentType } from "@angular/cdk/overlay";
+import { ComponentType } from '@angular/cdk/portal';
+import { TemplateRef } from "@angular/core";
+import { MatDialogRef } from "@angular/material";
 
 export interface FeatureModule
 {
 	name: string;
-	dialogs: { id: string, component: ComponentType<any> }[];
+	mainDialog: MatDialogRef<ComponentType<any> | TemplateRef<any>>;
 }

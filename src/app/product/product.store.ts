@@ -1,5 +1,5 @@
 import { CompanyModuleState } from '../company';
-import { JamEntityState, JamEntityAction, JamEntityActions, JamEntityAdapter, jamEntityReducer } from "../../jam/ngrx";
+import { JamEntityState, JamEntityActions, JamEntityAdapter } from "../../jam/ngrx";
 import { Product, ProductCategory, Brand } from "../model";
 import { actionPrefix, additionalStates } from "./product.config";
 

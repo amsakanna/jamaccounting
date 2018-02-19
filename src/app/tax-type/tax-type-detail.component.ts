@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
 import { TaxTypeService } from "./tax-type.service";
 
 @Component( {
@@ -9,9 +8,5 @@ import { TaxTypeService } from "./tax-type.service";
 } )
 export class TaxTypeDetailComponent
 {
-	constructor ( private $: TaxTypeService, private activatedRoute: ActivatedRoute )
-	{
-		const key: string = this.activatedRoute.snapshot.params[ 'tax-type' ] || '';
-		this.$.checkAndSelect( key );
-	}
+	constructor ( private $: TaxTypeService ) { }
 }

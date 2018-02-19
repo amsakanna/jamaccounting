@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
-import { DatabaseConfig } from "./database-config.model";
+import { FirebaseAppConfig } from 'angularfire2';
 
-export const configToken = new InjectionToken<DatabaseConfig>( 'config' );
+export const configToken = new InjectionToken<FirebaseAppConfig>( 'config' );
 
 export const defaults = {
     databaseMetadataPath: 'Metadata/Database/'

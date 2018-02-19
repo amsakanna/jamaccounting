@@ -9,6 +9,8 @@ export class JamEntityActions<T>
 
 	public get initialize (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.initialize; };
 	public get initialized (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.initialized; };
+	public get load (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.load; };
+	public get loaded (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.loaded; };
 	public get select (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.select; };
 	public get selected (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.selected; };
 	public get selectFailed (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.selectFailed; };
@@ -27,7 +29,9 @@ export class JamEntityActions<T>
 	public get removeFailed (): string { return this.actionPrefix + this.ifs + JamEntityActionTypes.removeFailed; };
 
 	public Initialize (): JamEntityAction<T> { return { type: this.initialize }; }
-	public Initialized ( list: T[], extras: any = {}, defaultItem: T = null ): JamEntityAction<T> { return { type: this.initialized, list: list, extras: extras, defaultItem: defaultItem }; };
+	public Initialized (): JamEntityAction<T> { return { type: this.initialized }; };
+	public Load (): JamEntityAction<T> { return { type: this.load }; }
+	public Loaded ( list: T[], extras: any = {}, defaultItem: T = null ): JamEntityAction<T> { return { type: this.loaded, list: list, extras: extras, defaultItem: defaultItem }; };
 	public Select ( key?: string ): JamEntityAction<T> { return { type: this.select, key: key }; }
 	public Selected ( item: T, extras: any = {} ): JamEntityAction<T> { return { type: this.selected, item: item, extras: extras }; }
 	public SelectFailed (): JamEntityAction<T> { return { type: this.selectFailed }; }

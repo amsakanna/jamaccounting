@@ -8,9 +8,5 @@ import { ProductService } from "./product.service";
 } )
 export class ProductFormComponent
 {
-	constructor ( private $: ProductService )
-	{
-		console.log( 'ProductFormComponent' );
-
-	}
+	constructor ( private $: ProductService ) { }
 }

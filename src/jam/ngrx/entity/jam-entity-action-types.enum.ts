@@ -2,6 +2,8 @@ export const enum JamEntityActionTypes
 {
 	initialize = 'initialize',
 	initialized = 'initialized',
+	load = 'load',
+	loaded = 'loaded',
 	select = 'select',
 	selected = 'selected',
 	selectFailed = 'select failed',

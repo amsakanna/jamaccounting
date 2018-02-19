@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { Company, UserAccount } from '../model';
+import { KeyValue } from '../../jam/model-library';
 
 export const enum CompanyActionTypes
 {
@@ -21,7 +22,7 @@ export const enum CompanyActionTypes
 }
 export namespace CompanyAction
 {
-	export class Initialize implements Action { public readonly type = CompanyActionTypes.initialize; constructor () { } }
+	export class Initialize implements Action { public readonly type = CompanyActionTypes.initialize; constructor ( public masterNames: KeyValue[] ) { } }
 	export class Initialized implements Action { public readonly type = CompanyActionTypes.initialized; constructor () { } }
 	export class Select implements Action { public readonly type = CompanyActionTypes.select; constructor ( public key: string = null ) { } }
 	export class Selected implements Action { public readonly type = CompanyActionTypes.selected; constructor ( public item: Company ) { } }

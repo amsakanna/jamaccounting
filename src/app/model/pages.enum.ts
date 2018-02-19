@@ -14,6 +14,8 @@ export enum Pages
     CreateCompany = '/user/companies/@create',
     Company = '/company/:company',
 
+    Master = '/company/master',
+
     Accounts = '/company/:company/account',
     CreateAccount = '/company/:company/account/@create',
     Account = '/company/:company/account/:account',

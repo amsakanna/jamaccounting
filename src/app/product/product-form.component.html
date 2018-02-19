@@ -24,7 +24,7 @@
 	<div *ngFor="let feature of $.selectedItemCategory.features; index as i">
 		<form novalidate [formGroup]="$.featureForms[i]" class="row">
 			<div class="label"> {{ feature.name }} </div>
-			<mat-form-field class="feature no-underline" >
+			<mat-form-field class="feature" >
 				<input *ngIf="!feature.options" matInput placeholder="Value" formControlName="value" />
 				<mat-select *ngIf="feature.options" [(value)]="$.formItem.features[i].value">
 					<mat-option *ngFor="let option of feature.options" [value]="option">

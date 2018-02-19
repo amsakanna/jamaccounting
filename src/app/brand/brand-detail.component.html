@@ -1,7 +1,13 @@
-<div class="container">
+<div class="container" *ngIf="$.selectedItem">
 	<div class="component">
 		<main class="item">
-			<div class="item-full-name">Name: {{ $.selectedItem.name }}</div>
+			<div *ngIf="$.selectedItem.logo;then logo else noLogo"></div>
+			<ng-template #logo>
+				<img alt="Logo not available" width="200" [src]="$.selectedItem.logo">
+			</ng-template>
+			<ng-template #noLogo>
+				<img alt="Logo not available" width="200" src="https://firebasestorage.googleapis.com/v0/b/firebase-jamdeck.appspot.com/o/no_logo.jpg?alt=media&token=86248e95-8de4-4bce-993f-b765e5d44c38">
+			</ng-template>
 		</main>
 	</div>
 </div>

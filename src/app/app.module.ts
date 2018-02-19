@@ -39,7 +39,7 @@ import { HomeModule } from './home/home.module';
 		EffectsModule.forRoot( appEffects ),
 		environment.production ? [] : StoreDevtoolsModule.instrument( { maxAge: 25 } ),
 		JamNavigatorModule,
-		JamFirestoreModule.forRoot( database.config, database.firebaseAppConfig ),
+		JamFirestoreModule.forRoot( database.firebaseAppConfig ),
 		JamAuthModule.forRoot(),
 		JamNotificationModule,
 		HomeModule

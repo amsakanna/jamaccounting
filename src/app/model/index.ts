@@ -12,6 +12,7 @@ export * from './product.model';
 export * from './serial-number.model';
 export * from './tax-type.model';
 export * from './tax.model';
+export * from './taxabilities.enum';
 export * from './user-account.model';
 export * from './voucher-type.model';
 export * from './voucher.model';

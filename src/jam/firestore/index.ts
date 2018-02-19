@@ -1,6 +1,5 @@
 export * from './database.model';
 export * from './table.model';
-export * from './database.service';
 export * from './database.guard';
 export * from './database.state';
 export * from './database.actions';

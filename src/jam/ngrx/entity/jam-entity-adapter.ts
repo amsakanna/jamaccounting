@@ -29,7 +29,9 @@ export class JamEntityAdapter<
 		{
 			switch ( action.type ) {
 				case actions.initialize: return adapter.initialize( state );
-				case actions.initialized: return adapter.initialized( state, action.list, action.extras, action.defaultItem );
+				case actions.initialized: return adapter.initialized( state );
+				case actions.load: return adapter.load( state );
+				case actions.loaded: return adapter.loaded( state, action.list, action.extras, action.defaultItem );
 				case actions.select: return adapter.select( state, action.key );
 				case actions.selected: return adapter.selected( state, action.item, action.extras );
 				case actions.selectFailed: return adapter.selectFailed( state );
@@ -90,21 +92,29 @@ export class JamEntityAdapter<
 		return Object.assign( {}, state, newObject );
 	}
 
-	public initialize ( state: S ): S
+	public initialize ( state: S, config?: Partial<S> ): S
 	{
-		return this.newState( state, { initialized: false, loading: true, processing: true } );
+		return this.newState( state, Object.assign( { initialized: false, processing: true }, config ) );
 	}
 
-	public initialized ( state: S, list: T[], extras: any = {}, defaultItem: T = null, keyColumn: string = 'key' ): S
+	public initialized ( state: S, list?: T[], extras: any = {}, defaultItem: T = null, keyColumn: string = 'key' ): S
 	{
-		console.log( extras );
+		return this.newState( state, { initialized: true, processing: false } );
+	}
+
+	public load ( state: S ): S
+	{
+		return this.newState( state, { loading: true, processing: true } );
+	}
+
+	public loaded ( state: S, list: T[], extras: any = {}, defaultItem: T = null, keyColumn: string = 'key' ): S
+	{
 		defaultItem = defaultItem || list[ 0 ];
 		return this.newState( state, Object.assign( {
-			initialized: true,
 			loading: false,
 			processing: false,
-			defaultItemKey: defaultItem ? defaultItem[ keyColumn ] : null,
-			list: list
+			list: list,
+			defaultItemKey: defaultItem ? defaultItem[ keyColumn ] : null
 		}, extras ) );
 	}
 
@@ -120,9 +130,8 @@ export class JamEntityAdapter<
 
 	public select ( state: S, key: string, keyColumn: string = 'key' ): S
 	{
-		const selectKey = key || state.defaultItemKey;
+		const selectKey = key || ( state.selectedItem && state.selectedItem[ keyColumn ] ) || state.defaultItemKey;
 		const selectedItem = ( selectKey && state.list.find( item => item[ keyColumn ] == selectKey ) ) || state.selectedItem;
-		console.log( selectKey, selectedItem );
 		return this.newState( state, { selectedItem: selectedItem } );
 	}
 

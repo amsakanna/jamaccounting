@@ -19,6 +19,11 @@ export * from './jam-bounce-spinner/jam-bounce-spinner.module';
 export * from './jam-explorer/jam-explorer.module';
 
 /**
+ * jam-explorer-side-nav
+ */
+export * from './jam-explorer-side-nav/jam-explorer-side-nav.module';
+
+/**
  * jam-facebook-spinner
  */
 export * from './jam-facebook-spinner/jam-facebook-spinner.module';

@@ -35,17 +35,29 @@ export class JamEntityService<T, S extends JamEntityState<T> = JamEntityState<T>
 	public lastRemovedItem: T;
 	public lastRemovedItemIndex: number;
 
-	constructor ( public store: Store<S>, public actions: AS ) { }
+	public subscribedList: ( keyof S )[];
+
+	constructor ( public store: Store<S>, public actions: AS )
+	{
+		this.subscribedList = [];
+		this.subscribeProperty( 'creating' );
+	}
 
 	public subscribeProperties ( ...subscribables: ( keyof S )[] )
 	{
 		subscribables.forEach( property => this.subscribeProperty( property ) );
 	}
 
-	public subscribeProperty ( property: keyof S )
+	public subscribeProperty ( property: keyof S ): boolean
 	{
-		this.store.select( property )
-			.subscribe( value => this[ property as string ] = value );
+		if ( this.subscribedList.find( item => item === property ) !== undefined ) {
+			return false;
+		} else {
+			this.store.select( property )
+				.subscribe( value => this[ property as string ] = value );
+			this.subscribedList.push( property );
+			return true;
+		}
 	}
 
 	public checkAndSelect ( key: string, keyColumn: string = 'key' ): void

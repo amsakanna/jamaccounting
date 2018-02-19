@@ -5,12 +5,12 @@ import { Company } from '../model';
 import { FlatTree } from '../../jam/model-library/flat-tree.model';
 
 const companyAdapter = new JamEntityAdapter<Company, CompanyState>();
-const initialState = companyAdapter.getInitialState();
+const initialState = companyAdapter.getInitialState( { masterNames: null } );
 
 export function companyReducers ( state = initialState, action: CompanyAction.All ): CompanyState
 {
 	switch ( action.type ) {
-		case CompanyActionTypes.initialize: return companyAdapter.initialize( state );
+		case CompanyActionTypes.initialize: return companyAdapter.initialize( state, { masterNames: action.masterNames } );
 		case CompanyActionTypes.initialized: return companyAdapter.initialized( state, [] );
 		case CompanyActionTypes.select: return companyAdapter.select( state, action.key );
 		case CompanyActionTypes.selected: return companyAdapter.selected( state, action.item );

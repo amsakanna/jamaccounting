@@ -12,20 +12,18 @@ import
 	MatOptionModule,
 	MatTooltipModule,
 	MatDialogModule,
-	MatSnackBarModule,
 	MatListModule
 } from '@angular/material';
-
 /*  3rd Party Modules  */
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-
 /*  My Library Modules  */
-import { JamBounceSpinnerModule } from './../../jam/ui-library';
-
+import { JamBounceSpinnerModule, JamFacebookSpinnerModule } from './../../jam/ui-library';
 /*  App Modules  */
+import { FormDialogModule, ExplorerModule } from '../ui';
+/*  App Components  */
 import { taxRoutes } from './tax.routes';
-import { taxReducers } from './tax.reducers';
+import { taxReducer } from './tax.store';
 import { TaxEffects } from './tax.effects';
 import { TaxService } from './tax.service';
 import { TaxComponent } from './tax.component';
@@ -48,13 +46,16 @@ import { TaxFormComponent } from './tax-form.component';
 		MatOptionModule,
 		MatTooltipModule,
 		MatDialogModule,
-		MatSnackBarModule,
 		MatListModule,
-		StoreModule.forFeature( 'taxState', taxReducers ),
+		StoreModule.forFeature( 'taxState', taxReducer ),
 		EffectsModule.forFeature( [ TaxEffects ] ),
 		JamBounceSpinnerModule,
-		RouterModule.forChild( taxRoutes )
+		JamFacebookSpinnerModule,
+		RouterModule.forChild( taxRoutes ),
+		FormDialogModule,
+		ExplorerModule
 	],
+	entryComponents: [ TaxFormComponent ],
 	providers: [ TaxService ]
 } )
 export class TaxModule { }

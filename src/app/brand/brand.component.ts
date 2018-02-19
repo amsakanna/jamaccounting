@@ -3,8 +3,15 @@ import { BrandService } from "./brand.service";
 
 @Component( {
 	selector: 'app-brand',
-	templateUrl: './brand.component.html',
-	styleUrls: [ './brand.component.css' ]
+	template: `
+		<app-explorer
+			[$]="$"
+			[tabs]="$.masterNames"
+			(tabChange)="$.tabChange( $event )"
+			[selectedTab]="$.selectedMasterName">
+			<app-brand-detail></app-brand-detail>
+		</app-explorer>
+	`
 } )
 export class BrandComponent
 {

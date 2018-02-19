@@ -6,6 +6,7 @@ import { DbAction } from '../jam/firestore';
 import { AuthAction } from '../jam/auth';
 import { Pages } from './model';
 import { NotificationAction } from '../jam/notification';
+import { database } from "../environments/environment";
 
 @Component( {
 	selector: 'app-root',

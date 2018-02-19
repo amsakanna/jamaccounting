@@ -2,8 +2,8 @@
 	<div class="component">
 		<main class="item">
 			<div class="item-sku"> SKU: {{ $.selectedItem.sku }} </div>
-			<div class="item-category"> category: {{ $.selectedItemCategory?.name }} </div>
-			<div class="item-brand"> brand: {{ $.selectedItemBrand?.name }} </div>
+			<div class="item-category"> Category: {{ $.selectedItemCategory?.name }} </div>
+			<div class="item-brand"> Brand: {{ $.selectedItemBrand?.name }} </div>
 			<h4> Features </h4>
 			<div *ngFor="let feature of $.selectedItem.features"
 				class="feature">

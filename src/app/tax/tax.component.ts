@@ -3,8 +3,15 @@ import { TaxService } from "./tax.service";
 
 @Component( {
 	selector: 'app-tax',
-	templateUrl: './tax.component.html',
-	styleUrls: [ './tax.component.css' ]
+	template: `
+		<app-explorer
+			[$]="$"
+			[tabs]="$.masterNames"
+			(tabChange)="$.tabChange( $event )"
+			[selectedTab]="$.selectedMasterName">
+			<app-tax-detail></app-tax-detail>
+		</app-explorer>
+	`
 } )
 export class TaxComponent
 {

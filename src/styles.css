@@ -223,15 +223,6 @@ mat-list-item .mat-list-item-content {
 }
 
 /*
-    PrimeNg Makeover
-*/
-
-p-tree .ui-widget-content {
-    border: 0px;
-    background: transparent !important;
-}
-
-/*
     Common Styles
 */
 
@@ -275,10 +266,6 @@ mat-icon.small {
     justify-content: center;
     align-items: center;
 }
-
-
-
-
 
 .spinner-container {
 	z-index: 999999;

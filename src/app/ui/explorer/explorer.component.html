@@ -3,7 +3,12 @@
 	<div class="component floating-box" [class.blur]="$.processing">
 		<section class="list">
 			<header>
-				<div class="title"> {{ $.moduleName }} </div>
+				<mat-form-field class="switch-tab">
+					<mat-select (selectionChange)="_tabChange( $event )" [(value)]="selectedTab">
+						<mat-option *ngFor="let tab of tabs" [value]="tab"> {{ tab.key }} </mat-option>
+					</mat-select>
+				</mat-form-field>
+				<!-- <div class="title"> {{ $.moduleName }} </div> -->
 				<button mat-button disableRipple color="primary"
 					class="add-button no-focus"
 					(click)="$.create()">
@@ -19,6 +24,7 @@
 					</mat-list-item>
 				</mat-nav-list>
 			</main>
+			<footer></footer>
 		</section>
 		<section class="detail">
 			<header *ngIf="$.selectedItem">
@@ -26,8 +32,9 @@
 					<div class="item-name">{{ $.selectedItem.name }}</div>
 				</div>
 				<div class="action">
-					<button mat-button color="primary" (click)="$.edit( $.selectedItem )"> <mat-icon> edit </mat-icon> </button>
-					<button mat-button color="warn" (click)="$.remove( $.selectedItem.key )"> <mat-icon> delete </mat-icon> </button>
+					<button mat-button disableRipple color="primary" class="compact no-focus" (click)="$.edit( $.selectedItem )"> edit </button>
+					<span color="primary"> | </span>
+					<button mat-button disableRipple color="primary" class="compact no-focus" (click)="$.remove( $.selectedItem.key )"> delete </button>
 				</div>
 			</header>
 			<main *ngIf="$.selectedItem">

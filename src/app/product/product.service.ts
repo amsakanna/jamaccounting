@@ -5,13 +5,16 @@ import { Store } from "@ngrx/store";
 import { JamEntityService } from "../../jam/ngrx";
 import { ProductModuleState, ProductState, productActions } from "./product.store";
 import { Product, ProductCategory, Brand } from "../model";
-import { module } from './product.config';
-import { CoreAction } from "../core";
+import { moduleName } from './product.config';
+import { KeyValue } from "../../jam/model-library";
+import { NavigatorAction } from "../../jam/navigator";
 
 @Injectable()
 export class ProductService extends JamEntityService<Product, ProductState>
 {
-	public get moduleName (): string { return module.name }
+	public get moduleName (): string { return moduleName }
+	public masterNames: KeyValue[];
+	public selectedMasterName: KeyValue;
 	public categoryList: ProductCategory[];
 	public brandList: Brand[];
 	public selectedItemCategory: ProductCategory;
@@ -23,34 +26,46 @@ export class ProductService extends JamEntityService<Product, ProductState>
 		public formBuilder: FormBuilder
 	)
 	{
-		/*  Initialize service  */
+		/**
+		 * Initialize service
+		 */
+
 		super( rootStore.select( state => state.productState ), productActions );
 		this.subscribeProperties( 'list', 'form', 'selectedItem', 'formItem', 'processing', 'loading', 'editing', 'adding', 'modifying' );
 
-		/*  Select from store  */
+		/**
+		 * Store Select
+		 */
+
 		this.rootStore.select( state => state.companyState.selectedItem )
 			.filter( company => !!company )
 			.subscribe( company => this.store.dispatch( productActions.Initialize() ) );
-		this.store.select( state => state.categoryList )
+		this.rootStore.select( state => state.companyState.masterNames )
+			.subscribe( masterNames =>
+			{
+				this.masterNames = masterNames;
+				this.selectedMasterName = this.masterNames.find( name => name.key == 'Product' );
+			} );
+		this.store.select( 'categoryList' )
 			.subscribe( categoryList => this.categoryList = categoryList );
-		this.store.select( state => state.brandList )
+		this.store.select( 'brandList' )
 			.subscribe( brandList => this.brandList = brandList );
-		this.store.select( state => state.selectedItemCategory )
+		this.store.select( 'selectedItemCategory' )
 			.subscribe( selectedItemCategory => this.selectedItemCategory = selectedItemCategory );
-		this.store.select( state => state.selectedItemBrand )
+		this.store.select( 'selectedItemBrand' )
 			.subscribe( selectedItemBrand => this.selectedItemBrand = selectedItemBrand );
-		this.store.select( state => state.creating )
+		this.store.select( 'creating' )
 			.filter( creating => creating )
 			.subscribe( creating => this.buildFeatureForms() );
-		this.store.select( state => state.editing )
+		this.store.select( 'editing' )
 			.filter( editing => editing )
 			.subscribe( editing => this.buildFeatureForms() );
 
-		/*  Dispatch Actions  */
-		console.log( 'ProductService' );
-		this.store.dispatch( new CoreAction.AddModule( module ) );
-
 	}
+
+	/**
+	 * Overrides
+	 */
 
 	public submit (): void
 	{
@@ -77,6 +92,11 @@ export class ProductService extends JamEntityService<Product, ProductState>
 			if ( formValue && !this.selectedItemCategory.features[ i ].options )
 				this.formItem.features[ i ].value = formValue;
 		}
+	}
+
+	private tabChange ( selectedTab: KeyValue ): void
+	{
+		this.rootStore.dispatch( new NavigatorAction.Navigate( selectedTab.value ) );
 	}
 
 }

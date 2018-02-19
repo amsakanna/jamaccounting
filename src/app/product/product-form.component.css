@@ -6,23 +6,3 @@
 	display: flex;
 	align-items: center;
 }
-
-.no-underline /deep/ .mat-form-field-underline {
-	/* display: none; */
-}
-
-.no-underline /deep/ .mat-form-field-infix {
-	/* -webkit-box-shadow: inset 0px 0px 22px -2px rgb(206, 206, 176);
-	-moz-box-shadow: inset 0px 0px 22px -2px rgb(206, 206, 176);
-	box-shadow: inset 0px 0px 22px -2px rgb(206, 206, 176);
-	border:none;
-	background:beige; */
-}
-
-.no-underline /deep/ .mat-select-value-text {
-	padding-left:15px;
-}
-
-.no-underline /deep/ .mat-select-arrow {
-	margin-right:15px;
-}

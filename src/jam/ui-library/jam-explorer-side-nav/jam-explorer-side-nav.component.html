@@ -1,0 +1,13 @@
+<div class="jam-explorer-side-nav-container">
+	<header> {{ title }} </header>
+	<main class="jam-explorer-side-nav-v-scrollable">
+		<mat-nav-list>
+			<mat-list-item *ngFor="let link of links"
+				[class.active1]="link == selectedLink"
+				(click)="_select( link )">
+				{{ link.name }}
+			</mat-list-item>
+		</mat-nav-list>
+	</main>
+	<footer></footer>
+</div>

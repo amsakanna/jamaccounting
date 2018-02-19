@@ -19,6 +19,7 @@ export class DatabaseService
 	constructor ( @Inject( configToken ) config: DatabaseConfig,
 		private firestore: AngularFirestore )
 	{
+		console.log( '------------------database-service constructor' );
 		this.loadStatus = new Subject<boolean>();
 		this.tables = new Array<Table<Data>>();
 
@@ -46,16 +47,19 @@ export class DatabaseService
 
 	private resolvePaths ( collectionName: string, documentKey: string )
 	{
+		console.log( '------------------database-service resolvePaths' );
 		this.tables.forEach( table => table.resolvePath( collectionName, documentKey ) );
 	}
 
-	public EnterCollection ( collectionName: string, documentKey: string )
+	public enterCollection ( collectionName: string, documentKey: string )
 	{
+		console.log( '------------------database-service enterCollection' );
 		this.resolvePaths( collectionName, documentKey );
 	}
 
-	public ExitCollection ( collectionName: string )
+	public exitCollection ( collectionName: string )
 	{
+		console.log( '------------------database-service exitCollection' );
 		this.resolvePaths( collectionName, '{' + collectionName + '}' );
 	}
 

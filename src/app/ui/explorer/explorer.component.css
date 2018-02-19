@@ -33,7 +33,7 @@ section.list-item {
 }
 
 section.list > main {
-    height: calc( 100% - 80px );
+    height: calc( 100% - 130px );
 }
 
 section.list /deep/ .mat-list-item-content {
@@ -53,10 +53,14 @@ section.list /deep/ .mat-list-item {
     font-size: 14px;
 }
 
+section.list > footer {
+    height: 50px;
+}
+
 section.detail {
-    padding-top: 50px;
+    /* padding-top: 50px; */
     width: 100%;
-    height: calc( 100% - 50px);
+    height: 100%;
     background-color: rgba(247, 250, 255, 0.8);
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -64,9 +68,10 @@ section.detail {
 
 section.detail > header {
     padding: 0px 50px;
+    height: 80px;
     display: flex;
     justify-content: center;
-    align-items: baseline;
+    align-items: center;
 }
 
 section.detail > header > .title {
@@ -75,4 +80,8 @@ section.detail > header > .title {
 
 section.detail > header > .action > button {
     min-width: auto;
+}
+
+section.detail > main {
+    height: calc( 100% - 80px );
 }

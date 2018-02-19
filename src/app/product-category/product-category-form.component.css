@@ -1,0 +1,16 @@
+.label {
+	width:140px;
+}
+
+.row {
+	display: flex;
+	align-items: center;
+}
+
+.no-underline /deep/ .mat-select-value-text {
+	padding-left:15px;
+}
+
+.no-underline /deep/ .mat-select-arrow {
+	margin-right:15px;
+}

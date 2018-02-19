@@ -6,6 +6,7 @@ import { CompanyModuleState } from './company.state';
 import { CompanyAction } from './company.actions';
 import { NavigatorAction } from '../../jam/navigator';
 import { Company, Pages } from '../model';
+import { KeyValue } from '../../jam/model-library';
 
 @Component( {
 	selector: 'app-company',
@@ -22,7 +23,16 @@ export class CompanyComponent implements OnInit
 	{
 		console.log( 'company-component' );
 
-		this.store.dispatch( new CompanyAction.Initialize() );
+		var masterNames: KeyValue[] = [
+			{ key: 'Account', value: Pages.Account },
+			{ key: 'Product', value: Pages.Product },
+			{ key: 'Product Category', value: Pages.ProductCategory },
+			{ key: 'Brand', value: Pages.Brand },
+			{ key: 'Tax Type', value: Pages.TaxType },
+			{ key: 'Tax', value: Pages.Tax }
+		]
+
+		this.store.dispatch( new CompanyAction.Initialize( masterNames ) );
 		this.store.select( state => state.companyState.selectedItem )
 			.subscribe( company => this.company = company );
 

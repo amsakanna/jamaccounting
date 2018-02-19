@@ -12,7 +12,6 @@ import
 	MatOptionModule,
 	MatTooltipModule,
 	MatDialogModule,
-	MatSnackBarModule,
 	MatListModule
 } from '@angular/material';
 /*  3rd Party Modules  */
@@ -30,7 +29,6 @@ import { ProductService } from './product.service';
 import { ProductComponent } from './product.component';
 import { ProductDetailComponent } from './product-detail.component';
 import { ProductFormComponent } from './product-form.component';
-import { FeatureModule } from '../../jam/model-library';
 
 @NgModule( {
 	declarations: [
@@ -48,7 +46,6 @@ import { FeatureModule } from '../../jam/model-library';
 		MatOptionModule,
 		MatTooltipModule,
 		MatDialogModule,
-		MatSnackBarModule,
 		MatListModule,
 		StoreModule.forFeature( 'productState', productReducer ),
 		EffectsModule.forFeature( [ ProductEffects ] ),

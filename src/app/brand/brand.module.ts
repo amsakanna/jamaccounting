@@ -12,20 +12,18 @@ import
 	MatOptionModule,
 	MatTooltipModule,
 	MatDialogModule,
-	MatSnackBarModule,
 	MatListModule
 } from '@angular/material';
-
 /*  3rd Party Modules  */
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-
 /*  My Library Modules  */
-import { JamBounceSpinnerModule } from './../../jam/ui-library';
-
+import { JamBounceSpinnerModule, JamFacebookSpinnerModule } from './../../jam/ui-library';
 /*  App Modules  */
+import { FormDialogModule, ExplorerModule } from '../ui';
+/*  App Components  */
 import { brandRoutes } from './brand.routes';
-import { brandReducer } from './brand.reducer';
+import { brandReducer } from './brand.store';
 import { BrandEffects } from './brand.effects';
 import { BrandService } from './brand.service';
 import { BrandComponent } from './brand.component';
@@ -48,13 +46,16 @@ import { BrandFormComponent } from './brand-form.component';
 		MatOptionModule,
 		MatTooltipModule,
 		MatDialogModule,
-		MatSnackBarModule,
 		MatListModule,
 		StoreModule.forFeature( 'brandState', brandReducer ),
 		EffectsModule.forFeature( [ BrandEffects ] ),
 		JamBounceSpinnerModule,
-		RouterModule.forChild( brandRoutes )
+		JamFacebookSpinnerModule,
+		RouterModule.forChild( brandRoutes ),
+		FormDialogModule,
+		ExplorerModule
 	],
+	entryComponents: [ BrandFormComponent ],
 	providers: [ BrandService ]
 } )
 export class BrandModule { }

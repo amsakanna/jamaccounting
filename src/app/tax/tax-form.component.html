@@ -1,54 +1,39 @@
-<div class="container">
-	<jam-bounce-spinner *ngIf="$.adding || $.modifying"></jam-bounce-spinner>
-	<form [formGroup]="$.form" novalidate
-		class="form"
-		(ngSubmit)="$.submit()"
-		[class.blur]="$.adding || $.modifying">
+<app-form-dialog [$]="$" [formGroup]="$.form">
 
-		<h2 mat-dialog-title> {{ $.creating ? 'New Item' : 'Edit Item' }} </h2>
+	<div class="row">
+		<div class="label"> Name : </div>
+		<mat-form-field>
+			<input matInput placeholder="Name" formControlName="name"/>
+		</mat-form-field>
+	</div>
 
-		<mat-dialog-content>
-
-			<div><mat-form-field class="name">
-				<input matInput placeholder="Name" formControlName="name"/>
-			</mat-form-field></div>
-			<div><mat-select placeholder="TaxType" [(value)]="$.formItem.type">
+	<div class="row">
+		<div class="label"> Tax Type : </div>
+		<mat-form-field>
+			<mat-select placeholder="Select Tax Type" [(value)]="$.formItem.typeKey">
 				<mat-option *ngFor="let taxType of $.taxTypeList" [value]="taxType.key">
-					<div> {{ taxType.name }} </div>
-					<div style.fontSize="smaller"> {{ [ taxType.fullName ] }} </div>
+					<span> {{ taxType.name }} </span>
+					<span class="taxTypeFullName"> ( {{ taxType.fullName }} ) </span>
 				</mat-option>
-			</mat-select></div>
-			<div><mat-select placeholder="Taxability" [(value)]="$.formItem.taxability">
+			</mat-select>
+		</mat-form-field>
+	</div>
+	<div class="row">
+		<div class="label"> Taxability : </div>
+		<mat-form-field>
+			<mat-select placeholder="Taxability" [(value)]="$.formItem.taxability">
 				<mat-option *ngFor="let taxability of $.taxabilities" [value]="taxability">
 					{{ taxability }}
 				</mat-option>
-			</mat-select></div>
-			<div><mat-form-field class="rate">
-				<input matInput type="number"
-					[disabled]="$.formItem.taxability != 'Taxable'"
-					placeholder="Rate" formControlName="rate"/>
-			</mat-form-field></div>
+			</mat-select>
+		</mat-form-field>
+	</div>
+	<div class="row">
+		<div class="label"> Rate : </div>
+		<mat-form-field>
+			<input matInput type="number" placeholder="Enter tax rate" formControlName="rate"
+			 	min="0.00" step="1.00"/>
+		</mat-form-field>
+	</div>
 
-		</mat-dialog-content>
-
-		<mat-dialog-actions>
-			<div class="left">
-				<button mat-button type="button"
-					class="reset-button no-animation"
-					(click)="$.form.reset()"> RESET
-				</button>
-			</div>
-			<div class="right">
-				<button mat-button type="button"
-					class="cancel-button no-animation"
-					(click)="$.cancel()"> CANCEL
-				</button>
-				<button mat-raised-button color="primary" type="submit"
-					class="save-button"
-					[disabled]="!$.form.valid"> SAVE
-				</button>
-			</div>
-		</mat-dialog-actions>
-
-	</form>
-</div>
+</app-form-dialog>

@@ -5,34 +5,59 @@ import { Store } from "@ngrx/store";
 import { JamEntityService } from "../../jam/ngrx";
 import { TaxModuleState, TaxState, taxActions } from "./tax.store";
 import { Tax, TaxType } from "../model";
+import { moduleName } from './tax.config';
+import { KeyValue } from "../../jam/model-library";
+import { NavigatorAction } from "../../jam/navigator";
+import { Taxabilities } from "../model/taxabilities.enum";
 
 @Injectable()
 export class TaxService extends JamEntityService<Tax, TaxState>
 {
-
-	public taxabilities: string[];
+	public get moduleName (): string { return moduleName }
+	public masterNames: KeyValue[];
+	public selectedMasterName: KeyValue;
 	public taxTypeList: TaxType[];
 	public selectedItemType: TaxType;
+	public taxabilities: string[];
 
 	constructor (
 		public rootStore: Store<TaxModuleState>,
 		public formBuilder: FormBuilder
 	)
 	{
+		/**
+		 * Initialize service
+		 */
 		super( rootStore.select( state => state.taxState ), taxActions );
-		this.subscribeProperties( 'list', 'form', 'selectedItem', 'formItem', 'loading', 'adding', 'modifying' );
+		this.subscribeProperties( 'list', 'form', 'selectedItem', 'formItem', 'processing', 'loading', 'editing', 'adding', 'modifying' );
 
+		/**
+		 * Store Select
+		 */
 		this.rootStore.select( state => state.companyState.selectedItem )
 			.filter( company => !!company )
 			.subscribe( company => this.store.dispatch( taxActions.Initialize() ) );
-
-		this.store.select( state => state.taxTypeList )
+		this.rootStore.select( state => state.companyState.masterNames )
+			.subscribe( masterNames =>
+			{
+				this.masterNames = masterNames;
+				this.selectedMasterName = this.masterNames.find( name => name.key == 'Tax' );
+			} );
+		this.store.select( 'taxTypeList' )
 			.subscribe( taxTypeList => this.taxTypeList = taxTypeList );
-
-		this.store.select( state => state.selectedItemType )
+		this.store.select( 'selectedItemType' )
 			.subscribe( selectedItemType => this.selectedItemType = selectedItemType );
 
-		this.taxabilities = [ 'Undefined', 'Exempt', 'NilRated', 'Taxable' ];
+		this.taxabilities = Object.keys( Taxabilities );
+	}
+
+	/**
+	 * Overrides
+	 */
+
+	private tabChange ( selectedTab: KeyValue ): void
+	{
+		this.rootStore.dispatch( new NavigatorAction.Navigate( selectedTab.value ) );
 	}
 
 }

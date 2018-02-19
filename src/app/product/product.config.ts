@@ -2,11 +2,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FeatureModule } from '../../jam/model-library';
 import { Product } from "../model";
 
-export const module: FeatureModule = {
-	name: 'Product',
-	dialogs: []
-}
-
 export const moduleName = 'Product';
 export const actionPrefix = '[Product]';
 export const urlParamKey = 'product';

@@ -8,7 +8,5 @@ import { ProductService } from "./product.service";
 } )
 export class ProductDetailComponent
 {
-	constructor ( private $: ProductService )
-	{
-	}
+	constructor ( private $: ProductService ) { }
 }

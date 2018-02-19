@@ -2,13 +2,14 @@ import { DatabaseState } from './database.state';
 import { DatabaseActionTypes, DbAction } from './database.actions';
 import { Data, Error } from "../../jam/model-library";
 import { Table } from './table.model';
+import { defaults } from './database.config';
 
 const initialState: DatabaseState = {
 	initialized: false,
 	processing: false,
 	error: new Error(),
 	path: 'Data/Table',
-	metadataPath: 'Metadata/Database',
+	metadataPath: 'Metadata/Database/',
 	tables: []
 }
 

@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
 import { BrandService } from "./brand.service";
 
 @Component( {
@@ -9,9 +8,5 @@ import { BrandService } from "./brand.service";
 } )
 export class BrandDetailComponent
 {
-	constructor ( private $: BrandService, private activatedRoute: ActivatedRoute )
-	{
-		const key: string = this.activatedRoute.snapshot.params[ 'brand' ] || '';
-		this.$.checkAndSelect( key );
-	}
+	constructor ( private $: BrandService ) { }
 }

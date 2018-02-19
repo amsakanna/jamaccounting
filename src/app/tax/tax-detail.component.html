@@ -1,9 +1,9 @@
-<div class="container">
+<div class="container" *ngIf="$.selectedItem">
 	<div class="component">
 		<main class="item">
-			<div> Full Name: {{ $.selectedItemType.fullName }} </div>
-			<div> Taxability: {{ $.selectedItem.taxability }} </div>
-			<div> Rate: {{ $.selectedItem.rate }} % </div>
+			<div class="item-type"> Tax Type: {{ $.selectedItemType?.fullName }} </div>
+			<div class="item-taxability"> Taxability: {{ $.selectedItem.taxability }} </div>
+			<div class="item-rate"> Rate: {{ $.selectedItem.rate }} </div>
 		</main>
 	</div>
 </div>

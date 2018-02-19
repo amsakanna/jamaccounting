@@ -19,7 +19,7 @@ export const database = {
 	},
 
 	config: {
-		metadataPath: 'Metadata/Database'
+		metadataPath: 'Metadata/Database/'
 	}
 
 }
