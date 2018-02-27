@@ -5,8 +5,8 @@
 			<input matInput placeholder="Name" formControlName="name"/>
 		</mat-form-field>
 		<mat-form-field class="parent-category">
-			<mat-select placeholder="Parent Category" [(value)]="$.formItem.parentKey">
-				<mat-option *ngFor="let parent of $.list" [value]="parent.key">
+			<mat-select placeholder="Parent Category" [(value)]="$.formItem.parent" [compareWith]="$.compareFn">
+				<mat-option *ngFor="let parent of $.list" [value]="parent">
 					{{ parent.name }}
 				</mat-option>
 			</mat-select>
@@ -17,14 +17,11 @@
 
 		<header style="margin-bottom: 20px"> Features </header>
 
-		<mat-expansion-panel *ngFor="let feature of $.formItem.features; index as i"
+		<mat-expansion-panel
+			*ngFor="let feature of $.formItem.features; index as i"
 			[expanded]="!feature.name">
 
-			<mat-expansion-panel-header>
-				<mat-panel-title>
-					{{ feature.name }}
-				</mat-panel-title>
-			</mat-expansion-panel-header>
+			<mat-expansion-panel-header> <mat-panel-title> {{ feature.name }} </mat-panel-title> </mat-expansion-panel-header>
 
 			<form novalidate [formGroup]="$.featureForms[i]">
 				<div>
@@ -48,9 +45,10 @@
 					</mat-form-field>
 
 					<button mat-button
-						type="button"
+						type="submit"
 						class="small"
-						(click)="$.addFeatureOption( i )"> Add
+						(click)="$.addFeatureOption( i )">
+						Add
 					</button>
 
 				</div>
@@ -59,14 +57,15 @@
 					<button mat-button color="warn"
 						type="button"
 						class="small"
-						(click)="$.removeFeature( i )"> Remove
+						(click)="$.removeFeature( i )">
+						Remove
 					</button>
 					<button mat-raised-button color="primary"
 						type="button"
-						style="margin-left: 10px"
-						class="small"
+						class="small" style="margin-left: 10px"
 						[disabled]="!$.featureForms[i].valid"
-						(click)="$.addFeature( i )"> Save
+						(click)="$.addFeature( i )">
+						Save
 					</button>
 				</mat-action-row>
 
@@ -75,9 +74,9 @@
 		</mat-expansion-panel>
 
 		<button mat-raised-button color="primary" type="button"
-			class="small"
-			style="margin-top: 20px"
-			(click)="$.createFeature()"> Add New Feature
+			class="small" style="margin-top: 20px"
+			(click)="$.createFeature()">
+			Add New Feature
 		</button>
 
 	</mat-accordion>

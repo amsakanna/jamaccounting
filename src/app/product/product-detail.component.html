@@ -1,9 +1,9 @@
 <div class="container" *ngIf="$.selectedItem">
 	<div class="component">
 		<main class="item">
-			<div class="item-sku"> SKU: {{ $.selectedItem.sku }} </div>
-			<div class="item-category"> Category: {{ $.selectedItemCategory?.name }} </div>
-			<div class="item-brand"> Brand: {{ $.selectedItemBrand?.name }} </div>
+			<div> Id: {{ $.selectedItem.id }} </div>
+			<div> Category: {{ $.selectedItem.category?.name }} </div>
+			<div> Brand: {{ $.selectedItem.brand?.name }} </div>
 			<h4> Features </h4>
 			<div *ngFor="let feature of $.selectedItem.features"
 				class="feature">

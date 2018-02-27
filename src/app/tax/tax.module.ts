@@ -12,7 +12,8 @@ import
 	MatOptionModule,
 	MatTooltipModule,
 	MatDialogModule,
-	MatListModule
+	MatListModule,
+	MatSlideToggleModule
 } from '@angular/material';
 /*  3rd Party Modules  */
 import { StoreModule } from '@ngrx/store';
@@ -47,6 +48,7 @@ import { TaxFormComponent } from './tax-form.component';
 		MatTooltipModule,
 		MatDialogModule,
 		MatListModule,
+		MatSlideToggleModule,
 		StoreModule.forFeature( 'taxState', taxReducer ),
 		EffectsModule.forFeature( [ TaxEffects ] ),
 		JamBounceSpinnerModule,

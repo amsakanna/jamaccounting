@@ -22,10 +22,10 @@ export class AuthEffects
 		console.log( 'auth-effects' );
 
 		this.initialize$ = this.actions$.ofType<AuthAction.Initialize>( AuthActionTypes.initialize )
-			.switchMap( action => this.angularFireAuth.authState )
+			.map( action => ( { email: 'amsakanna@gmail.com' } ) )
+			// .switchMap( action => this.angularFireAuth.authState )
 			.mergeMap( firebaseUser =>
 			{
-
 				const authenticated = !!firebaseUser;
 				// return authenticated ? new AuthAction.Authenticated( new User( firebaseUser ) ) : new AuthAction.Deauthenticated();
 				return authenticated

@@ -15,7 +15,6 @@ export class BrandService extends JamEntityService<Brand, BrandState>
 	public get moduleName (): string { return moduleName }
 	public masterNames: KeyValue[];
 	public selectedMasterName: KeyValue;
-	public brandList: Brand[];
 
 	constructor (
 		public rootStore: Store<BrandModuleState>,

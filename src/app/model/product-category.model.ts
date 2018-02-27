@@ -5,6 +5,7 @@ export interface ProductCategory extends Data
 {
 	name?: string;
 	parentKey?: string;
+	parent?: ProductCategory;
 	picture?: Picture;
 	features?: ProductCategoryFeature[];
 }

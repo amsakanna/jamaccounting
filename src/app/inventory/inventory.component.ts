@@ -3,8 +3,15 @@ import { InventoryService } from "./inventory.service";
 
 @Component( {
 	selector: 'app-inventory',
-	templateUrl: './inventory.component.html',
-	styleUrls: [ './inventory.component.css' ]
+	template: `
+		<app-explorer
+			[$]="$"
+			[tabs]="$.masterNames"
+			(tabChange)="$.tabChange( $event )"
+			[selectedTab]="$.selectedMasterName">
+			<app-inventory-detail></app-inventory-detail>
+		</app-explorer>
+	`
 } )
 export class InventoryComponent
 {

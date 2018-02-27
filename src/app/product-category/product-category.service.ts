@@ -91,6 +91,7 @@ export class ProductCategoryService extends JamEntityService<ProductCategory, Pr
 	{
 		const newFeatureOption = this.featureForms[ i ].controls[ 'newFeatureOption' ].value;
 		this.formItem.features[ i ].options.push( newFeatureOption );
+		this.featureForms[ i ].controls[ 'newFeatureOption' ].reset();
 	}
 
 	public addFeature ( i: number ): void

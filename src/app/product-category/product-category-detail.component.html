@@ -1,10 +1,10 @@
-<div class="container">
+<div class="container" *ngIf="$.selectedItem">
 	<div class="component">
 		<main class="item">
-			<div class="item-name">Name: {{ $.selectedItem?.name }}</div>
-			<div class="item-parent">Parent Category: {{ $.SelectedItemParent?.name }}</div>
+			<div class="item-name">Name: {{ $.selectedItem.name }}</div>
+			<div class="item-parent">Parent Category: {{ $.selectedItem.parent?.name }}</div>
 			<h4> Features </h4>
-			<div *ngFor="let feature of $.selectedItem?.features"
+			<div *ngFor="let feature of $.selectedItem.features"
 				class="feature">
 				<div> {{ feature.name }}
 					<span *ngIf="feature.unitOfMeasure"> in ( {{ feature.unitOfMeasure }} )</span>

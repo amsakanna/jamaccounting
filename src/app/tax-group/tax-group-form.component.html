@@ -1,0 +1,24 @@
+<app-form-dialog [$]="$" [formGroup]="$.form">
+
+	<div class="row">
+		<div class="label"> Name: </div>
+		<mat-form-field class="name">
+			<input matInput placeholder="Provide a name" formControlName="name"/>
+		</mat-form-field>
+	</div>
+
+	<div class="row">
+		<div class="label"> Taxes: </div>
+		<div class="tax-list v-scrollable">
+			<mat-selection-list (selectionChange)="taxSelectionChange( $event )">
+				<mat-list-option *ngFor="let tax of $.taxList"
+					[value]="tax"
+					[selected]="tax.selected$">
+					<p mat-line class="tax-name"> {{ tax.name }} </p>
+					<p mat-line class="tax-rate"> {{ tax.rate }}% </p>
+				</mat-list-option>
+			</mat-selection-list>
+		</div>
+	</div>
+
+</app-form-dialog>

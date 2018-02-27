@@ -9,4 +9,10 @@ import { ProductService } from "./product.service";
 export class ProductFormComponent
 {
 	constructor ( private $: ProductService ) { }
+
+	public setFeaturesFromCategory (): void
+	{
+		this.$.formItem.features = this.$.formItem.category.features.map( feature => ( { name: feature.name, value: null } ) );
+	}
+
 }

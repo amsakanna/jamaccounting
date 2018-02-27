@@ -9,21 +9,21 @@ export const urlParamKey = 'tax';
 export const emptyItem: Tax = {
 	name: null,
 	typeKey: null,
-	taxability: Taxabilities.Undefined,
-	rate: null
+	type: null,
+	rate: null,
+	flatRate: null,
+	perUnits: null
 };
 
 export const form = new FormGroup( {
 	name: new FormControl( '', Validators.required ),
-	type: new FormControl( null ),
-	rate: new FormControl( null )
+	rate: new FormControl( null ),
+	flatRate: new FormControl( null ),
+	perUnits: new FormControl( null )
 } );
 
 export const additionalStates = {
 	emptyItem: emptyItem,
 	form: form,
-	categoryList: [],
-	selectedItemCategory: null,
-	brandList: [],
-	selectedItemBrand: null
+	taxList: []
 }

@@ -1,9 +1,15 @@
 <div class="container">
-	<div *ngIf="inventoryItem">
-		<div> Supply Type: {{ inventoryItem.supplyTypeText }} </div>
-		<div> units: {{ inventoryItem.units }} </div>
-		<div> Unit Of Measure: {{ inventoryItem.unitOfMeasure }} </div>
-		<div> Buying Price: {{ inventoryItem.buyingPrice }} </div>
-		<div> Selling Price: {{ inventoryItem.sellingPrice }} </div>
+	<div class="component">
+		<main class="item">
+			<div class="item-sku">SKU: {{ $.selectedItem.sku }}</div>
+			<h4> Features </h4>
+			<div *ngFor="let feature of $.selectedItem.features"
+				class="feature">
+				<div>
+					<span> {{ feature.name }}: </span>
+					<span *ngIf="feature.value"> {{ feature.value }} </span>
+				</div>
+			</div>
+		</main>
 	</div>
 </div>

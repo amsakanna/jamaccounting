@@ -12,20 +12,18 @@ import
 	MatOptionModule,
 	MatTooltipModule,
 	MatDialogModule,
-	MatSnackBarModule,
 	MatListModule
 } from '@angular/material';
-
-/*  3rd Party Modules  */
+/*  3rd Inventory Modules  */
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-
 /*  My Library Modules  */
-import { JamBounceSpinnerModule } from './../../jam/ui-library';
-
+import { JamBounceSpinnerModule, JamFacebookSpinnerModule } from './../../jam/ui-library';
 /*  App Modules  */
+import { FormDialogModule, ExplorerModule } from '../ui';
+/*  App Components  */
 import { inventoryRoutes } from './inventory.routes';
-import { inventoryReducers } from './inventory.reducers';
+import { inventoryReducer } from './inventory.store';
 import { InventoryEffects } from './inventory.effects';
 import { InventoryService } from './inventory.service';
 import { InventoryComponent } from './inventory.component';
@@ -48,13 +46,16 @@ import { InventoryFormComponent } from './inventory-form.component';
 		MatOptionModule,
 		MatTooltipModule,
 		MatDialogModule,
-		MatSnackBarModule,
 		MatListModule,
-		StoreModule.forFeature( 'inventoryState', inventoryReducers ),
+		StoreModule.forFeature( 'inventoryState', inventoryReducer ),
 		EffectsModule.forFeature( [ InventoryEffects ] ),
 		JamBounceSpinnerModule,
-		RouterModule.forChild( inventoryRoutes )
+		JamFacebookSpinnerModule,
+		RouterModule.forChild( inventoryRoutes ),
+		FormDialogModule,
+		ExplorerModule
 	],
+	entryComponents: [ InventoryFormComponent ],
 	providers: [ InventoryService ]
 } )
 export class InventoryModule { }

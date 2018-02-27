@@ -1,38 +1,51 @@
 <app-form-dialog [$]="$" [formGroup]="$.form">
 
-	<div class="row"><div class="label"> Name : </div><mat-form-field class="name">
-		<input matInput placeholder="Name" formControlName="name"/>
-	</mat-form-field></div>
-	<div class="row"><div class="label"> SKU : </div><mat-form-field class="sku">
-		<input matInput placeholder="SKU" formControlName="sku"/>
-	</mat-form-field></div>
-	<div class="row"><div class="label"> Category : </div><mat-form-field class="category">
-		<mat-select [(value)]="$.formItem.categoryKey">
-			<mat-option *ngFor="let category of $.categoryList" [value]="category.key">
-				{{ category.name }}
-			</mat-option>
-		</mat-select>
-	</mat-form-field></div>
-	<div class="row"><div class="label"> Brand : </div><mat-form-field class="brand">
-		<mat-select [(value)]="$.formItem.brandKey">
-			<mat-option *ngFor="let brand of $.brandList" [value]="brand.key">
-				{{ brand.name }}
-			</mat-option>
-		</mat-select>
-	</mat-form-field></div>
+	<div class="row">
+		<div class="label"> Name: </div>
+		<mat-form-field>
+			<input matInput placeholder="Name" formControlName="name"/>
+		</mat-form-field>
+	</div>
 
-	<div *ngFor="let feature of $.selectedItemCategory.features; index as i">
-		<form novalidate [formGroup]="$.featureForms[i]" class="row">
-			<div class="label"> {{ feature.name }} </div>
-			<mat-form-field class="feature" >
-				<input *ngIf="!feature.options" matInput placeholder="Value" formControlName="value" />
-				<mat-select *ngIf="feature.options" [(value)]="$.formItem.features[i].value">
-					<mat-option *ngFor="let option of feature.options" [value]="option">
-						{{ option }}
-					</mat-option>
-				</mat-select>
-			</mat-form-field>
-		</form>
+	<div class="row">
+		<div class="label"> Id: </div>
+		<mat-form-field>
+			<input matInput placeholder="Enter unique id" formControlName="id"/>
+		</mat-form-field>
+	</div>
+
+	<div class="row">
+		<div class="label"> Category: </div>
+		<mat-form-field>
+			<mat-select [(value)]="$.formItem.category" [compareWith]="$.compareFn" (selectionChange)="setFeaturesFromCategory()">
+				<mat-option *ngFor="let category of $.categoryList" [value]="category">
+					{{ category.name }}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</div>
+
+	<div class="row">
+		<div class="label"> Brand: </div>
+		<mat-form-field>
+			<mat-select [(value)]="$.formItem.brand" [compareWith]="$.compareFn">
+				<mat-option *ngFor="let brand of $.brandList" [value]="brand">
+					{{ brand.name }}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</div>
+
+	<div class="row" *ngFor="let feature of $.formItem.category?.features; index as i">
+		<div class="label"> {{ feature.name }} </div>
+		<mat-form-field>
+			<input *ngIf="!feature.options" matInput placeholder="Value" formControlName="value" />
+			<mat-select *ngIf="feature.options" [(value)]="$.formItem.features[i].value">
+				<mat-option *ngFor="let option of feature.options" [value]="option">
+					{{ option }}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
 	</div>
 
 </app-form-dialog>

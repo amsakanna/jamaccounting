@@ -1,18 +1,22 @@
-import { InventoryState } from './inventory.state';
 import { InventoryActionTypes, InventoryAction } from './inventory.actions';
 import { JamEntityAdapter } from '../../jam/ngrx';
-import { InventoryItem } from '../model';
+import { InventoryState } from './inventory.state';
+import { Inventory } from '../model';
 
-const inventoryAdapter = new JamEntityAdapter<InventoryItem, InventoryState>();
-const initialState = inventoryAdapter.getInitialState( { tree: null } );
+const inventoryAdapter = new JamEntityAdapter<Inventory, InventoryState>();
+const initialState = inventoryAdapter.getInitialState( {
+	selectedItemProduct: null,
+	selectedItemCategory: null,
+	taxList: []
+} );
 
 export function inventoryReducers ( state = initialState, action: InventoryAction.All ): InventoryState
 {
 	switch ( action.type ) {
 		case InventoryActionTypes.initialize: return inventoryAdapter.initialize( state );
-		case InventoryActionTypes.initialized: return { ...inventoryAdapter.initialized( state, action.list, action.defaultItem ), tree: action.tree };
+		case InventoryActionTypes.initialized: return inventoryAdapter.initialized( state, action.list, { taxList: action.taxList } );
 		case InventoryActionTypes.select: return inventoryAdapter.select( state, action.key );
-		case InventoryActionTypes.selected: return inventoryAdapter.selected( state, action.item );
+		case InventoryActionTypes.selected: return inventoryAdapter.selected( state, action.item, { selectedItemProduct: action.product, selectedItemCategory: action.category } );
 		case InventoryActionTypes.selectFailed: return inventoryAdapter.selectFailed( state );
 		case InventoryActionTypes.create: return inventoryAdapter.create( state );
 		case InventoryActionTypes.cancelCreate: return inventoryAdapter.cancelCreate( state );
@@ -22,6 +26,9 @@ export function inventoryReducers ( state = initialState, action: InventoryActio
 		case InventoryActionTypes.cancelEdit: return inventoryAdapter.cancelEdit( state );
 		case InventoryActionTypes.modify: return inventoryAdapter.modify( state, action.item );
 		case InventoryActionTypes.modified: return inventoryAdapter.modified( state, action.item );
+		case InventoryActionTypes.remove: return inventoryAdapter.remove( state, action.key );
+		case InventoryActionTypes.removed: return inventoryAdapter.removed( state, action.item );
+		case InventoryActionTypes.removeFailed: return inventoryAdapter.removeFailed( state );
 		default: return state;
 	}
 }

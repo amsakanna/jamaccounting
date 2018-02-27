@@ -1,0 +1,17 @@
+<app-form-dialog [$]="$" [formGroup]="$.form">
+
+	<div class="row">
+		<div class="label"> Name: </div>
+		<mat-form-field class="name">
+			<input matInput placeholder="Name" formControlName="name"/>
+		</mat-form-field>
+	</div>
+
+	<div class="row">
+		<div class="label"> GSTIN: </div>
+		<mat-form-field class="gstin">
+			<input matInput placeholder="GST Identification Number" formControlName="gstin"/>
+		</mat-form-field>
+	</div>
+
+</app-form-dialog>

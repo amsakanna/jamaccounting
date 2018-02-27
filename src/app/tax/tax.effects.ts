@@ -32,7 +32,6 @@ export class TaxEffects
 		/**
 		 * Load Effects
 		 */
-
 		this.initialize$ = this.actions$.ofType( taxActions.initialize )
 			.switchMap( action => this.rootStore.select( state => state.companyState.selectedItem ) )
 			.filter( company => !!company )
@@ -40,20 +39,26 @@ export class TaxEffects
 
 		this.load$ = this.actions$.ofType( taxActions.load )
 			.switchMap( action => this.db.tables.Tax.list )
-			.switchMap( list => this.db.tables.TaxType.list, ( outerValue, innerValue ) => ( { taxList: outerValue, taxTypeList: innerValue } ) )
-			.map( result => taxActions.Loaded( result.taxList, { taxTypeList: result.taxTypeList } ) );
+			.switchMap( list => this.db.tables.TaxType.list, ( outerValue, innerValue ) => ( { list: outerValue, taxTypeList: innerValue } ) )
+			.map( result => ( {
+				...result,
+				list: result.list.map( tax => ( {
+					...tax,
+					type: result.taxTypeList.find( taxTypeItem => taxTypeItem.key == tax.typeKey )
+				} ) as Tax
+				)
+			} ) )
+			.map( result => taxActions.Loaded( result.list, { taxTypeList: result.taxTypeList } ) );
 
 		/**
 		 * Select Effects
 		 */
-
 		this.selectAfterCrud$ = this.actions$.ofType( taxActions.loaded, taxActions.added, taxActions.modified, taxActions.removed )
 			.map( action => taxActions.Select() );
 
 		/**
 		 * CRUD Effects
 		 */
-
 		this.add$ = this.actions$.ofType( taxActions.add )
 			.switchMap( action => this.db.tables.Tax.insert( action.item ) )
 			.map( item => item ? taxActions.Added( item ) : taxActions.AddFailed() );
@@ -69,9 +74,8 @@ export class TaxEffects
 		/**
 		 * Dialog Effects
 		 */
-
 		this.openDialog$ = this.actions$.ofType( taxActions.create, taxActions.edit )
-			.map( action => this.dialogManager.open( TaxFormComponent, { width: '650px', id: 'TaxFormComponent' } ) );
+			.map( action => this.dialogManager.open( TaxFormComponent, { width: '800px', id: 'TaxFormComponent' } ) );
 
 		this.closeDialog$ = this.actions$.ofType( taxActions.cancelCreate, taxActions.cancelEdit, taxActions.added, taxActions.modified )
 			.map( action => this.dialogManager.getDialogById( 'TaxFormComponent' ).close() );

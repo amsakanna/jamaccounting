@@ -11,8 +11,8 @@
 }
 
 mat-dialog-content {
-    padding: 50px 100px;
-    height: calc(100% - 200px);
+    padding: 20px 100px;
+    height: calc(100% - 184px);
 }
 
 mat-dialog-content .description {

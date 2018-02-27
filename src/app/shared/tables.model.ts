@@ -5,15 +5,18 @@ import
 {
 	UserAccount,
 	Company,
-	Address,
 	Account,
 	Product,
 	ProductCategory,
 	Inventory,
-	Tax,
 	TaxType,
-	Brand
+	Tax,
+	TaxGroup,
+	Brand,
+	Party,
+	Invoice
 } from '../model';
+import { AddressClass } from '../model/address-class.model';
 
 export class Tables
 {
@@ -22,7 +25,7 @@ export class Tables
 	public UserAccount: Table<UserAccount>;
 	public PresetAccount: Table<Account>;
 	public Company: Table<Company>;
-	public Address: Table<Address>;
+	public Address: Table<AddressClass>;
 	public Account: Table<Account>;
 	public Product: Table<Product>;
 	public ProductCategory: Table<ProductCategory>;
@@ -30,6 +33,9 @@ export class Tables
 	public Inventory: Table<Inventory>;
 	public Tax: Table<Tax>;
 	public TaxType: Table<TaxType>;
+	public TaxGroup: Table<TaxGroup>;
+	public Party: Table<Party>;
+	public Invoice: Table<Invoice>;
 
 	constructor () { }
 

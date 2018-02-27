@@ -1,0 +1,18 @@
+.label {
+	width: 140px;
+}
+
+.row {
+	display: flex;
+	align-items: center;
+}
+
+.party-option
+{
+	margin-left: 20px;
+}
+
+.party-option:first-child
+{
+	margin-left: 0px;
+}

@@ -41,21 +41,27 @@ export class TaxService extends JamEntityService<Tax, TaxState>
 			.subscribe( masterNames =>
 			{
 				this.masterNames = masterNames;
-				this.selectedMasterName = this.masterNames.find( name => name.key == 'Tax' );
+				this.selectedMasterName = this.masterNames.find( name => name.key === 'Tax' );
 			} );
 		this.store.select( 'taxTypeList' )
 			.subscribe( taxTypeList => this.taxTypeList = taxTypeList );
-		this.store.select( 'selectedItemType' )
-			.subscribe( selectedItemType => this.selectedItemType = selectedItemType );
 
 		this.taxabilities = Object.keys( Taxabilities );
 	}
 
 	/**
-	 * Overrides
+	 * Override Methods
 	 */
+	public submit ()
+	{
+		this.formItem.typeKey = this.formItem.type.key;
+		super.submit();
+	}
 
-	private tabChange ( selectedTab: KeyValue ): void
+	/**
+	 * Extension Methods
+	 */
+	public tabChange ( selectedTab: KeyValue ): void
 	{
 		this.rootStore.dispatch( new NavigatorAction.Navigate( selectedTab.value ) );
 	}

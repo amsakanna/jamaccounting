@@ -4,12 +4,17 @@
 		<section class="list">
 			<header>
 				<mat-form-field class="switch-tab">
-					<mat-select (selectionChange)="_tabChange( $event )" [(value)]="selectedTab">
-						<mat-option *ngFor="let tab of tabs" [value]="tab"> {{ tab.key }} </mat-option>
-					</mat-select>
+					<div class="nav-select">
+						<mat-icon class="nav-icon"> dehaze </mat-icon>
+						<mat-select (selectionChange)="_tabChange( $event )" [(value)]="selectedTab">
+							<mat-option *ngFor="let tab of tabs" [value]="tab"> {{ tab.key }} </mat-option>
+						</mat-select>
+					</div>
+
 				</mat-form-field>
 				<!-- <div class="title"> {{ $.moduleName }} </div> -->
-				<button mat-button disableRipple color="primary"
+				<button mat-button disableRipple
+					color="primary"
 					class="add-button no-focus"
 					(click)="$.create()">
 					<mat-icon> add </mat-icon>

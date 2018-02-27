@@ -39,7 +39,7 @@ export class CoreEffects
 		// 		console.log( dialogs );
 		// 		const myDialog = dialogs.find( dialog => dialog.id === action.type );
 		// 		if ( !myDialog ) return null;
-		// 		this.matDialog.open( myDialog.component, { id: myDialog.id, width: '650px' } );
+		// 		this.matDialog.open( myDialog.component, { id: myDialog.id, width: '800px' } );
 		// 	} );
 
 		this.added$ = this.actions$.filter( action => !!action.type.match( /\[.*\] added/ ) )

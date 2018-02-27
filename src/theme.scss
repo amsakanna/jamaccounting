@@ -1,4 +1,4 @@
-@import '~@angular/material/theming';
+@import '~@angular/material/_theming.scss';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -9,16 +9,83 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue.
-$royal-blue-primary: mat-palette( royalblue );
-$royal-blue-accent:  mat-palette($mat-pink, A200, A100, A400);
+// $royal-blue-primary: #d2691e;
+// $royal-blue-accent:  chocolate;
 
-// The warn palette is optional (defaults to red).
-$royal-blue-warn:    mat-palette($mat-red);
+$mat-midnightblue: (
+  50: midnightblue,
+  100: midnightblue,
+  200: midnightblue,
+  300: midnightblue,
+  400: midnightblue,
+  500: midnightblue,
+  600: midnightblue,
+  700: midnightblue,
+  800: midnightblue,
+  900: midnightblue,
+  A100: midnightblue,
+  A200: midnightblue,
+  A400: midnightblue,
+  A700: midnightblue,
+  contrast: (
+    50: $black-87-opacity,
+    100: $black-87-opacity,
+    200: $black-87-opacity,
+    300: $black-87-opacity,
+    400: $black-87-opacity,
+    500: white,
+    600: white,
+    700: white,
+    800: $white-87-opacity,
+    900: $white-87-opacity,
+    A100: $black-87-opacity,
+    A200: white,
+    A400: white,
+    A700: white,
+  )
+);
+
+$mat-chocolate: (
+  50: chocolate,
+  100: chocolate,
+  200: chocolate,
+  300: chocolate,
+  400: chocolate,
+  500: chocolate,
+  600: chocolate,
+  700: chocolate,
+  800: chocolate,
+  900: chocolate,
+  A100: chocolate,
+  A200: chocolate,
+  A400: chocolate,
+  A700: chocolate,
+  contrast: (
+    50: $black-87-opacity,
+    100: $black-87-opacity,
+    200: $black-87-opacity,
+    300: $black-87-opacity,
+    400: $black-87-opacity,
+    500: white,
+    600: white,
+    700: white,
+    800: $white-87-opacity,
+    900: $white-87-opacity,
+    A100: $black-87-opacity,
+    A200: white,
+    A400: white,
+    A700: white,
+  )
+);
+
+$my-theme-primary: mat-palette( $mat-midnightblue );
+$my-theme-accent:  mat-palette( $mat-chocolate );
+$my-theme-warn: mat-palette( $mat-red );
 
 // Create the theme object (a Sass map containing all of the palettes).
-$royal-blue-theme: mat-light-theme($royal-blue-primary, $royal-blue-accent, $royal-blue-warn);
+$my-theme: mat-light-theme( $my-theme-primary, $my-theme-accent, $my-theme-warn );
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme( $royal-blue-theme );
+@include angular-material-theme( $my-theme );

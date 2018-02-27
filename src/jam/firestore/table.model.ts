@@ -4,6 +4,7 @@ import 'rxjs/add/operator/take';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Data, TableBase } from "../../jam/model-library";
 import * as firebase from 'firebase/app';
+import { filterObject } from '../functions/filter-object.function';
 
 export class Table<T extends Data> implements TableBase
 {
@@ -11,7 +12,6 @@ export class Table<T extends Data> implements TableBase
     public key: string;
     public name: string;
     public path: string;
-    // public model: { new( data: T ): T; };
     private collection: AngularFirestoreCollection<T>;
 
     constructor ( public db: AngularFirestore, name: string, path: string )
@@ -34,40 +34,29 @@ export class Table<T extends Data> implements TableBase
     public resolvePath ( collectionName: string, documentKey: string ): void
     {
         if ( !documentKey ) return;
-        // console.log( 'replacing ' + '{' + collectionName + '}' + ' with ' + documentKey );
         this.path = this.path.replace( '{' + collectionName + '}', documentKey );
-        // console.log( 'after replacing ' + this.path );
         this.collection = this.pathValid ? this.db.collection<T>( this.path ) : null;
     }
 
-    // private mapToModel ( data: T ): T
-    // {
-    //     return new this.model( data );
-    // }
-
-    // private mapToModels ( list: Array<T> ): Array<T>
-    // {
-    //     return list.map( item => this.mapToModel( item ) );
-    // }
+    public get join (): Observable<Array<T>>
+    {
+        return this.collection.valueChanges();
+    }
 
     public get list (): Observable<Array<T>>
     {
-        console.log( this );
-        return this.collection.valueChanges()
-        // .map( list => this.mapToModels( list ) );
+        return this.collection.valueChanges();
     }
 
     public filter ( searchColumn: string, operator: firebase.firestore.WhereFilterOp, searchKey: any ): Observable<Array<T>>
     {
         return this.db.collection<T>( this.path, ref => ref.where( searchColumn, operator, searchKey ) ).valueChanges()
-        // .map( list => this.mapToModels( list ) );
     }
 
     public get ( key: string ): Observable<T>
     {
         console.log( 'get', key );
         return key ? this.collection.doc<T>( key ).valueChanges() : Observable.of( null );
-        // .map( item => this.mapToModel( item ) );
     }
 
     public getMany ( keys: string[] ): Observable<T[]>
@@ -75,7 +64,6 @@ export class Table<T extends Data> implements TableBase
         console.log( 'getMany', keys );
         const item$s = keys
             .map( key => this.collection.doc<T>( key ).valueChanges() );
-        // .map( item => this.mapToModel( item ) ) )
         return Observable.merge( ...item$s ).toArray();
     }
 
@@ -106,7 +94,6 @@ export class Table<T extends Data> implements TableBase
         var result: T;
         return searchColumn
             ? this.db.collection<T>( this.path, ref => ref.where( searchColumn, '==', searchKey ) ).valueChanges()
-                // .map( list => this.mapToModel( list[ 0 ] ) || null )
                 .map( list => list[ 0 ] || null )
                 .take( 1 ).toPromise()
             : this.get( searchKey )
@@ -119,19 +106,30 @@ export class Table<T extends Data> implements TableBase
         return await this.lookup( searchKey, searchColumn ) || await this.insert( data );
     }
 
+    public removeVmColumns ( data: T ): Partial<T>
+    {
+        return filterObject<T>( data, ( data, column ) =>
+        {
+            console.log( column, ( data[ column + 'Key' ] === undefined ) && !( column.endsWith( '$' ) ) );
+            return ( data[ column + 'Key' ] === undefined ) && !( column.endsWith( '$' ) );
+        } );
+    }
+
     public async insert ( data: T ): Promise<T>
     {
         /*  Insert data  */
+        console.log( 'insert-pre', this.removeVmColumns( data ) );
+        data = this.removeVmColumns( data ) as T;
         console.log( 'insert', data );
 
         var key: string;
         if ( data.key ) {
             const existingData = await this.lookup( data.key );
             if ( existingData ) return null;
-            await this.collection.doc( data.key ).set( data/*.toObject()*/ );
+            await this.collection.doc( data.key ).set( data );
             key = data.key;
         } else {
-            const docRef = await this.collection.add( data/*.toObject()*/ );
+            const docRef = await this.collection.add( data );
             key = docRef.id;
         }
         console.log( 'data inserted', key );
@@ -147,12 +145,6 @@ export class Table<T extends Data> implements TableBase
         return insertedObject;
     }
 
-    public async updateElseInsert ( data: T, searchKey?: string, searchColumn?: string ): Promise<T>
-    {
-        console.log( 'updateElseInsert', data/*.toObject()*/ );
-        return await this.update( data, searchKey, searchColumn ) || await this.insert( data );
-    }
-
     public async update ( data: T, searchKey?: string, searchColumn?: string ): Promise<T>
     {
         /**
@@ -160,6 +152,7 @@ export class Table<T extends Data> implements TableBase
          * Lookup via key - data.key
          * Lookup via columns - searchKey.
          */
+        data = this.removeVmColumns( data ) as T;
         console.log( 'update', data );
         searchKey = searchKey || data.key;
 
@@ -177,13 +170,19 @@ export class Table<T extends Data> implements TableBase
         data.key = data.key || existingData.key;
 
         /*  Update data  */
-        await this.collection.doc( existingData.key ).set( data/*.toObject()*/ );
+        await this.collection.doc( existingData.key ).set( data );
 
         /*  Return updated data  */
         const updatedData = await this.get( existingData.key ).take( 1 ).toPromise();
         console.log( 'data updated', updatedData );
 
         return updatedData;
+    }
+
+    public async updateElseInsert ( data: T, searchKey?: string, searchColumn?: string ): Promise<T>
+    {
+        console.log( 'updateElseInsert', data );
+        return await this.update( data, searchKey, searchColumn ) || await this.insert( data );
     }
 
     public async updateFields ( data: T, searchKey?: string, searchColumn?: string ): Promise<T>
@@ -193,7 +192,8 @@ export class Table<T extends Data> implements TableBase
          * Lookup via key - data.key
          * Lookup via columns - searchKey.
          */
-        console.log( 'update-fields', data/*.toObject()*/ );
+        data = this.removeVmColumns( data ) as T;
+        console.log( 'update-fields', data );
         searchKey = searchKey || data.key;
 
         /**
@@ -209,10 +209,8 @@ export class Table<T extends Data> implements TableBase
         /**
          * Remove empty fields and prepare new object with fields to be updated
          */
-        const newRawData = data/*.toObject()*/;
-        newRawData.key = null;
-        var newData = {};
-        Object.keys( newRawData ).forEach( key => newRawData[ key ] && ( newData[ key ] = newRawData[ key ] ) );
+        var newData = { key: null };
+        Object.keys( data ).forEach( key => data[ key ] !== null && ( newData[ key ] = data[ key ] ) );
 
         /*  Update data  */
         try {

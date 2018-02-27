@@ -42,6 +42,7 @@ export class ProductCategoryEffects
 
 		this.load$ = this.actions$.ofType( productCategoryActions.load )
 			.switchMap( action => this.db.tables.ProductCategory.list )
+			.map( list => list.map( item => ( { ...item, parent: list.find( parentItem => parentItem.key === item.parentKey ) } ) as ProductCategory ) )
 			.map( list => productCategoryActions.Loaded( list ) );
 
 		/**
@@ -75,7 +76,7 @@ export class ProductCategoryEffects
 		 */
 
 		this.openDialog$ = this.actions$.ofType( productCategoryActions.create, productCategoryActions.edit )
-			.map( action => this.formDialog = this.dialogManager.open( ProductCategoryFormComponent, { width: '650px' } ) );
+			.map( action => this.formDialog = this.dialogManager.open( ProductCategoryFormComponent, { width: '800px' } ) );
 
 		this.closeDialog$ = this.actions$.ofType( productCategoryActions.cancelCreate, productCategoryActions.cancelEdit, productCategoryActions.added, productCategoryActions.modified )
 			.map( action => this.formDialog.close() );

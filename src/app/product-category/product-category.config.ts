@@ -9,6 +9,7 @@ export const urlParamKey = 'product-category';
 export const emptyItem: ProductCategory = {
 	name: '',
 	parentKey: '',
+	parent: null,
 	picture: null,
 	features: []
 };

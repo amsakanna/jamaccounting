@@ -1,39 +1,50 @@
 <app-form-dialog [$]="$" [formGroup]="$.form">
 
 	<div class="row">
-		<div class="label"> Name : </div>
+		<div class="label"> Name: </div>
 		<mat-form-field>
 			<input matInput placeholder="Name" formControlName="name"/>
 		</mat-form-field>
 	</div>
 
 	<div class="row">
-		<div class="label"> Tax Type : </div>
+		<div class="label"> Tax Type: </div>
 		<mat-form-field>
-			<mat-select placeholder="Select Tax Type" [(value)]="$.formItem.typeKey">
-				<mat-option *ngFor="let taxType of $.taxTypeList" [value]="taxType.key">
+			<mat-select placeholder="Select Tax Type" [(value)]="$.formItem.type">
+				<mat-option *ngFor="let taxType of $.taxTypeList" [value]="taxType">
 					<span> {{ taxType.name }} </span>
 					<span class="taxTypeFullName"> ( {{ taxType.fullName }} ) </span>
 				</mat-option>
 			</mat-select>
 		</mat-form-field>
 	</div>
+
 	<div class="row">
-		<div class="label"> Taxability : </div>
-		<mat-form-field>
-			<mat-select placeholder="Taxability" [(value)]="$.formItem.taxability">
-				<mat-option *ngFor="let taxability of $.taxabilities" [value]="taxability">
-					{{ taxability }}
-				</mat-option>
-			</mat-select>
-		</mat-form-field>
+		<div class="label"> Rate: </div>
+		<div>
+			<span><mat-form-field style="width: 50px">
+				<input matInput type="number" placeholder="rate" formControlName="rate"
+					min="0.00" step="1.00"/>
+			</mat-form-field></span>
+			<span *ngIf="!$.formItem.isFlatRate" matSuffix> &nbsp; % </span>
+		</div>
 	</div>
+
 	<div class="row">
-		<div class="label"> Rate : </div>
-		<mat-form-field>
-			<input matInput type="number" placeholder="Enter tax rate" formControlName="rate"
-			 	min="0.00" step="1.00"/>
-		</mat-form-field>
+		<div class="label"> Flat Rate: </div>
+		<div>
+			<span matPrefix> ₹ &nbsp; </span>
+			<span><mat-form-field style="width: 50px">
+				<input matInput type="number" formControlName="flatRate"
+					min="0.00" step="1.00"/>
+			</mat-form-field></span>
+			<span> per </span>
+			<span><mat-form-field style="width: 100px">
+				<input matInput type="number" formControlName="perUnits"
+					min="0.00" step="1.00"/>
+			</mat-form-field></span>
+			<span> units </span>
+		</div>
 	</div>
 
 </app-form-dialog>

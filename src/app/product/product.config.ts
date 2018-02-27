@@ -7,10 +7,12 @@ export const actionPrefix = '[Product]';
 export const urlParamKey = 'product';
 
 export const emptyItem: Product = {
-	sku: '',
+	id: '',
 	name: '',
 	categoryKey: '',
+	category: null,
 	brandKey: '',
+	brand: null,
 	color: '',
 	pictures: [],
 	features: []
@@ -18,14 +20,12 @@ export const emptyItem: Product = {
 
 export const form = new FormGroup( {
 	name: new FormControl( '', Validators.required ),
-	sku: new FormControl( '' )
+	id: new FormControl( '' )
 } );
 
 export const additionalStates = {
 	emptyItem: emptyItem,
 	form: form,
 	categoryList: [],
-	selectedItemCategory: null,
-	brandList: [],
-	selectedItemBrand: null
+	brandList: []
 }

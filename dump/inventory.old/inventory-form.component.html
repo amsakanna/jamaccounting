@@ -1,0 +1,45 @@
+<div class="container">
+	<form [formGroup]="form" novalidate
+		class="form"
+		(ngSubmit)="submit()">
+
+		<main>
+			<section class="units">
+				<mat-form-field><input
+					matInput
+					type="number"
+					placeholder="Units"
+					formControlName="units" />
+				</mat-form-field>
+			</section>
+
+			<mat-select placeholder="Category"
+				formControlName="parent"
+				[(ngModel)]="item.parentKey">
+				<mat-option *ngFor="let parent of list"
+					[value]="parent.key">
+					{{ parent.name }}
+				</mat-option>
+			</mat-select>
+		</main>
+
+		<footer>
+			<div class="left">
+				<button mat-button type="button"
+					class="reset-button no-animation"
+					(click)="reset()"> RESET
+				</button>
+			</div>
+			<div class="right">
+				<button mat-button type="button"
+					class="cancel-button no-animation"
+					(click)="cancel()"> CANCEL
+				</button>
+				<button mat-raised-button color="primary" type="submit"
+					class="save-button"> SAVE
+				</button>
+			</div>
+		</footer>
+
+	</form>
+</div>

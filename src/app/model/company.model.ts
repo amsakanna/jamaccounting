@@ -1,5 +1,5 @@
 import { Data } from "../../jam/model-library";
-import { Address } from "./address.model";
+import { AddressClass } from "./address-class.model";
 
 export class Company implements Data
 {
@@ -9,7 +9,7 @@ export class Company implements Data
     public password: string;
     public name: string;
     public owner: string;
-    public address: Address;
+    public address: AddressClass;
     public logo: string;
     public cin: string;
     public pan: string;
@@ -26,7 +26,7 @@ export class Company implements Data
         this.name = object.name || '';
         this.owner = object.owner || '';
         this.address = object.address ? object.address : object.addressKey
-            ? new Address( { key: object.addressKey } ) : new Address();
+            ? new AddressClass( { key: object.addressKey } ) : new AddressClass();
         this.logo = object.logo || '';
         this.cin = object.cin || '';
         this.pan = object.pan || '';

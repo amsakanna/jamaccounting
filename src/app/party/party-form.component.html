@@ -1,0 +1,53 @@
+<app-form-dialog [$]="$" [formGroup]="$.form">
+
+	<div class="row">
+		<div class="label"> Name: </div>
+		<mat-form-field>
+			<input matInput placeholder="Name" formControlName="name"/>
+		</mat-form-field>
+	</div>
+
+	<div class="row">
+		<div class="label"> Party Type: </div>
+		<mat-radio-group [(value)]="$.formItem.type" (change)="partyTypeChanged( $event )">
+			<mat-radio-button class="party-option" *ngFor="let partyType of partyTypes" [value]="partyType">
+				{{ partyType }}
+			</mat-radio-button>
+		</mat-radio-group>
+	</div>
+
+	<div class="row">
+		<div class="label"> Registration Type: </div>
+		<mat-form-field>
+			<mat-select [(value)]="$.formItem.companyRegistrationType" (selectionChange)="registrationTypeChanged()">
+				<mat-option *ngFor="let companyRegistrationType of companyRegistrationTypes" [value]="companyRegistrationType">
+					<span> {{ companyRegistrationType }} </span>
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</div>
+
+	<div class="row">
+		<div class="label"> GSTIN: </div>
+		<mat-form-field>
+			<input matInput placeholder="GST Identification Number" formControlName="taxNumber"/>
+			<mat-error *ngIf="taxNumberFormControl.errors">
+				{{ taxNumberFormControl.errors.error }}
+			</mat-error>
+		</mat-form-field>
+	</div>
+
+	<div class="row">
+		<div class="label"> Place of supply: </div>
+		<mat-form-field>
+			<mat-select
+				[(value)]="$.formItem.placeOfSupply"
+				[disabled]="gstRequired">
+				<mat-option *ngFor="let state of stateList" [value]="state.code">
+					<span> {{ state.code }} - {{ state.name }} </span>
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</div>
+
+</app-form-dialog>

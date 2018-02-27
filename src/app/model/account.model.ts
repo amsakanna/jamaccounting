@@ -1,5 +1,5 @@
 import { Data } from "../../jam/model-library";
-import { Address } from "./address.model";
+import { AddressClass } from "./address-class.model";
 import { Tax } from "./tax.model";
 
 export class Account implements Data
@@ -11,7 +11,7 @@ export class Account implements Data
     public description: string;
     public holderName: string;
     public number: string;
-    public address: Address;
+    public address: AddressClass;
 
     constructor ( object?: any )
     {
@@ -24,7 +24,7 @@ export class Account implements Data
         this.description = object.description || '';
         this.number = object.number || '';
         this.holderName = object.holderName || '';
-        this.address = object.addressKey ? new Address( { key: object.addressKey } ) : object.address || new Address();
+        this.address = object.addressKey ? new AddressClass( { key: object.addressKey } ) : object.address || new AddressClass();
     }
 
     public toObject ()

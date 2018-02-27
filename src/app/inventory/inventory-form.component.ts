@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { MatSelectChange } from "@angular/material";
 import { InventoryService } from "./inventory.service";
 
 @Component( {
@@ -9,4 +10,10 @@ import { InventoryService } from "./inventory.service";
 export class InventoryFormComponent
 {
 	constructor ( private $: InventoryService ) { }
+
+	public taxGroupSelectionChange ()
+	{
+		this.$.formItem.taxGroupKey = this.$.formItem.taxGroup.key;
+	}
+
 }

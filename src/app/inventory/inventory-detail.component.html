@@ -1,15 +1,11 @@
-<div class="container">
+<div class="container" *ngIf="$.selectedItem">
 	<div class="component">
 		<main class="item">
-			<div class="item-sku">SKU: {{ $.selectedItem.sku }}</div>
-			<h4> Features </h4>
-			<div *ngFor="let feature of $.selectedItem.features"
-				class="feature">
-				<div>
-					<span> {{ feature.name }}: </span>
-					<span *ngIf="feature.value"> {{ feature.value }} </span>
-				</div>
-			</div>
+			<div> Supply Type: {{ $.selectedItem.supplyType }} </div>
+			<div> Items in stock: {{ $.selectedItem.units }} </div>
+			<div> Buying Price: {{ $.selectedItem.buyingPrice }} </div>
+			<div> Selling Price: {{ $.selectedItem.sellingPrice }} </div>
+			<div> Tax: {{ $.selectedItem.taxGroup?.name }} </div>
 		</main>
 	</div>
 </div>

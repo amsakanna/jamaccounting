@@ -40,9 +40,17 @@ export class ProductEffects
 
 		this.load$ = this.actions$.ofType( productActions.load )
 			.switchMap( action => this.db.tables.Product.list )
-			.switchMap( list => this.db.tables.ProductCategory.list, ( outerValue, innerValue ) => ( { productList: outerValue, productCategoryList: innerValue } ) )
+			.switchMap( list => this.db.tables.ProductCategory.list, ( outerValue, innerValue ) => ( { list: outerValue, productCategoryList: innerValue } ) )
 			.switchMap( result => this.db.tables.Brand.list, ( outerValue, innerValue ) => ( { ...outerValue, brandList: innerValue } ) )
-			.map( result => productActions.Loaded( result.productList, { categoryList: result.productCategoryList, brandList: result.brandList } ) );
+			.map( result => ( {
+				...result,
+				list: result.list.map( product => ( {
+					...product,
+					category: result.productCategoryList.find( productCategoryItem => productCategoryItem.key == product.categoryKey ),
+					brand: result.brandList.find( brandItem => brandItem.key == product.brandKey )
+				} ) as Product )
+			} ) )
+			.map( result => productActions.Loaded( result.list, { categoryList: result.productCategoryList, brandList: result.brandList } ) );
 
 		/**
 		 * Select Effects
@@ -72,7 +80,7 @@ export class ProductEffects
 		 */
 
 		this.openDialog$ = this.actions$.ofType( productActions.create, productActions.edit )
-			.map( action => this.dialogManager.open( ProductFormComponent, { width: '650px', id: 'ProductFormComponent' } ) );
+			.map( action => this.dialogManager.open( ProductFormComponent, { width: '800px', id: 'ProductFormComponent' } ) );
 
 		this.closeDialog$ = this.actions$.ofType( productActions.cancelCreate, productActions.cancelEdit, productActions.added, productActions.modified )
 			.map( action => this.dialogManager.getDialogById( 'ProductFormComponent' ).close() );

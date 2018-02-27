@@ -1,0 +1,34 @@
+<div class="container">
+	<main class="floating-box">
+		<jam-explorer
+			[itemTitle]="selectedItem?.name"
+			newItemText="New Item"
+			(create)="create()">
+			<div jam-explorer-list-template
+				class="jam-explorer-list-template">
+				<jam-tree-list
+					[tree]="tree"
+					(select)="select( $event )">
+					<div header-template
+						class="title">
+						Inventory
+					</div>
+					<ng-template let-item="item">
+						<div class="list-item disable-text-selection">
+							<section class="name-section">
+								<div class="name"> {{ item?.name }} </div>
+								<div class="id"> {{ item?.id }} </div>
+							</section>
+							<section class="units-section">
+								<div class="units"> {{ item?.units }} </div>
+							</section>
+						</div>
+					</ng-template>
+				</jam-tree-list>
+			</div>
+			<div jam-explorer-item-template>
+				<router-outlet></router-outlet>
+			</div>
+		</jam-explorer>
+	</main>
+</div>

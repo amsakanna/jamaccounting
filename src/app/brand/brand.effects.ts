@@ -70,7 +70,7 @@ export class BrandEffects
 		 */
 
 		this.openDialog$ = this.actions$.ofType( brandActions.create, brandActions.edit )
-			.map( action => this.dialogManager.open( BrandFormComponent, { width: '650px', id: 'BrandFormComponent' } ) );
+			.map( action => this.dialogManager.open( BrandFormComponent, { width: '800px', id: 'BrandFormComponent' } ) );
 
 		this.closeDialog$ = this.actions$.ofType( brandActions.cancelCreate, brandActions.cancelEdit, brandActions.added, brandActions.modified )
 			.map( action => this.dialogManager.getDialogById( 'BrandFormComponent' ).close() );

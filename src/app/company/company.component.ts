@@ -28,8 +28,10 @@ export class CompanyComponent implements OnInit
 			{ key: 'Product', value: Pages.Product },
 			{ key: 'Product Category', value: Pages.ProductCategory },
 			{ key: 'Brand', value: Pages.Brand },
-			{ key: 'Tax Type', value: Pages.TaxType },
-			{ key: 'Tax', value: Pages.Tax }
+			{ key: 'Tax', value: Pages.Tax },
+			{ key: 'Tax Group', value: Pages.TaxGroup },
+			{ key: 'Party', value: Pages.Party },
+			{ key: 'Inventory', value: Pages.Inventory }
 		]
 
 		this.store.dispatch( new CompanyAction.Initialize( masterNames ) );

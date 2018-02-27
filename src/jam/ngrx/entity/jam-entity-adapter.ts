@@ -130,9 +130,10 @@ export class JamEntityAdapter<
 
 	public select ( state: S, key: string, keyColumn: string = 'key' ): S
 	{
-		const selectKey = key || ( state.selectedItem && state.selectedItem[ keyColumn ] ) || state.defaultItemKey;
+		const selectKey = state.itemBeingSelectedKey || key || ( state.selectedItem && state.selectedItem[ keyColumn ] ) || state.defaultItemKey;
 		const selectedItem = ( selectKey && state.list.find( item => item[ keyColumn ] == selectKey ) ) || state.selectedItem;
-		return this.newState( state, { selectedItem: selectedItem } );
+
+		return this.newState( state, { selectedItem: selectedItem, itemBeingSelectedKey: null } );
 	}
 
 	public selected ( state: S, item: T, extras: Partial<S> = {} ): S

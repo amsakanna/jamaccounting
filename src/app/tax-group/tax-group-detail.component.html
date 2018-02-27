@@ -1,0 +1,11 @@
+<div class="container" *ngIf="$.selectedItem">
+	<div class="component">
+		<main class="item">
+			<div> Taxes: </div>
+			<div style="padding-left: 20px" *ngFor="let tax of $.selectedItem.taxes">
+				<div> {{ tax.name }} </div>
+				<div> {{ tax.rate }} </div>
+			</div>
+		</main>
+	</div>
+</div>

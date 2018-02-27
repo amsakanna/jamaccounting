@@ -3,6 +3,7 @@ import { Store } from "@ngrx/store";
 import { buildModelFromForm } from "../../functions";
 import { JamEntityState } from "./jam-entity.state";
 import { JamEntityActions } from "./jam-entity.actions";
+import { Subscription } from "rxjs";
 
 export class JamEntityService<T, S extends JamEntityState<T> = JamEntityState<T>, AS extends JamEntityActions<T> = JamEntityActions<T>> implements JamEntityState<T>
 {
@@ -35,11 +36,13 @@ export class JamEntityService<T, S extends JamEntityState<T> = JamEntityState<T>
 	public lastRemovedItem: T;
 	public lastRemovedItemIndex: number;
 
-	public subscribedList: ( keyof S )[];
+	public subscribedProperties: ( keyof S )[];
+	private subscriptionList: Subscription[];
 
 	constructor ( public store: Store<S>, public actions: AS )
 	{
-		this.subscribedList = [];
+		this.subscribedProperties = [];
+		this.subscriptionList = [];
 		this.subscribeProperty( 'creating' );
 	}
 
@@ -50,21 +53,19 @@ export class JamEntityService<T, S extends JamEntityState<T> = JamEntityState<T>
 
 	public subscribeProperty ( property: keyof S ): boolean
 	{
-		if ( this.subscribedList.find( item => item === property ) !== undefined ) {
+		if ( this.subscribedProperties.includes( property ) ) {
 			return false;
 		} else {
-			this.store.select( property )
-				.subscribe( value => this[ property as string ] = value );
-			this.subscribedList.push( property );
+			const newSubscription = this.store.select( property ).subscribe( value => this[ property as string ] = value );
+			this.subscribedProperties.push( property );
+			this.subscriptionList.push( newSubscription );
 			return true;
 		}
 	}
 
-	public checkAndSelect ( key: string, keyColumn: string = 'key' ): void
+	public unsubscribeAll (): void
 	{
-		if ( !this.selectedItem || this.selectedItem[ keyColumn ] != key ) {
-			this.store.dispatch( this.actions.Select( key ) )
-		}
+		this.subscriptionList.forEach( item => item.unsubscribe() );
 	}
 
 	public select ( item: T, keyColumn: string = 'key' ): void
@@ -105,6 +106,11 @@ export class JamEntityService<T, S extends JamEntityState<T> = JamEntityState<T>
 	public reset (): void
 	{
 		this.form.reset();
+	}
+
+	public compareFn = ( listItem: any, selectedItem: any ) =>
+	{
+		return listItem.key === selectedItem.key;
 	}
 
 }
