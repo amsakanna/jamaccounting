@@ -1,7 +1,7 @@
 <div class="container">
 	<jam-facebook-spinner *ngIf="$.adding || $.modifying"></jam-facebook-spinner>
 	<form [formGroup]="$.form" novalidate
-		class="form"
+		class="stretch"
 		(ngSubmit)="$.submit()"
 		[class.blur]="$.adding || $.modifying">
 

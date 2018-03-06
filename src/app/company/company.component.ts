@@ -31,7 +31,8 @@ export class CompanyComponent implements OnInit
 			{ key: 'Tax', value: Pages.Tax },
 			{ key: 'Tax Group', value: Pages.TaxGroup },
 			{ key: 'Party', value: Pages.Party },
-			{ key: 'Inventory', value: Pages.Inventory }
+			{ key: 'Inventory', value: Pages.Inventory },
+			{ key: 'Invoice', value: Pages.Invoice }
 		]
 
 		this.store.dispatch( new CompanyAction.Initialize( masterNames ) );
@@ -56,7 +57,8 @@ export class CompanyComponent implements OnInit
 
 	private shutDown ()
 	{
-		this.store.dispatch( new CompanyAction.Remove( this.company.key ) );
+		alert( 'Simulation: Your company will be removed' );
+		// this.store.dispatch( new CompanyAction.Remove( this.company.key ) );
 	}
 
 }

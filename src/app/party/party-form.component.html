@@ -30,9 +30,9 @@
 	<div class="row">
 		<div class="label"> GSTIN: </div>
 		<mat-form-field>
-			<input matInput placeholder="GST Identification Number" formControlName="taxNumber"/>
-			<mat-error *ngIf="taxNumberFormControl.errors">
-				{{ taxNumberFormControl.errors.error }}
+			<input matInput placeholder="GST Identification Number" formControlName="gstin"/>
+			<mat-error *ngIf="gstinFormControl.errors">
+				{{ gstinFormControl.errors.error }}
 			</mat-error>
 		</mat-form-field>
 	</div>

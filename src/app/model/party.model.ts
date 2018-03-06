@@ -10,7 +10,7 @@ export interface Party extends Data
 	name: string;
 	companyName?: string;
 	companyRegistrationType: CompanyRegistrationTypes;
-	taxNumber?: string;
+	gstin?: string;
 	placeOfSupply?: string;
 	email?: string;
 	phone?: string;

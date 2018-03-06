@@ -6,7 +6,8 @@ const initialState: NotificationState = {
 	notifying: false,
 	defaultMessage: null,
 	currentMessage: null,
-	messageHistory: []
+	messageHistory: [],
+	viewContainerRef: null
 }
 
 export function notificationReducer ( state = initialState, action: NotificationAction.All ): NotificationState
@@ -16,7 +17,8 @@ export function notificationReducer ( state = initialState, action: Notification
 		case NotificationActionTypes.initialize:
 			return {
 				...state,
-				defaultMessage: action.defaultMessage
+				defaultMessage: action.defaultMessage,
+				viewContainerRef: action.viewContainerRef
 			};
 
 		case NotificationActionTypes.open:

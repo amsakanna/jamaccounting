@@ -27,7 +27,8 @@ export class NotificationEffect
 				action: action.message.action || defaultMessage.action,
 				duration: action.message.duration || defaultMessage.duration
 			} ) )
-			.map( ( message: NotificationMessage ) => this.matSnackBar.open( message.content, message.action, { duration: message.duration } ) )
+			.withLatestFrom( this.store.select( state => state.notificationState.viewContainerRef ) )
+			.map( ( [ message, viewContainerRef ] ) => this.matSnackBar.open( message.content, message.action, { duration: message.duration, horizontalPosition: 'right', viewContainerRef: viewContainerRef } ) )
 			.switchMap( snackBar => snackBar.afterDismissed() )
 			.map( closed => new NotificationAction.Closed() );
 	}

@@ -130,7 +130,7 @@ export class JamEntityAdapter<
 
 	public select ( state: S, key: string, keyColumn: string = 'key' ): S
 	{
-		const selectKey = state.itemBeingSelectedKey || key || ( state.selectedItem && state.selectedItem[ keyColumn ] ) || state.defaultItemKey;
+		const selectKey = key || state.itemBeingSelectedKey || ( state.selectedItem && state.selectedItem[ keyColumn ] ) || state.defaultItemKey;
 		const selectedItem = ( selectKey && state.list.find( item => item[ keyColumn ] == selectKey ) ) || state.selectedItem;
 
 		return this.newState( state, { selectedItem: selectedItem, itemBeingSelectedKey: null } );
@@ -244,7 +244,8 @@ export class JamEntityAdapter<
 			lastRemovedItemIndex: state.itemBeingRemovedIndex,
 			itemBeingRemovedKey: null,
 			itemBeingRemovedIndex: -1,
-			itemBeingSelectedKey: itemToBeSelected[ keyColumn ]
+			itemBeingSelectedKey: itemToBeSelected[ keyColumn ],
+			selectedItem: null
 		} );
 	}
 

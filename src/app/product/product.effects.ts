@@ -6,7 +6,7 @@ import { Action, Store } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
 import { JamEntityAction } from "../../jam/ngrx";
 import { ProductModuleState, productActions } from './product.store';
-import { Product } from '../model';
+import { Product, Inventory } from '../model';
 import { ProductFormComponent } from "./product-form.component";
 
 @Injectable()
@@ -32,7 +32,6 @@ export class ProductEffects
 		/**
 		 * Load Effects
 		 */
-
 		this.initialize$ = this.actions$.ofType( productActions.initialize )
 			.switchMap( action => this.rootStore.select( state => state.companyState.selectedItem ) )
 			.filter( company => !!company )
@@ -55,16 +54,22 @@ export class ProductEffects
 		/**
 		 * Select Effects
 		 */
-
 		this.selectAfterCrud$ = this.actions$.ofType( productActions.loaded, productActions.added, productActions.modified, productActions.removed )
 			.map( action => productActions.Select() );
 
 		/**
 		 * CRUD Effects
 		 */
-
 		this.add$ = this.actions$.ofType( productActions.add )
 			.switchMap( action => this.db.tables.Product.insert( action.item ) )
+			.switchMap( item => this.db.tables.Inventory.insert( ( {
+				productKey: item.key,
+				supplyType: null,
+				units: null,
+				buyingPrice: null,
+				sellingPrice: null,
+				taxGroupKey: null
+			} ) as Inventory ), ( outerValue, innerValue ) => outerValue )
 			.map( item => item ? productActions.Added( item ) : productActions.AddFailed() );
 
 		this.modify$ = this.actions$.ofType( productActions.modify )
@@ -73,12 +78,12 @@ export class ProductEffects
 
 		this.remove$ = this.actions$.ofType( productActions.remove )
 			.switchMap( action => this.db.tables.Product.remove( action.key ) )
+			.switchMap( item => this.db.tables.Inventory.remove( item.key, 'productKey' ), ( outerValue, innerValue ) => outerValue )
 			.map( item => item ? productActions.Removed( item ) : productActions.RemoveFailed() );
 
 		/**
 		 * Dialog Effects
 		 */
-
 		this.openDialog$ = this.actions$.ofType( productActions.create, productActions.edit )
 			.map( action => this.dialogManager.open( ProductFormComponent, { width: '800px', id: 'ProductFormComponent' } ) );
 

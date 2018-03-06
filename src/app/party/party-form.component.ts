@@ -18,7 +18,7 @@ export class PartyFormComponent
 	{
 		this.partyTypes = Object.keys( PartyTypes ).map( key => PartyTypes[ key ] );
 		this.companyRegistrationTypes = Object.keys( CompanyRegistrationTypes ).map( key => CompanyRegistrationTypes[ key ] );
-		this.taxNumberFormControl.valueChanges.subscribe( gstin =>
+		this.gstinFormControl.valueChanges.subscribe( gstin =>
 		{
 			if ( !gstin ) return;
 			const state = this.stateList.find( state => state.code == gstin.slice( 0, 2 ) );
@@ -33,12 +33,12 @@ export class PartyFormComponent
 
 	private registrationTypeChanged (): void
 	{
-		const taxNumberFormControl = this.taxNumberFormControl;
+		const gstinFormControl = this.gstinFormControl;
 		if ( !this.gstRequired ) {
-			taxNumberFormControl.reset();
-			taxNumberFormControl.disable();
+			gstinFormControl.reset();
+			gstinFormControl.disable();
 		} else {
-			taxNumberFormControl.enable();
+			gstinFormControl.enable();
 		}
 	}
 
@@ -49,9 +49,9 @@ export class PartyFormComponent
 			|| this.$.formItem.companyRegistrationType == CompanyRegistrationTypes.SEZ;
 	}
 
-	private get taxNumberFormControl (): AbstractControl
+	private get gstinFormControl (): AbstractControl
 	{
-		return this.$.form.get( 'taxNumber' );
+		return this.$.form.get( 'gstin' );
 	}
 
 	private stateList = [

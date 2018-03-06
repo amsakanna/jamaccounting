@@ -16,14 +16,17 @@ import { JamNavigatorModule } from '../jam/navigator';
 import { JamFirestoreModule } from "../jam/firestore";
 import { JamAuthModule } from "../jam/auth";
 import { JamNotificationModule } from '../jam/notification';
+import { JamToolbarModule } from './ui';
 
 /*    App Modules    */
+import { HomeModule } from './home/home.module';
+
+/*    This Module    */
 import { database, environment } from "../environments/environment";
 import { appRoutes } from './app.routes';
 import { appReducers, appEffects } from './app.store';
 import { DatabaseService } from './shared/database.service';
 import { AppComponent } from './app.component';
-import { HomeModule } from './home/home.module';
 
 @NgModule( {
 	declarations: [
@@ -42,6 +45,7 @@ import { HomeModule } from './home/home.module';
 		JamFirestoreModule.forRoot( database.firebaseAppConfig ),
 		JamAuthModule.forRoot(),
 		JamNotificationModule,
+		JamToolbarModule,
 		HomeModule
 	],
 	providers: [ DatabaseService ],

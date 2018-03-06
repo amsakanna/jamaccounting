@@ -110,7 +110,7 @@ export class JamEntityService<T, S extends JamEntityState<T> = JamEntityState<T>
 
 	public compareFn = ( listItem: any, selectedItem: any ) =>
 	{
-		return listItem.key === selectedItem.key;
+		return selectedItem && listItem.key === selectedItem.key;
 	}
 
 }

@@ -1,3 +1,4 @@
+import { ViewContainerRef } from '@angular/core';
 import { NotificationMessage } from './notification-message.model';
 
 export interface NotificationModuleState
@@ -11,4 +12,5 @@ export interface NotificationState
 	defaultMessage: NotificationMessage;
 	currentMessage: NotificationMessage;
 	messageHistory: NotificationMessage[];
+	viewContainerRef: ViewContainerRef;
 }

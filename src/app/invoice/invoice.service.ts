@@ -4,7 +4,7 @@ import { buildModelFromForm, concatUniqueKeys } from "../../jam/functions";
 import { Store } from "@ngrx/store";
 import { JamEntityService } from "../../jam/ngrx";
 import { InvoiceModuleState, InvoiceState, invoiceActions } from "./invoice.store";
-import { Invoice } from "../model";
+import { Invoice, Party, Inventory } from "../model";
 import { moduleName } from './invoice.config';
 import { KeyValue } from "../../jam/model-library";
 import { NavigatorAction } from "../../jam/navigator";
@@ -16,6 +16,8 @@ export class InvoiceService extends JamEntityService<Invoice, InvoiceState>
 	public masterNames: KeyValue[];
 	public selectedMasterName: KeyValue;
 	public invoiceList: Invoice[];
+	public partyList: Party[];
+	public inventoryList: Inventory[];
 
 	constructor (
 		public rootStore: Store<InvoiceModuleState>,
@@ -25,14 +27,12 @@ export class InvoiceService extends JamEntityService<Invoice, InvoiceState>
 		/**
 		 * Initialize service
 		 */
-
 		super( rootStore.select( state => state.invoiceState ), invoiceActions );
 		this.subscribeProperties( 'list', 'form', 'selectedItem', 'formItem', 'processing', 'loading', 'editing', 'adding', 'modifying' );
 
 		/**
 		 * Store Select
 		 */
-
 		this.rootStore.select( state => state.companyState.selectedItem )
 			.filter( company => !!company )
 			.subscribe( company => this.store.dispatch( invoiceActions.Initialize() ) );
@@ -40,18 +40,24 @@ export class InvoiceService extends JamEntityService<Invoice, InvoiceState>
 			.subscribe( masterNames =>
 			{
 				this.masterNames = masterNames;
-				this.selectedMasterName = this.masterNames.find( name => name.key == 'Invoice' );
+				this.selectedMasterName = this.masterNames.find( name => name.key === 'Invoice' );
 			} );
+		this.store.select( 'partyList' ).subscribe( partyList => this.partyList = partyList );
+		this.store.select( 'inventoryList' ).subscribe( inventoryList => this.inventoryList = inventoryList );
 
 	}
 
 	/**
-	 * Overrides
+	 * Extension Methods
 	 */
-
 	private tabChange ( selectedTab: KeyValue ): void
 	{
 		this.rootStore.dispatch( new NavigatorAction.Navigate( selectedTab.value ) );
+	}
+
+	public create (): void
+	{
+		this.store.dispatch( invoiceActions.Create() );
 	}
 
 }

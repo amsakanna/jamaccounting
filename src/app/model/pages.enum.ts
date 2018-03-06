@@ -15,7 +15,6 @@ export enum Pages
     Company = '/company/:company',
 
     Master = '/company/master',
-
     Accounts = '/company/:company/account',
     CreateAccount = '/company/:company/account/@create',
     Account = '/company/:company/account/:account',
@@ -28,6 +27,8 @@ export enum Pages
     TaxGroup = '/company/:company/tax-group',
     Party = '/company/:company/party',
     Inventory = '/company/:company/inventory',
-    Invoice = '/company/:company/invoice'
+
+    Invoice = '/company/:company/invoice',
+    CreateInvoice = '/company/:company/invoice/@create'
 
 }

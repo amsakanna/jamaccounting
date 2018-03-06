@@ -1,3 +1,4 @@
+import { ViewContainerRef } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { KeyValue } from '../../jam/model-library';
 import { NotificationMessage } from './notification-message.model';
@@ -15,7 +16,7 @@ export namespace NotificationAction
 	export class Initialize implements Action
 	{
 		public readonly type = NotificationActionTypes.initialize;
-		constructor ( public defaultMessage: NotificationMessage ) { }
+		constructor ( public defaultMessage: NotificationMessage, public viewContainerRef?: ViewContainerRef ) { }
 	}
 
 	export class Open implements Action

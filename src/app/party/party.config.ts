@@ -11,12 +11,12 @@ export const emptyItem: Party = {
 	type: null,
 	name: null,
 	companyRegistrationType: null,
-	taxNumber: null
+	gstin: null
 };
 
 export const form = new FormGroup( {
 	name: new FormControl( '', Validators.required ),
-	taxNumber: new FormControl( '', GstinValidators.gstinValidator() )
+	gstin: new FormControl( '', GstinValidators.gstinValidator() )
 } );
 
 export const additionalStates = {

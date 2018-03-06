@@ -49,7 +49,7 @@ export class InventoryEffects
 						const product = result.productList.find( product => product.key == inventory.productKey ) || null;
 						return {
 							...inventory,
-							name: product.name,
+							name: product ? product.name : null,
 							product: product,
 							taxGroup: result.taxGroupList.find( taxGroup => taxGroup.key == inventory.taxGroupKey ) || null
 						} as Inventory;

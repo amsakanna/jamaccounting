@@ -1,6 +1,7 @@
 <div class="container" *ngIf="$.selectedItem">
 	<div class="component">
 		<main class="item">
+			<div> Product Id: {{ $.selectedItem.product?.id }} </div>
 			<div> Supply Type: {{ $.selectedItem.supplyType }} </div>
 			<div> Items in stock: {{ $.selectedItem.units }} </div>
 			<div> Buying Price: {{ $.selectedItem.buyingPrice }} </div>

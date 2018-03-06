@@ -1,17 +1,139 @@
-<app-form-dialog [$]="$" [formGroup]="$.form">
+<div class="container">
+	<jam-facebook-spinner *ngIf="$.adding || $.modifying"></jam-facebook-spinner>
+	<div class="component stretch floating-box flex-v-center" [class.blur]="$.adding || $.modifying">
+		<form [formGroup]="$.form" novalidate
+			class=""
+			(ngSubmit)="$.submit()">
+			<main class="stretch flex-v">
+				<section class="invoice-header-section">
 
-	<div class="row">
-		<div class="label"> Name: </div>
-		<mat-form-field class="name">
-			<input matInput placeholder="Name" formControlName="name"/>
-		</mat-form-field>
+					<div class="invoice-header-box">
+						<div class="invoice-header-left-box">
+							<div class="party-box">
+								<mat-form-field>
+									<mat-select [(value)]="$.formItem.party" placeholder="Party" [compareWith]="$.compareFn">
+										<mat-option *ngFor="let party of $.partyList" [value]="party">
+											{{ party.name }}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+								<div class="gstin"> GSTIN: {{ $.formItem.party?.gstin }} </div>
+							</div>
+						</div>
+						<div class="invoice-header-right-box">
+							<div class="invoice-number-box">
+								<span class="label"> Invoice Number </span>
+								<span class="value"> 1235987 </span>
+							</div>
+						</div>
+					</div>
+
+				</section>
+				<section formArrayName="lines" class="invoice-line-section">
+					<div class="table-container v-scrollable">
+						<mat-table [dataSource]="dataSource">
+
+							<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+							<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+							<!-- sno Column -->
+							<ng-container matColumnDef="sno">
+								<mat-header-cell *matHeaderCellDef class="sno-column"> No. </mat-header-cell>
+								<mat-cell *matCellDef="let element; let i = index"class="sno-column"> {{ i + 1 }} </mat-cell>
+							</ng-container>
+
+							<!-- Name Column -->
+							<ng-container matColumnDef="name">
+								<mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+								<mat-cell *matCellDef="let element; let i = index">
+									<mat-form-field>
+										<mat-select [(value)]="element.inventory" [compareWith]="$.compareFn" (selectionChange)="inventoryChange( i )">
+											<mat-option *ngFor="let inventory of $.inventoryList" [value]="inventory">
+												{{ inventory.product?.name }}
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+								</mat-cell>
+							</ng-container>
+
+							<!-- Units Column -->
+							<ng-container matColumnDef="units">
+								<mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+								<mat-cell *matCellDef="let element; let i = index">
+									<mat-form-field [formGroupName]="i">
+										<input matInput formControlName="units"/>
+									</mat-form-field>
+									<!-- {{ element.units }} -->
+								</mat-cell>
+							</ng-container>
+
+							<!-- Rate Column -->
+							<ng-container matColumnDef="rate">
+								<mat-header-cell *matHeaderCellDef> Rate </mat-header-cell>
+								<mat-cell *matCellDef="let element;"> {{ element.inventory?.sellingPrice }} </mat-cell>
+							</ng-container>
+
+							<!-- Discount Column -->
+							<ng-container matColumnDef="discount">
+								<mat-header-cell *matHeaderCellDef> Discount </mat-header-cell>
+								<mat-cell *matCellDef="let element; let i = index" [formGroupName]="i">
+									<mat-form-field>
+										<input matInput formControlName="discount"/>
+									</mat-form-field>
+									<!-- {{ element.discount }} -->
+								</mat-cell>
+							</ng-container>
+
+							<!-- Tax Column -->
+							<ng-container matColumnDef="tax">
+								<mat-header-cell *matHeaderCellDef> Tax </mat-header-cell>
+								<mat-cell *matCellDef="let element"> {{ element.inventory?.taxGroup?.name }} </mat-cell>
+							</ng-container>
+
+							<!-- Amount Column -->
+							<ng-container matColumnDef="amount">
+								<mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+								<mat-cell *matCellDef="let element"> {{ element.amount }} </mat-cell>
+							</ng-container>
+
+							<!-- Action Column -->
+							<ng-container matColumnDef="action">
+								<mat-header-cell *matHeaderCellDef></mat-header-cell>
+								<mat-cell *matCellDef="let element; let i = index">
+									<button mat-button disableRipple
+										type="button" class="compact no-focus"
+										[disabled]="$.formItem.lines.length == 1"
+										(click)="removeLineItem( i )">
+										<mat-icon class="remove-line-item"> close </mat-icon>
+									</button>
+								</mat-cell>
+							</ng-container>
+
+						</mat-table>
+					</div>
+				</section>
+				<!-- <section class="invoice-footer-section" style="display: flex;">
+					<div class="fill-empty-space"></div>
+					<div class="total-box">
+						<div class="total-line">
+							<div class="label"> Sub Total </div>
+							<div class="value"> 0 </div>
+						</div>
+						<div class="total-line total-line-dim">
+							<div class="label"> Discount </div>
+							<div class="value"> 870 </div>
+						</div>
+						<div class="total-line total-line-dim">
+							<div class="label"> Adjustment </div>
+							<div class="value"> 0 </div>
+						</div>
+						<div class="total-line total">
+							<div class="label"> Total </div>
+							<div class="value"> 0 </div>
+						</div>
+					</div>
+				</section> -->
+			</main>
+		</form>
 	</div>
-
-	<div class="row">
-		<div class="label"> GSTIN: </div>
-		<mat-form-field class="gstin">
-			<input matInput placeholder="GST Identification Number" formControlName="gstin"/>
-		</mat-form-field>
-	</div>
-
-</app-form-dialog>
+</div>

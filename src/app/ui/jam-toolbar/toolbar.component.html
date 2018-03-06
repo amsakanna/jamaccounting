@@ -1,0 +1,59 @@
+<div class="container">
+
+	<div class="component" [ngClass]="{ 'extend': selectedParent?.subMenu }">
+
+		<section class="app-info-section">
+			<div class="app-logo"></div>
+		</section>
+
+		<section class="menu-section">
+
+			<!-- Sub Menu -->
+			<nav class="sub-menu">
+				<button
+					*ngFor="let menuItem of selectedParent?.subMenu"
+					mat-button disableRipple
+					class="no-focus menu-item"
+					[matTooltip]="menuItem.tooltip?.text" [matTooltipPosition]="menuItem.tooltip?.position"
+					(click)="_select( menuItem )"
+					[ngClass]="{ 'selected-menu-item': menuItem === selected }">
+					<mat-icon *ngIf="menuItem.icon"> {{ menuItem.icon }} </mat-icon>
+					<span *ngIf="menuItem.text"> {{ menuItem.text }} </span>
+				</button>
+			</nav>
+
+			<!-- Menu -->
+			<nav class="menu">
+				<button
+					*ngFor="let menuItem of menu"
+					mat-button disableRipple
+					class="no-focus menu-item"
+					[matTooltip]="menuItem.tooltip?.text" [matTooltipPosition]="menuItem.tooltip?.position"
+					(click)="_drillDown( menuItem )"
+					[ngClass]="{ 'selected-menu-item': menuItem === selectedParent }">
+					<mat-icon *ngIf="menuItem.icon"> {{ menuItem.icon }} </mat-icon>
+					<span *ngIf="menuItem.text"> {{ menuItem.text }} </span>
+				</button>
+			</nav>
+
+		</section>
+
+		<section class="notification-section">
+
+			<button mat-button disableRipple
+				class="no-focus item"
+				matTooltip="Notifications" matTooltipPosition="above">
+				<mat-icon> announcement </mat-icon>
+			</button>
+
+			<button mat-button disableRipple
+				class="no-focus item"
+				matTooltip="Settings" matTooltipPosition="above">
+				<mat-icon> settings </mat-icon>
+			</button>
+
+		</section>
+
+	</div>
+
+</div>

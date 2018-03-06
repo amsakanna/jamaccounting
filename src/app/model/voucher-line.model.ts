@@ -1,11 +1,12 @@
-import { Data } from "../../jam/model-library";
+import { Inventory } from "./inventory.model";
 
-export interface VoucherLine extends Data
+export interface VoucherLine
 {
 	sno?: number;
 	inventoryKey?: string;
-	quantity?: number;
-	rate?: number;
+	inventory?: Inventory;
+	units?: number;
 	discount?: number;
+	isFlatDiscount?: boolean;
 	amount?: number;
 }

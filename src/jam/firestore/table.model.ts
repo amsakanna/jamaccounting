@@ -110,18 +110,24 @@ export class Table<T extends Data> implements TableBase
     {
         return filterObject<T>( data, ( data, column ) =>
         {
-            console.log( column, ( data[ column + 'Key' ] === undefined ) && !( column.endsWith( '$' ) ) );
+            if ( data[ column + 'Key' ] !== undefined )
+                console.log( 'Removing', column, 'because it has a counterpart key column' );
+            if ( column.endsWith( '$' ) )
+                console.log( 'Removing', column, 'because it ends with $' );
+
             return ( data[ column + 'Key' ] === undefined ) && !( column.endsWith( '$' ) );
         } );
     }
 
     public async insert ( data: T ): Promise<T>
     {
-        /*  Insert data  */
+        if ( !data ) return null;
+
         console.log( 'insert-pre', this.removeVmColumns( data ) );
         data = this.removeVmColumns( data ) as T;
         console.log( 'insert', data );
 
+        /*  Insert data  */
         var key: string;
         if ( data.key ) {
             const existingData = await this.lookup( data.key );
@@ -147,6 +153,7 @@ export class Table<T extends Data> implements TableBase
 
     public async update ( data: T, searchKey?: string, searchColumn?: string ): Promise<T>
     {
+        if ( !data ) return null;
         /**
          * You can lookup via key or other columns.
          * Lookup via key - data.key
@@ -187,6 +194,7 @@ export class Table<T extends Data> implements TableBase
 
     public async updateFields ( data: T, searchKey?: string, searchColumn?: string ): Promise<T>
     {
+        if ( !data ) return null;
         /**
          * You can lookup via key or other columns.
          * Lookup via key - data.key
@@ -225,7 +233,7 @@ export class Table<T extends Data> implements TableBase
         return updatedData;
     }
 
-    public async remove ( searchKey: any, searchColumn?: string ): Promise<T>
+    public async remove ( searchKey: any, searchColumn?: keyof T ): Promise<T>
     {
 
         if ( !searchKey ) return null;
