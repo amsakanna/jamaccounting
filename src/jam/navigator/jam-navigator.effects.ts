@@ -22,8 +22,6 @@ export class NavigatorEffects
 		private router: Router )
 	{
 
-		console.log( 'navigator-effects' );
-
 		this.initialize$ = this.actions$.ofType<NavigatorAction.Initialize>( NavigatorActionTypes.initialize )
 			.switchMap( action => this.router.events
 				.filter( event => event instanceof NavigationEnd )

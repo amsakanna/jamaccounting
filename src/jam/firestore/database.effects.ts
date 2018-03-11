@@ -22,8 +22,6 @@ export class DatabaseEffects
 		private firestore: AngularFirestore )
 	{
 
-		console.log( 'database-effects' );
-
 		this.initialize$ = this.actions$.ofType<DbAction.Initialize>( DatabaseActionTypes.initialize )
 			.withLatestFrom( store.select( state => state.databaseState.metadataPath ) )
 			.map( ( [ action, stateMetadataPath ] ) => action.metadataPath || stateMetadataPath )

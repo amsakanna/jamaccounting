@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate, CanLoad
 		return this.store.select( state => state.authState.authenticated ).take( 1 )
 			.do( authenticated =>
 			{
-				console.log( 'auth guard let me in ?', authenticated );
+				console.log( ( authenticated ? '[ check ]' : '[ problem ]' ), 'Auth Guard let me in?' );
 				if ( !authenticated ) {
 					this.store.dispatch( new AuthAction.RequestSignInPage() );
 				}
@@ -34,7 +34,7 @@ export class AuthGuard implements CanActivate, CanLoad
 		return this.store.select( state => state.authState.authenticated ).take( 1 )
 			.do( authenticated =>
 			{
-				console.log( 'auth guard let me in ?', authenticated );
+				console.log( ( authenticated ? '[ check ]' : '[ problem ]' ), 'Auth Guard let me in?' );
 				if ( !authenticated ) {
 					this.store.dispatch( new AuthAction.RequestSignInPage() );
 				}
