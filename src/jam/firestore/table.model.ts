@@ -72,6 +72,7 @@ export class Table<T extends Data> implements TableBase
 
     public filterMany ( searchColumn: string, keys: any[], limit?: number ): Observable<T[]>
     {
+        console.log( '' );
         console.log( 'filterMany -' + ' searchColumn: ' + searchColumn + ' | keys: ' + keys, + ' | limit: ' + limit );
         const items = keys.map( key => this.find( searchColumn, key ).first() );
         const ite = Observable.merge( ...items ).toArray();
