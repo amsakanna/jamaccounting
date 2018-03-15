@@ -48,7 +48,7 @@ export class JamEntityAdapter<
 				case actions.remove: return adapter.remove( state, action.key );
 				case actions.removed: return adapter.removed( state, action.item );
 				case actions.removeFailed: return adapter.removeFailed( state );
-				default: return state;
+				default: return adapter[ action.fnName ] ? adapter[ action.fnName ]( state, action ) : state;
 			}
 		};
 	}

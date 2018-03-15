@@ -38,19 +38,44 @@ export class Table<T extends Data> implements TableBase
         this.collection = this.pathValid ? this.db.collection<T>( this.path ) : null;
     }
 
-    public get join (): Observable<Array<T>>
+    public get join (): Observable<T[]>
     {
         return this.collection.valueChanges();
     }
 
-    public get list (): Observable<Array<T>>
+    public get list (): Observable<T[]>
     {
         return this.collection.valueChanges();
     }
 
-    public filter ( searchColumn: string, operator: firebase.firestore.WhereFilterOp, searchKey: any ): Observable<Array<T>>
+    public listFirst ( limit: number ): Observable<T[]>
     {
-        return this.db.collection<T>( this.path, ref => ref.where( searchColumn, operator, searchKey ) ).valueChanges()
+        console.log( 'listFirst -' + ' limit: ' + limit )
+        return this.db.collection<T>( this.path, ref => ref.limit( limit ) ).valueChanges();
+    }
+
+    public find ( searchColumn: string, searchKey: any ): Observable<T>
+    {
+        console.log( 'find -' + ' searchColumn: ' + searchColumn + ' | searchKey: ' + searchKey );
+        return this.filter( searchColumn, '==', searchKey, 1 ).map( list => list[ 0 ] );
+    }
+
+    public filter ( searchColumn: string, operator: firebase.firestore.WhereFilterOp, searchKey: any, limit?: number ): Observable<T[]>
+    {
+        console.log( 'filter -' + ' searchColumn: ' + searchColumn + ' | operator: ' + operator + ' | searchKey: ' + searchKey, + ' | limit: ' + limit.toString() );
+        return this.db
+            .collection<T>( this.path, ref => limit
+                ? ref.where( searchColumn, operator, searchKey ).limit( limit )
+                : ref.where( searchColumn, operator, searchKey ) )
+            .valueChanges();
+    }
+
+    public filterMany ( searchColumn: string, keys: any[], limit?: number ): Observable<T[]>
+    {
+        console.log( 'filterMany -' + ' searchColumn: ' + searchColumn + ' | keys: ' + keys, + ' | limit: ' + limit );
+        const items = keys.map( key => this.find( searchColumn, key ).first() );
+        const ite = Observable.merge( ...items ).toArray();
+        return Observable.merge( ...items ).toArray() || Observable.of( [] );
     }
 
     public get ( key: string ): Observable<T>
@@ -62,9 +87,8 @@ export class Table<T extends Data> implements TableBase
     public getMany ( keys: string[] ): Observable<T[]>
     {
         console.log( 'getMany', keys );
-        const item$s = keys
-            .map( key => this.collection.doc<T>( key ).valueChanges() );
-        return Observable.merge( ...item$s ).toArray();
+        const item$s = keys.map( key => this.get( key ) );
+        return Observable.merge( ...item$s ).toArray() || Observable.of( [] );
     }
 
     public static async clone ( sourceTable: Table<any>, targetTable: Table<any>, replace?: boolean ): Promise<boolean>

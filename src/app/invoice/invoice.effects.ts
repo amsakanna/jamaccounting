@@ -6,7 +6,7 @@ import { Action, Store } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
 import { JamEntityAction } from "../../jam/ngrx";
 import { InvoiceModuleState, invoiceActions } from './invoice.store';
-import { Invoice, Pages, Inventory } from '../model';
+import { Invoice, Pages, Inventory, Product } from '../model';
 import { NavigatorAction } from "../../jam/navigator";
 
 @Injectable()
@@ -14,12 +14,16 @@ export class InvoiceEffects
 {
 	@Effect() public initialize$: Observable<Action>;
 	@Effect() public load$: Observable<Action>;
+	@Effect() public loaded$: Observable<Action>;
 	@Effect() public add$: Observable<Action>;
 	@Effect() public modify$: Observable<Action>;
 	@Effect() public remove$: Observable<Action>;
 	@Effect() public selectAfterCrud$: Observable<Action>;
 	@Effect( { dispatch: false } ) public openForm$: Observable<any>;
 	@Effect( { dispatch: false } ) public closeForm$: Observable<any>;
+
+	@Effect() public filterParties$: Observable<any>;
+	@Effect() public filterProducts$: Observable<any>;
 
 	constructor (
 		private actions$: Actions<JamEntityAction<Invoice>>,
@@ -35,40 +39,93 @@ export class InvoiceEffects
 		this.initialize$ = this.actions$.ofType( invoiceActions.initialize )
 			.switchMap( action => this.rootStore.select( state => state.companyState.selectedItem ) )
 			.filter( company => !!company )
-			.mergeMap( company => [ invoiceActions.Initialized(), invoiceActions.Load() ] );
+			.mergeMap( company => [
+				invoiceActions.Initialized(),
+				invoiceActions.Load()
+			] );
 
 		this.load$ = this.actions$.ofType( invoiceActions.load )
 			.switchMap( action => this.db.tables.Invoice.list )
-			.switchMap( list => this.db.tables.Party.list, ( outerValue, innerValue ) => ( { list: outerValue, partyList: innerValue } ) )
-			.switchMap( result => this.db.tables.Product.list, ( outerValue, innerValue ) => ( { ...outerValue, productList: innerValue } ) )
-			.switchMap( result => this.db.tables.Inventory.list, ( outerValue, innerValue ) => ( { ...outerValue, inventoryList: innerValue } ) )
-			.switchMap( result => this.db.tables.TaxGroup.list, ( outerValue, innerValue ) => ( { ...outerValue, taxGroupList: innerValue } ) )
+			.switchMap( result => this.db.tables.TaxGroup.list, ( outerValue, innerValue ) => ( { list: outerValue, taxGroupList: innerValue } ) )
 			.switchMap( result => this.db.tables.Tax.list, ( outerValue, innerValue ) => ( { ...outerValue, taxList: innerValue } ) )
 			.switchMap( result => this.db.tables.TaxType.list, ( outerValue, innerValue ) => ( { ...outerValue, taxTypeList: innerValue } ) )
-			.map( result => ( {
-				list: result.list,
-				partyList: result.partyList,
-				inventoryList: result.inventoryList.map( inventory =>
+			.map( result => invoiceActions.Loaded( result.list, { taxTypeList: result.taxTypeList, taxList: result.taxList, taxGroupList: result.taxGroupList } ) );
+
+		this.loaded$ = this.actions$.ofType( invoiceActions.loaded )
+			.mergeMap( action => [
+				invoiceActions.FilterParties( null ),
+				invoiceActions.FilterProducts( null )
+			] );
+
+		this.filterParties$ = this.actions$.ofType( invoiceActions.filterParties )
+			.switchMap( action => action.key
+				? this.db.tables.Party.filter( 'name', '==', action.key )
+				: this.db.tables.Party.listFirst( 10 ) )
+			.map( partyList => invoiceActions.FilteredParties( partyList ) );
+
+		this.filterProducts$ = this.actions$.ofType( invoiceActions.filterProducts )
+			.switchMap( action => action.key
+				? this.db.tables.Product.filter( 'name', '==', action.key )
+				: this.db.tables.Product.listFirst( 10 ) )
+			.switchMap( productList => this.db.tables.Inventory.filterMany( 'productKey', productList.map( product => product.key ) ), ( outerValue, innerValue ) => ( [ outerValue, innerValue ] ) as [ Product[], Inventory[] ] )
+			.withLatestFrom(
+				this.rootStore.select( state => state.invoiceState.taxTypeList ),
+				this.rootStore.select( state => state.invoiceState.taxList ),
+				this.rootStore.select( state => state.invoiceState.taxGroupList ) )
+			.map( ( [ [ productList, inventoryList ], taxTypeList, taxList, taxGroupList ] ) => inventoryList
+				.map( inventory =>
 				{
-					const product = result.productList
+					const product = productList
 						.find( product => product.key == inventory.productKey ) || null;
-					const taxGroup = result.taxGroupList
+					const taxGroup = taxGroupList
 						.find( taxGroup => taxGroup.key == inventory.taxGroupKey ) || null;
 					taxGroup.taxes = taxGroup.taxesKey.map( taxKey =>
 					{
-						const tax = result.taxList.find( tax => tax.key == taxKey ) || null;
-						tax.type = result.taxTypeList.find( taxType => taxType.key == tax.typeKey ) || null;
+						const tax = taxList.find( tax => tax.key == taxKey ) || null;
+						tax.type = taxTypeList.find( taxType => taxType.key == tax.typeKey ) || null;
 						return tax;
 					} );
-
 					return {
 						...inventory,
 						product: product,
 						taxGroup: taxGroup
 					} as Inventory
-				} )
-			} ) )
-			.map( result => invoiceActions.Loaded( result.list, { partyList: result.partyList, inventoryList: result.inventoryList } ) );
+				} ) )
+			.map( inventoryList => invoiceActions.FilteredProducts( inventoryList ) );
+
+
+		// this.load$ = this.actions$.ofType( invoiceActions.load )
+		// 	.switchMap( action => this.db.tables.Invoice.list )
+		// 	.switchMap( list => this.db.tables.Party.list, ( outerValue, innerValue ) => ( { list: outerValue, partyList: innerValue } ) )
+		// 	.switchMap( result => this.db.tables.Product.list, ( outerValue, innerValue ) => ( { ...outerValue, productList: innerValue } ) )
+		// 	.switchMap( result => this.db.tables.Inventory.list, ( outerValue, innerValue ) => ( { ...outerValue, inventoryList: innerValue } ) )
+		// 	.switchMap( result => this.db.tables.TaxGroup.list, ( outerValue, innerValue ) => ( { ...outerValue, taxGroupList: innerValue } ) )
+		// 	.switchMap( result => this.db.tables.Tax.list, ( outerValue, innerValue ) => ( { ...outerValue, taxList: innerValue } ) )
+		// 	.switchMap( result => this.db.tables.TaxType.list, ( outerValue, innerValue ) => ( { ...outerValue, taxTypeList: innerValue } ) )
+		// 	.map( result => ( {
+		// 		list: result.list,
+		// 		partyList: result.partyList,
+		// 		inventoryList: result.inventoryList.map( inventory =>
+		// 		{
+		// 			const product = result.productList
+		// 				.find( product => product.key == inventory.productKey ) || null;
+		// 			const taxGroup = result.taxGroupList
+		// 				.find( taxGroup => taxGroup.key == inventory.taxGroupKey ) || null;
+		// 			taxGroup.taxes = taxGroup.taxesKey.map( taxKey =>
+		// 			{
+		// 				const tax = result.taxList.find( tax => tax.key == taxKey ) || null;
+		// 				tax.type = result.taxTypeList.find( taxType => taxType.key == tax.typeKey ) || null;
+		// 				return tax;
+		// 			} );
+
+		// 			return {
+		// 				...inventory,
+		// 				product: product,
+		// 				taxGroup: taxGroup
+		// 			} as Inventory
+		// 		} )
+		// 	} ) )
+		// 	.map( result => invoiceActions.Loaded( result.list, { partyList: result.partyList, inventoryList: result.inventoryList } ) );
 
 		/**
 		 * Select Effects

@@ -31,7 +31,7 @@
 					[matTooltip]="menuItem.tooltip?.text" [matTooltipPosition]="menuItem.tooltip?.position"
 					(click)="_drillDown( menuItem )"
 					[ngClass]="{ 'selected-menu-item': menuItem === selectedParent }">
-					<mat-icon *ngIf="menuItem.icon"> {{ menuItem.icon }} </mat-icon>
+					<mat-icon *ngIf="menuItem.icon" class="small"> {{ menuItem.icon }} </mat-icon>
 					<span *ngIf="menuItem.text"> {{ menuItem.text }} </span>
 				</button>
 			</nav>
@@ -43,13 +43,13 @@
 			<button mat-button disableRipple
 				class="no-focus item"
 				matTooltip="Notifications" matTooltipPosition="above">
-				<mat-icon> announcement </mat-icon>
+				<mat-icon class="small"> announcement </mat-icon>
 			</button>
 
 			<button mat-button disableRipple
 				class="no-focus item"
 				matTooltip="Settings" matTooltipPosition="above">
-				<mat-icon> settings </mat-icon>
+				<mat-icon class="small"> settings </mat-icon>
 			</button>
 
 		</section>

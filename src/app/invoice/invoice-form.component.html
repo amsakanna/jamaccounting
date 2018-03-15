@@ -47,11 +47,17 @@
 								<mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
 								<mat-cell *matCellDef="let element; let i = index">
 									<mat-form-field>
-										<mat-select [(value)]="element.inventory" [compareWith]="$.compareFn" (selectionChange)="inventoryChange( i )">
+										<input type="text" [matAutocomplete]="auto" matInput>
+										<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+											<mat-option *ngFor="let inventory of $.inventoryList" [value]="inventory.name">
+												{{ inventory.name }}
+											</mat-option>
+										</mat-autocomplete>
+										<!-- <mat-select [(value)]="element.inventory" [compareWith]="$.compareFn" (selectionChange)="inventoryChange( i )">
 											<mat-option *ngFor="let inventory of $.inventoryList" [value]="inventory">
 												{{ inventory.product?.name }}
 											</mat-option>
-										</mat-select>
+										</mat-select> -->
 									</mat-form-field>
 								</mat-cell>
 							</ng-container>

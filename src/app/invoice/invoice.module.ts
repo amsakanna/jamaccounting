@@ -13,7 +13,8 @@ import
 	MatTooltipModule,
 	MatDialogModule,
 	MatListModule,
-	MatTableModule
+	MatTableModule,
+	MatAutocompleteModule
 } from '@angular/material';
 /*  3rd Invoice Modules  */
 import { StoreModule } from '@ngrx/store';
@@ -49,6 +50,7 @@ import { InvoiceFormComponent } from './invoice-form.component';
 		MatDialogModule,
 		MatListModule,
 		MatTableModule,
+		MatAutocompleteModule,
 		StoreModule.forFeature( 'invoiceState', invoiceReducer ),
 		EffectsModule.forFeature( [ InvoiceEffects ] ),
 		JamBounceSpinnerModule,

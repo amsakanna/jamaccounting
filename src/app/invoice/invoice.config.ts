@@ -25,5 +25,10 @@ export const form = new FormGroup( {
 
 export const additionalStates = {
 	emptyItem: emptyItem,
-	form: form
+	form: form,
+	taxList: [],
+	taxGroupList: [],
+	taxTypeList: [],
+	partyList: [],
+	inventoryList: []
 }

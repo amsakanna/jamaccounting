@@ -60,4 +60,14 @@ export class InvoiceService extends JamEntityService<Invoice, InvoiceState>
 		this.store.dispatch( invoiceActions.Create() );
 	}
 
+	public filterParties ( key: string ): void
+	{
+		this.store.dispatch( invoiceActions.FilterParties( key ) );
+	}
+
+	public filterProducts ( key: string ): void
+	{
+		this.store.dispatch( invoiceActions.FilterProducts( key ) );
+	}
+
 }

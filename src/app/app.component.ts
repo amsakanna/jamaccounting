@@ -29,9 +29,8 @@ import { MenuItem } from './ui';
 	styles: [ `
 		.component > main {
 			width: 100%;
-			height: calc( 100% - 172px );
+			height: calc( 100% - 122px );
 			padding-top: 50px;
-			padding-bottom: 50px;
 		}
 		.component > header {
 			width: 100%;

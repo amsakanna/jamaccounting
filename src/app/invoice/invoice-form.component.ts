@@ -98,9 +98,14 @@ export class InvoiceFormComponent implements OnInit
 		} );
 		const linesFormArray = this.$.form.controls[ 'lines' ] as FormArray;
 		linesFormArray.push( new FormGroup( {
+			name: new FormControl( null ),
 			units: new FormControl( 1, Validators.min( 1 ) ),
 			discount: new FormControl( 0, Validators.min( 0 ) )
 		} ) );
+		// linesFormArray.controls.forEach( lineFormGroup =>
+		// {
+		// 	lineFormGroup.get( 'name' ).valueChanges().subscribe( value =>  );
+		// });
 		this.refreshDatasource( this.$.formItem.lines );
 	}
 
